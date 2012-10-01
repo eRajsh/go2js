@@ -4,7 +4,7 @@ var A string
 var a int
 var b, c, d float64
 var e = 0
-var f, g float32 = -1, -2
+var f, g_ float32 = -1, -2
 var (
 	h       int
 	i, j, k = 2.0, 3.0, "bar"
