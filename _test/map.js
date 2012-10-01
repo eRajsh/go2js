@@ -10,9 +10,9 @@ function valueNil() {
 
 	var msg = "declaration";
 	if (n === undefined) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 
@@ -21,9 +21,9 @@ function valueNil() {
 
 	msg = "using make";
 	if (n !== undefined) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 }
@@ -40,9 +40,9 @@ function declare_1() {
 
 
 	if (numbers.get("trois")[0] === 3) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] Trois is the french word for the number: " + numbers.get("trois")[0] + "\n");
+		document.write("[Error] Trois is the french word for the number: " + numbers.get("trois")[0] + "<br>");
 	}
 
 }
@@ -61,9 +61,9 @@ function declare_2() {
 
 	var code = "";
 	if (JSON.stringify(rating.get("Go")[0]) === JSON.stringify(rating2.get("Go")[0])) {
-		console.log("[OK] comparing same value\n");
+		document.write("[OK] comparing same value<br>");
 	} else {
-		alert("[Error] rating[\"Go\"]: " + rating.get("Go")[0] + "\trating2[\"Go\"]: " + rating2.get("Go")[0] + "\n");
+		document.write("[Error] rating[\"Go\"]: " + rating.get("Go")[0] + "\trating2[\"Go\"]: " + rating2.get("Go")[0] + "<br>");
 
 	}
 
@@ -75,7 +75,7 @@ function declare_2() {
 	} else {
 		code = "Error";
 	}
-	console.log("[" + code + "] comparing different value\n");
+	document.write("[" + code + "] comparing different value<br>");
 
 }
 
@@ -89,9 +89,9 @@ function reference() {
 
 
 	if (JSON.stringify(m.get("Hello")[0]) === JSON.stringify(m1.get("Hello")[0])) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] value in key: " + m.get("Hello")[0] + "\n");
+		document.write("[Error] value in key: " + m.get("Hello")[0] + "<br>");
 	}
 
 }
@@ -100,9 +100,9 @@ function checkKey() {
 	var csharp_rating = rating.get("C#")[0];
 
 	if (csharp_rating === 0.00) {
-		console.log("[OK] single key\n");
+		document.write("[OK] single key<br>");
 	} else {
-		alert("[Error] value in key: " + csharp_rating + "\n");
+		document.write("[Error] value in key: " + csharp_rating + "<br>");
 	}
 
 
@@ -110,23 +110,23 @@ function checkKey() {
 	var k_multMap = multMap.get(1, 2)[0];
 
 	if (k_multMap === "") {
-		console.log("[OK] multi-dimensional key\n");
+		document.write("[OK] multi-dimensional key<br>");
 	} else {
-		alert("[Error] value in multi-dimensional key: " + k_multMap + "\n");
+		document.write("[Error] value in multi-dimensional key: " + k_multMap + "<br>");
 	}
 
 
 	var _ = rating.get("C#"), csharp_rating2 = _[0], ok = _[1];
 
 	if (ok) {
-		alert("[Error] using comma\n");
+		document.write("[Error] using comma<br>");
 	} else {
-		console.log("[OK] using comma\n");
+		document.write("[OK] using comma<br>");
 	}
 	if (csharp_rating2 === 0.00) {
-		console.log("[OK] value (using comma)\n");
+		document.write("[OK] value (using comma)<br>");
 	} else {
-		alert("[Error] value in key (using comma): " + csharp_rating2 + "\n");
+		document.write("[Error] value in key (using comma): " + csharp_rating2 + "<br>");
 	}
 
 }
@@ -137,9 +137,9 @@ function deleteKey() {
 	var ok = rating.get("C++")[1];
 
 	if (ok) {
-		alert("[Error]\n");
+		document.write("[Error]<br>");
 	} else {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	}
 
 }
@@ -152,37 +152,37 @@ function testRange() {
 		switch (key) {
 		case "C":
 			if (value !== 5) {
-			alert("[Error] key 'C': expected '5', got " + value + "\n");
+			document.write("[Error] key 'C': expected '5', got " + value + "<br>");
 			hasError = true;
 		} break;
 		case "Go":
 			if (value !== 4.5) {
-			alert("[Error] key 'Go': expected '4.5', got " + value + "\n");
+			document.write("[Error] key 'Go': expected '4.5', got " + value + "<br>");
 			hasError = true;
 		} break;
 		case "Python":
 			if (value !== 4.5) {
-			alert("[Error] key 'Python': expected '4.5', got " + value + "\n");
+			document.write("[Error] key 'Python': expected '4.5', got " + value + "<br>");
 			hasError = true;
 		} break;
 		default:
-			alert("[Error] key not expected: " + key + "\n");
+			document.write("[Error] key not expected: " + key + "<br>");
 			hasError = true;
 		}
 	}
 	if (!hasError) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	}
 
 
 	for (key in rating.m) {
 		if (key !== "C" && key !== "Go" && key !== "Python") {
-			alert("[Error] key not expected: " + key + "\n");
+			document.write("[Error] key not expected: " + key + "<br>");
 			hasError = true;
 		}
 	}
 	if (!hasError) {
-		console.log("[OK] omitting value\n");
+		document.write("[OK] omitting value<br>");
 	}
 }
 
@@ -210,40 +210,40 @@ function blankIdentifierInRange() {
 
 	slice.set(A1, 0);
 	if (Max(slice.f) !== 9) {
-		alert("[Error] 'A1': value expected '9', got " + Max(slice.f) + "\n");
+		document.write("[Error] 'A1': value expected '9', got " + Max(slice.f) + "<br>");
 		hasError = true;
 	}
 	slice.set(A2, 0);
 	if (Max(slice.f) !== 4) {
-		alert("[Error] 'A2': value expected '4', got " + Max(slice.f) + "\n");
+		document.write("[Error] 'A2': value expected '4', got " + Max(slice.f) + "<br>");
 		hasError = true;
 	}
 	slice.set(A3, 0);
 	if (Max(slice.f) !== 1) {
-		alert("[Error] 'A3': value expected '1', got " + Max(slice.f) + "\n");
+		document.write("[Error] 'A3': value expected '1', got " + Max(slice.f) + "<br>");
 		hasError = true;
 	}
 
 	if (!hasError) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	}
 }
 
 function main() {
-	console.log("\n== valueNil\n");
+	document.write("<br>== valueNil<br>");
 	valueNil();
-	console.log("\n== declare_1\n");
+	document.write("<br>== declare_1<br>");
 	declare_1();
-	console.log("\n== declare_2\n");
+	document.write("<br>== declare_2<br>");
 	declare_2();
-	console.log("\n== reference\n");
+	document.write("<br>== reference<br>");
 	reference();
-	console.log("\n== checkKey\n");
+	document.write("<br>== checkKey<br>");
 	checkKey();
-	console.log("\n== deleteKey\n");
+	document.write("<br>== deleteKey<br>");
 	deleteKey();
-	console.log("\n== testRange\n");
+	document.write("<br>== testRange<br>");
 	testRange();
-	console.log("\n== blankIdentifierInRange\n");
+	document.write("<br>== blankIdentifierInRange<br>");
 	blankIdentifierInRange();
-}
+} main();

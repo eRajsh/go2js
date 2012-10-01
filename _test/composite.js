@@ -28,9 +28,9 @@ function testStruct() {
 	var _ = Older(tom, bob), tb_Older = _[0], tb_diff = _[1];
 
 	if (JSON.stringify(tb_Older) === JSON.stringify(bob) && tb_diff === 7) {
-		console.log("[OK] Tom, Bob\n");
+		document.write("[OK] Tom, Bob<br>");
 	} else {
-		alert("[Error] Of " + tom.name + " and " + bob.name + ", " + tb_Older.name + " is older by " + tb_diff + " years\n");
+		document.write("[Error] Of " + tom.name + " and " + bob.name + ", " + tb_Older.name + " is older by " + tb_diff + " years<br>");
 
 	}
 
@@ -38,9 +38,9 @@ function testStruct() {
 	var _ = Older(tom, paul), tp_Older = _[0], tp_diff = _[1];
 
 	if (JSON.stringify(tp_Older) === JSON.stringify(paul) && tp_diff === 25) {
-		console.log("[OK] Tom, Paul\n");
+		document.write("[OK] Tom, Paul<br>");
 	} else {
-		alert("[Error] Of " + tom.name + " and " + paul.name + ", " + tp_Older.name + " is older by " + tp_diff + " years\n");
+		document.write("[Error] Of " + tom.name + " and " + paul.name + ", " + tp_Older.name + " is older by " + tp_diff + " years<br>");
 
 	}
 
@@ -48,9 +48,9 @@ function testStruct() {
 	var _ = Older(bob, paul), bp_Older = _[0], bp_diff = _[1];
 
 	if (JSON.stringify(bp_Older) === JSON.stringify(paul) && bp_diff === 18) {
-		console.log("[OK] Bob, Paul\n");
+		document.write("[OK] Bob, Paul<br>");
 	} else {
-		alert("[Error] Of " + bob.name + " and " + paul.name + ", " + bp_Older.name + " is older by " + bp_diff + " years\n");
+		document.write("[Error] Of " + bob.name + " and " + paul.name + ", " + bp_Older.name + " is older by " + bp_diff + " years<br>");
 
 	}
 }
@@ -86,9 +86,9 @@ function testArray() {
 
 
 	if (older.name === "Sam") {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] The older of the group is: " + older.name + "\n");
+		document.write("[Error] The older of the group is: " + older.name + "<br>");
 	}
 }
 
@@ -124,15 +124,15 @@ function initializeArray() {
 
 
 	if (array1.length === array2.length) {
-		console.log("[OK] length\n");
+		document.write("[OK] length<br>");
 	} else {
-		alert("[Error] len => array1: " + array1.length + ", array2: " + array2.length + "\n");
+		document.write("[Error] len => array1: " + array1.length + ", array2: " + array2.length + "<br>");
 	}
 
 	if (JSON.stringify(array1) === JSON.stringify(array2)) {
-		console.log("[OK] comparison\n");
+		document.write("[OK] comparison<br>");
 	} else {
-		alert("[Error] array1: " + array1 + "\narray2: " + array2 + "\n");
+		document.write("[Error] array1: " + array1 + "<br>array2: " + array2 + "<br>");
 	}
 }
 
@@ -154,21 +154,21 @@ function multiArray() {
 
 
 	if (JSON.stringify(doubleArray_1) === JSON.stringify(doubleArray_2) && JSON.stringify(doubleArray_2) === JSON.stringify(doubleArray_3)) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] multi-dimensional\n");
+		document.write("[Error] multi-dimensional<br>");
 	}
 }
 
 
 
 function main() {
-	console.log("\n== testStruct\n");
+	document.write("<br>== testStruct<br>");
 	testStruct();
-	console.log("\n== testArray\n");
+	document.write("<br>== testArray<br>");
 	testArray();
-	console.log("\n== initializeArray\n");
+	document.write("<br>== initializeArray<br>");
 	initializeArray();
-	console.log("\n== multiArray\n");
+	document.write("<br>== multiArray<br>");
 	multiArray();
-}
+} main();

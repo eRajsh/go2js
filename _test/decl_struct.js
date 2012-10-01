@@ -32,7 +32,7 @@ function main() {
 	function Fa(a) {
 		this.a=a;
 	}
-}
+} main();
 
 g.Export(test, [Point]);
 })();

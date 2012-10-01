@@ -55,7 +55,7 @@ function main() {
 	Fa = 2,
 	fb = 3;
 
-}
+} main();
 
 g.Export(test, [Pi, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Partyday]);
 })();

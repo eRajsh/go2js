@@ -42,19 +42,19 @@ function main() {
 
 
 	older = Older(paul, jim)[1];
-	alert("The older of Paul and Jim is:  " + older.name + "\n");
+	document.write("The older of Paul and Jim is:  " + older.name + "<br>");
 
 	older = Older(paul, jim, sam)[1];
-	alert("The older of Paul, Jim and Sam is:  " + older.name + "\n");
+	document.write("The older of Paul, Jim and Sam is:  " + older.name + "<br>");
 
 	older = Older(paul, jim, sam, rob)[1];
-	alert("The older of Paul, Jim, Sam and Rob is:  " + older.name + "\n");
+	document.write("The older of Paul, Jim, Sam and Rob is:  " + older.name + "<br>");
 
 	older = Older(karl)[1];
-	alert("When Karl is alone in a group, the older is:  " + older.name + "\n");
+	document.write("When Karl is alone in a group, the older is:  " + older.name + "<br>");
 
 	_ = Older(), ok = _[0], older = _[1];
 	if (!ok) {
-		alert("In an empty group there is no older person\n");
+		document.write("In an empty group there is no older person<br>");
 	}
-}
+} main();

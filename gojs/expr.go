@@ -155,7 +155,7 @@ func (e *expression) transform(expr ast.Expr) {
 	//  Kind     token.Token // token.INT, token.FLOAT, token.IMAG, token.CHAR, or token.STRING
 	//  Value    string      // literal string
 	case *ast.BasicLit:
-		e.WriteString(typ.Value)
+		e.WriteString(strings.Replace(typ.Value, "\\n", "<br>", -1)) // replace new lines
 		e.isBasicLit = true
 
 	// http://golang.org/doc/go_spec.html#Comparison_operators
@@ -338,7 +338,7 @@ func (e *expression) transform(expr ast.Expr) {
 		// ==
 
 		case "print", "println":
-			e.WriteString(fmt.Sprintf("console.log(%s)", e.tr.GetArgs(call, typ.Args)))
+			e.WriteString(fmt.Sprintf("document.write(%s)", e.tr.GetArgs(call, typ.Args)))
 
 		case "len":
 			arg := e.tr.getExpression(typ.Args[0]).String()

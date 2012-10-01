@@ -71,7 +71,7 @@ function main() {
 	var Fd = 20;
 	var Fe = 0;
 
-}
+} main();
 
 g.Export(test, [A]);
 })();

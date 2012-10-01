@@ -18,10 +18,10 @@ function testInit() {
 	} else {
 		code = "Error";
 	}
-	console.log("[" + code + "]\n");
+	document.write("[" + code + "]<br>");
 }
 
-function singleLine() { console.log("[OK]\n"); }
+function singleLine() { document.write("[OK]<br>"); }
 
 function simpleFunc() {
 
@@ -39,26 +39,26 @@ function simpleFunc() {
 	var max_xy = max(x, y);
 
 	if (max_xy === 4) {
-		console.log("[OK] x,y\n");
+		document.write("[OK] x,y<br>");
 	} else {
-		alert("[Error] max(" + x + ", " + y + ") = " + max_xy + "\n");
+		document.write("[Error] max(" + x + ", " + y + ") = " + max_xy + "<br>");
 	}
 
 
 	var max_xz = max(x, z);
 
 	if (max_xz === 5) {
-		console.log("[OK] x,z\n");
+		document.write("[OK] x,z<br>");
 	} else {
-		alert("[Error] max(" + x + ", " + z + ") = " + max_xz + "\n");
+		document.write("[Error] max(" + x + ", " + z + ") = " + max_xz + "<br>");
 	}
 
 
 
 	if (max(y, z) === 5) {
-		console.log("[OK] y,z\n");
+		document.write("[OK] y,z<br>");
 	} else {
-		alert("[Error] max(" + y + ", " + z + ") = " + max(y, z) + "\n");
+		document.write("[Error] max(" + y + ", " + z + ") = " + max(y, z) + "<br>");
 	}
 
 }
@@ -75,10 +75,10 @@ function twoOuputValues() {
 
 
 	if (xPLUSy === 7 && xTIMESy === 12) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] " + x + " + " + y + " = " + xPLUSy + "\t");
-		alert("" + x + " * " + y + " = " + xTIMESy + "\n");
+		document.write("[Error] " + x + " + " + y + " = " + xPLUSy + "\t");
+		document.write("" + x + " * " + y + " = " + xTIMESy + "<br>");
 	}
 
 }
@@ -111,18 +111,18 @@ function resultVariable() {
 		var _ = MySqrt(i), sqroot = _[0], ok = _[1];
 		if (ok) {
 			if (JSON.stringify(sqroot) !== JSON.stringify(results.get(i)[0])) {
-				alert("[Error] The square root of " + i + " is " + sqroot + "\n");
+				document.write("[Error] The square root of " + i + " is " + sqroot + "<br>");
 				err = true;
 			}
 		} else {
 			if (i !== -2.0 && i !== -1.0 && i !== 0) {
-				alert("[Error] The square root for " + i + " should not be run\n");
+				document.write("[Error] The square root for " + i + " should not be run<br>");
 				err = true;
 			}
 		}
 	}
 	if (!err) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	}
 }
 
@@ -143,14 +143,14 @@ function testReturn() {
 	} else {
 		code = "Error";
 	}
-	console.log("[" + code + "]\n");
+	document.write("[" + code + "]<br>");
 
 	var ok = MySqrt(0)[1]; if (!ok) {
 		code = "OK";
 	} else {
 		code = "Error";
 	}
-	console.log("[" + code + "]\n");
+	document.write("[" + code + "]<br>");
 
 }
 
@@ -160,18 +160,18 @@ function testPanic() {
 }
 
 function main() {
-	console.log("\n== testInit\n");
+	document.write("<br>== testInit<br>");
 	testInit();
-	console.log("\n== singleLine\n");
+	document.write("<br>== singleLine<br>");
 	singleLine();
-	console.log("\n== simpleFunc\n");
+	document.write("<br>== simpleFunc<br>");
 	simpleFunc();
-	console.log("\n== twoOuputValues\n");
+	document.write("<br>== twoOuputValues<br>");
 	twoOuputValues();
-	console.log("\n== resultVariable\n");
+	document.write("<br>== resultVariable<br>");
 	resultVariable();
-	console.log("\n== testReturn\n");
+	document.write("<br>== testReturn<br>");
 	testReturn();
-	console.log("\n== testPanic\n");
+	document.write("<br>== testPanic<br>");
 	testPanic();
-}
+} main();

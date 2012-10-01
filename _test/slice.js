@@ -8,23 +8,23 @@ function valueNil() {
 
 	var msg = "value";
 	if (s.isNil()) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 	msg = "length";
 	if (s.len === 0) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 	msg = "capacity";
 	if (s.cap === 0) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 }
@@ -40,18 +40,18 @@ function shortHand() {
 	a_slice.set(array, 4, 8);
 
 	if (a_slice.toString() === "efgh" && a_slice.len === 4 && a_slice.cap === 6) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 
 	a_slice.set(array, 6, 7);
 
 	if (a_slice.toString() === "g") {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error]\n");
+		document.write("[Error]<br>");
 	}
 
 
@@ -60,27 +60,27 @@ function shortHand() {
 	a_slice.set(array, 0, 3);
 
 	if (a_slice.toString() === "abc" && a_slice.len === 3 && a_slice.cap === 10) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 
 	a_slice.set(array, 5);
 
 	if (a_slice.toString() === "fghij") {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error]\n");
+		document.write("[Error]<br>");
 	}
 
 
 	a_slice.set(array, 0);
 
 	if (a_slice.toString() === "abcdefghij") {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error]\n");
+		document.write("[Error]<br>");
 	}
 
 
@@ -89,36 +89,36 @@ function shortHand() {
 	a_slice.set(array, 3, 7);
 
 	if (a_slice.toString() === "defg" && a_slice.len === 4 && a_slice.cap === 7) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 
 	b_slice.set(a_slice, 1, 3);
 
 	if (b_slice.toString() === "ef" && b_slice.len === 2 && b_slice.cap === 6) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error]\n");
+		document.write("[Error]<br>");
 	}
 
 
 	b_slice.set(a_slice, 0, 3);
 
 	if (b_slice.toString() === "def") {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error]\n");
+		document.write("[Error]<br>");
 	}
 
 
 	b_slice.set(a_slice, 0);
 
 	if (b_slice.toString() === "defg") {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error]\n");
+		document.write("[Error]<br>");
 	}
 
 }
@@ -148,27 +148,27 @@ function useFunc() {
 	slice.set(A1, 0);
 
 	if (Max(slice.f) === 9) {
-		console.log("[OK] A1\n");
+		document.write("[OK] A1<br>");
 	} else {
-		alert("[Error] A1\n");
+		document.write("[Error] A1<br>");
 	}
 
 
 	slice.set(A2, 0);
 
 	if (Max(slice.f) === 4) {
-		console.log("[OK] A2\n");
+		document.write("[OK] A2<br>");
 	} else {
-		alert("[Error] A2\n");
+		document.write("[Error] A2<br>");
 	}
 
 
 	slice.set(A3, 0);
 
 	if (Max(slice.f) === 1) {
-		console.log("[OK] A3\n");
+		document.write("[OK] A3<br>");
 	} else {
-		alert("[Error] A3\n");
+		document.write("[Error] A3<br>");
 	}
 
 }
@@ -182,7 +182,7 @@ function PrintByteSlice(name, slice) {
 	}
 	s += "" + slice.f[slice.len - 1] + "]";
 
-	console.log(s + "\n");
+	document.write(s + "<br>");
 }
 
 function reference() {
@@ -195,7 +195,7 @@ function reference() {
 	var slice3 = g.NewSlice(slice1, 0, 2);
 
 
-	console.log("=== First content of A and the slices\n");
+	document.write("=== First content of A and the slices<br>");
 	PrintByteSlice("A", g.NewSlice(A, 0));
 	PrintByteSlice("slice1", slice1);
 	PrintByteSlice("slice2", slice2);
@@ -203,7 +203,7 @@ function reference() {
 
 
 	A[4] = 'E';
-	console.log("\n=== Content of A and the slices, after changing 'e' to 'E' in array A\n");
+	document.write("<br>=== Content of A and the slices, after changing 'e' to 'E' in array A<br>");
 	PrintByteSlice("A", g.NewSlice(A, 0));
 	PrintByteSlice("slice1", slice1);
 	PrintByteSlice("slice2", slice2);
@@ -211,7 +211,7 @@ function reference() {
 
 
 	slice2[1] = 'G';
-	console.log("\n=== Content of A and the slices, after changing 'g' to 'G' in slice2\n");
+	document.write("<br>=== Content of A and the slices, after changing 'g' to 'G' in slice2<br>");
 	PrintByteSlice("A", g.NewSlice(A, 0));
 	PrintByteSlice("slice1", slice1);
 	PrintByteSlice("slice2", slice2);
@@ -228,9 +228,9 @@ function resize() {
 
 	if (slice.len === 4 && slice.cap === 5 && slice.f[0] === 0 && slice.f[1] === 0 && slice.f[2] === 0 && slice.f[3] === 0) {
 
-		console.log("[OK] allocation\n");
+		document.write("[OK] allocation<br>");
 	} else {
-		alert("[Error] allocation\n");
+		document.write("[Error] allocation<br>");
 	}
 
 
@@ -238,9 +238,9 @@ function resize() {
 	slice.f[1] = 2, slice.f[3] = 3;
 
 	if (slice.f[0] === 0 && slice.f[1] === 2 && slice.f[2] === 0 && slice.f[3] === 3) {
-		console.log("[OK] change\n");
+		document.write("[OK] change<br>");
 	} else {
-		alert("[Error] change\n");
+		document.write("[Error] change<br>");
 	}
 
 
@@ -248,9 +248,9 @@ function resize() {
 	slice = g.MakeSlice(0, 2);
 
 	if (slice.len === 2 && slice.cap === 2 && slice.f[0] === 0 && slice.f[1] === 0) {
-		console.log("[OK] resize\n");
+		document.write("[OK] resize<br>");
 	} else {
-		alert("[Error] resize\n");
+		document.write("[Error] resize<br>");
 	}
 
 }
@@ -258,14 +258,14 @@ function resize() {
 
 
 function main() {
-	console.log("\n== valueNil\n");
+	document.write("<br>== valueNil<br>");
 	valueNil();
-	console.log("\n== shortHand\n");
+	document.write("<br>== shortHand<br>");
 	shortHand();
-	console.log("\n== useFunc\n");
+	document.write("<br>== useFunc<br>");
 	useFunc();
-	console.log("\n== reference\n");
+	document.write("<br>== reference<br>");
 	reference();
-	console.log("\n== resize\n");
+	document.write("<br>== resize<br>");
 	resize();
-}
+} main();

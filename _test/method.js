@@ -15,10 +15,10 @@ function noMethod() {
 
 
 	if (area(r1) === 24 && area(new Rectangle(9, 4)) === 36) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] Area of r1 is: " + area(r1) + "\n");
-		alert("\tArea of \"Rectangle{9, 4}\" is: " + area(new Rectangle(9, 4)) + "\n");
+		document.write("[Error] Area of r1 is: " + area(r1) + "<br>");
+		document.write("\tArea of \"Rectangle{9, 4}\" is: " + area(new Rectangle(9, 4)) + "<br>");
 	}
 }
 
@@ -44,17 +44,17 @@ function method() {
 
 
 	if (r1.area() === 24 && r2.area() === 36) {
-		console.log("[OK] rectangle\n");
+		document.write("[OK] rectangle<br>");
 	} else {
-		alert("[Error] Area of r1 is: " + r1.area() + "\n");
-		alert("\tArea of r2 is: " + r2.area() + "\n");
+		document.write("[Error] Area of r1 is: " + r1.area() + "<br>");
+		document.write("\tArea of r2 is: " + r2.area() + "<br>");
 	}
 
 	if (c1.area() === 314.1592653589793 && c2.area() === 1963.4954084936207) {
-		console.log("[OK] circle\n");
+		document.write("[OK] circle<br>");
 	} else {
-		alert("[Error] Area of c1 is: " + c1.area() + "\n");
-		alert("\tArea of c2 is: " + c2.area() + "\n");
+		document.write("[Error] Area of c1 is: " + c1.area() + "<br>");
+		document.write("\tArea of c2 is: " + c2.area() + "<br>");
 	}
 }
 
@@ -94,25 +94,25 @@ function withNamedType() {
 
 
 	if (s.sum() === 15) {
-		console.log("[OK] sum\n");
+		document.write("[OK] sum<br>");
 	} else {
-		alert("[Error] The sum of ints in the slice s is: " + s.sum() + "\n");
+		document.write("[Error] The sum of ints in the slice s is: " + s.sum() + "<br>");
 	}
 
 	if (folks.older() === "Popey") {
-		console.log("[OK] older\n");
+		document.write("[OK] older<br>");
 	} else {
-		alert("[Error] The older in the map folks is: " + folks.older() + "\n");
+		document.write("[Error] The older in the map folks is: " + folks.older() + "<br>");
 	}
 }
 
 
 
 function main() {
-	console.log("\n== noMethod\n");
+	document.write("<br>== noMethod<br>");
 	noMethod();
-	console.log("\n== method\n");
+	document.write("<br>== method<br>");
 	method();
-	console.log("\n== withNamedType\n");
+	document.write("<br>== withNamedType<br>");
 	withNamedType();
-}
+} main();

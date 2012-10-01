@@ -68,10 +68,14 @@ func (tr *transform) getFunc(decl *ast.FuncDecl) {
 		tr.WriteString("());")
 	}
 
-	// At exiting of the function, it returns at the global scope.
 	if decl.Name != nil {
+		// At exiting of the function, it returns at the global scope.
 		tr.funcId = 0
 		tr.blockId = 0
+
+		if decl.Name.Name == "main" {
+			tr.WriteString(SP+"main();") // call to function main
+		}
 	}
 	if decl.Recv != nil {
 		tr.recvVar = ""

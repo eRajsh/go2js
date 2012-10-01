@@ -10,7 +10,7 @@ var p = {p:undefined};
 (function() {
 	p = i;
 	var helloPtr = hello;
-	console.log("helloPtr: " + helloPtr + "\n");
+	document.write("helloPtr: " + helloPtr + "<br>");
 }());
 
 function valueNil() {
@@ -20,9 +20,9 @@ function valueNil() {
 
 	var msg = "declaration";
 	if (p.p === undefined) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 
@@ -30,9 +30,9 @@ function valueNil() {
 
 	msg = "assignment";
 	if (p.p !== undefined) {
-		console.log("[OK] " + msg + "\n");
+		document.write("[OK] " + msg + "<br>");
 	} else {
-		alert("[Error] " + msg + "\n");
+		document.write("[Error] " + msg + "<br>");
 	}
 
 }
@@ -44,7 +44,7 @@ function declaration() {
 
 	p = i;
 	var helloPtr = hello;
-	console.log("p:  " + p + " " + "\nhelloPtr: " + helloPtr + "\n");
+	document.write("p:  " + p + " " + "<br>helloPtr: " + helloPtr + "<br>");
 }
 
 function showAddress() {
@@ -55,10 +55,10 @@ function showAddress() {
 	var b = {p:true};
 
 
-	console.log("Hexadecimal address of 'i' is: " + i + "\n");
-	console.log("Hexadecimal address of 'hello' is: " + hello + "\n");
-	console.log("Hexadecimal address of 'pi' is: " + pi + "\n");
-	console.log("Hexadecimal address of 'b' is: " + b + "\n");
+	document.write("Hexadecimal address of 'i' is: " + i + "<br>");
+	document.write("Hexadecimal address of 'hello' is: " + hello + "<br>");
+	document.write("Hexadecimal address of 'pi' is: " + pi + "<br>");
+	document.write("Hexadecimal address of 'b' is: " + b + "<br>");
 }
 
 function access_1() {
@@ -72,17 +72,17 @@ function access_1() {
 
 
 	if (hello.p === "Hello, mina-san!" && helloPtr.p === "Hello, mina-san!") {
-		console.log("[OK] string\n");
+		document.write("[OK] string<br>");
 	} else {
-		alert("[Error] The string \"hello\" is: " + hello + "\n");
-		alert("\tThe string pointed to by \"helloPtr\" is: " + helloPtr.p + "\n");
+		document.write("[Error] The string \"hello\" is: " + hello + "<br>");
+		document.write("\tThe string pointed to by \"helloPtr\" is: " + helloPtr.p + "<br>");
 	}
 
 	if (i.p === 6 && iPtr.p === 6) {
-		console.log("[OK] int\n");
+		document.write("[OK] int<br>");
 	} else {
-		alert("[Error] The value of \"i\" is: " + i + "\n");
-		alert("\tThe value pointed to by \"iPtr\" is: " + iPtr.p + "\n");
+		document.write("[Error] The value of \"i\" is: " + i + "<br>");
+		document.write("\tThe value pointed to by \"iPtr\" is: " + iPtr.p + "<br>");
 	}
 }
 
@@ -93,18 +93,18 @@ function access_2() {
 	y.p++;
 
 	if (x.p === 4) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] x is: " + x + "\n");
+		document.write("[Error] x is: " + x + "<br>");
 	}
 
 
 	y.p++;
 
 	if (x.p === 5) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] x is: " + x + "\n");
+		document.write("[Error] x is: " + x + "<br>");
 	}
 }
 
@@ -120,10 +120,10 @@ function allocation() {
 
 
 	if (sum === 45 && doubleSum.p === 90) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] The sum of numbers from 0 to 10 is: " + sum + "\n");
-		alert("\tThe double of this sum is: " + doubleSum.p + "\n");
+		document.write("[Error] The sum of numbers from 0 to 10 is: " + sum + "<br>");
+		document.write("\tThe double of this sum is: " + doubleSum.p + "<br>");
 	}
 }
 
@@ -139,10 +139,10 @@ function parameterByValue() {
 
 
 	if (x1 === 4 && x === 3) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] x+1 = " + x1 + "\n");
-		alert("\tx = " + x + "\n");
+		document.write("[Error] x+1 = " + x1 + "<br>");
+		document.write("\tx = " + x + "<br>");
 	}
 }
 
@@ -157,20 +157,20 @@ function byReference_1() {
 	var x1 = add(x);
 
 	if (x1 === 4 && x.p === 4) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] x+1 = " + x1 + "\n");
-		alert("\tx = " + x + "\n");
+		document.write("[Error] x+1 = " + x1 + "<br>");
+		document.write("\tx = " + x + "<br>");
 	}
 
 
 	x1 = add(x);
 
 	if (x1 === 5 && x.p === 5) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] x+1 = " + x1 + "\n");
-		alert("\tx = " + x + "\n");
+		document.write("[Error] x+1 = " + x1 + "<br>");
+		document.write("\tx = " + x + "<br>");
 	}
 
 }
@@ -184,18 +184,18 @@ function byReference_2() {
 	add(value, incr);
 
 	if (value.p === 7) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] value = " + value + "\n");
+		document.write("[Error] value = " + value + "<br>");
 	}
 
 
 	add(value, incr);
 
 	if (value.p === 8) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] value = " + value + "\n");
+		document.write("[Error] value = " + value + "<br>");
 	}
 
 }
@@ -209,31 +209,31 @@ function byReference_3() {
 
 	f();
 	if (y.p === 4) {
-		console.log("[OK]\n");
+		document.write("[OK]<br>");
 	} else {
-		alert("[Error] y =  " + y.p + "\n");
+		document.write("[Error] y =  " + y.p + "<br>");
 	}
 }
 
 function main() {
-	console.log("\n== valueNil\n");
+	document.write("<br>== valueNil<br>");
 	valueNil();
-	console.log("\n== declaration\n");
+	document.write("<br>== declaration<br>");
 	declaration();
-	console.log("\n== showAddress\n");
+	document.write("<br>== showAddress<br>");
 	showAddress();
-	console.log("\n== access_1\n");
+	document.write("<br>== access_1<br>");
 	access_1();
-	console.log("\n== access_2\n");
+	document.write("<br>== access_2<br>");
 	access_2();
-	console.log("\n== allocation\n");
+	document.write("<br>== allocation<br>");
 	allocation();
-	console.log("\n== parameterByValue\n");
+	document.write("<br>== parameterByValue<br>");
 	parameterByValue();
-	console.log("\n== byReference_1\n");
+	document.write("<br>== byReference_1<br>");
 	byReference_1();
-	console.log("\n== byReference_2\n");
+	document.write("<br>== byReference_2<br>");
 	byReference_2();
-	console.log("\n== byReference_3\n");
+	document.write("<br>== byReference_3<br>");
 	byReference_3();
-}
+} main();

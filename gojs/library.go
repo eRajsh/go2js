@@ -154,7 +154,7 @@ func (tr *transform) joinArgsPrint(args []ast.Expr, addLine bool) string {
 
 		if addLine {
 			if i == lenArgs {
-				jsArgs = add(jsArgs, "\\n")
+				jsArgs = add(jsArgs, "<br>")
 			} else {
 				jsArgs = add(jsArgs, " ")
 			}
