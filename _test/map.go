@@ -4,7 +4,7 @@ import "fmt"
 
 var rating = map[string]float32{"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}
 
-func valueNil() {
+func nilValue() {
 	var n map[string]int
 
 	// Checking
@@ -230,8 +230,8 @@ func blankIdentifierInRange() {
 }
 
 func main() {
-	println("\n== valueNil")
-	valueNil()
+	println("\n== nilValue")
+	nilValue()
 	println("\n== declare_1")
 	declare_1()
 	println("\n== declare_2")

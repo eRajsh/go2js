@@ -27,8 +27,10 @@ var a5 = []; for (var i=0; i<4; i++){ a5[i]=0; }
 var a6 = []; for (var i=0; i<3; i++){ a6[i]=[]; for (var j=0; j<5; j++){ a6[i][j]=0; }}
 var a7 = []; for (var i=0; i<2; i++){ a7[i]=[]; for (var j=0; j<2; j++){ a7[i][j]=[]; for (var k=0; k<2; k++){ a7[i][j][k]=0; }}}
 
-var b1 = []; for (var i=0; i<32; i++){ b1[i]=0; } b1 = [1, 2, 3, 4];
-var b2 = []; for (var i=0; i<4; i++){ b2[i]=0; } b2 = [1, , , 4];
+var a8 = []; for (var i=0; i<32; i++){ a8[i]=0; } a8 = [1, 2, 3, 4];
+var a9 = []; for (var i=0; i<4; i++){ a9[i]=0; } a9 = [1, , , 4];
+
+var a10 = ["a", "b", "c"];
 
 
 
@@ -36,21 +38,21 @@ var b2 = []; for (var i=0; i<4; i++){ b2[i]=0; } b2 = [1, , , 4];
 var s1 = g.MakeSlice(0, 10);
 var s2 = g.MakeSlice(0, 10, 20);
 
-var s3 = [2, 4, 6];
-var s4 = [1, _, 3];
-var s5 = ["a", "b", "c"];
+var s3 = g.NewSlice([2, 4, 6]);
+var s4 = g.NewSlice([1, _, 3]);
+var s5 = g.NewSlice([]);
 
 
 
 
-var m1 = new g.M({}, 0);
-var m2 = new g.M({}, 0);
-var m3 = new g.M({
+var m1 = new g.Map({}, 0);
+var m2 = new g.Map({}, 0);
+var m3 = new g.Map({
 	1: "first",
 	2: "second",
 	3: "third"
 }, "");
-var m4 = new g.M({
+var m4 = new g.Map({
 	1: "first",
 	2: 2,
 	3: 3

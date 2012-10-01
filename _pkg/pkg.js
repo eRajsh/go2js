@@ -27,24 +27,36 @@ function Export(pkg, exported) {
 
 
 
-function S(f, len, cap) {
-	this.f=f;
+function Slice(array, elts, low, high, len, cap, isNil) {
+	this.array=array;
+	this.elts=elts;
+
+	this.low=low;
+	this.high=high;
 	this.len=len;
 	this.cap=cap;
+
+	this.isNil=isNil;
 }
 
 
-function NewSlice(i, low, high) {
-	var s = new S([], 0, 0);
-	return s.set(i, low, high);
+
+function NilSlice() {
+	var s = new Slice(undefined, [], 0, 0, 0, 0, false);
+	s.isNil = true;
+	s.len = 0, s.cap = 0;
+	return s;
 }
+
+
 
 
 function MakeSlice(zero, len, cap) {
-	var s = new S([], 0, 0);
+	var s = new Slice(undefined, [], 0, 0, 0, 0, false);
+	s.len = len;
 
 	for (var i = 0; i < len; i++) {
-		s.f[i] = zero;
+		s.elts[i] = zero;
 	}
 
 	if (cap !== undefined) {
@@ -52,43 +64,45 @@ function MakeSlice(zero, len, cap) {
 	} else {
 		s.cap = len;
 	}
-	s.len = len;
 
 	return s;
 }
 
 
-S.prototype.set = function(i, low, high) {
-	if (i.f !== undefined) {
-		this.f = i.f.slice(low, high);
-		this.cap = i.cap - low;
-	} else {
-		this.f = i.slice(low, high);
-		this.cap = i.length - low;
+function NewSlice(elts) {
+	var s = new Slice(undefined, [], 0, 0, 0, 0, false);
+	s.elts = elts;
+	s.len = elts.length;
+	s.cap = s.len;
+	return s;
+}
+
+
+function NewSliceFrom(a, low, high) {
+	var s = new Slice(undefined, [], 0, 0, 0, 0, false);
+	s.array = a;
+	s.low = low;
+	s.high = high;
+	s.len = high - low;
+	s.cap = a.cap - low;
+	return s;
+}
+
+
+
+
+Slice.prototype.get = function() {
+	if (this.elts.length !== 0) {
+		return this.elts;
 	}
 
-	this.len = this.f.length;
+	return this.array.slice(this.low, this.high);
 }
 
 
-S.prototype.append = function(elt) {
-	if (JSON.stringify(this.len) === JSON.stringify(this.cap)) {
-		this.cap = this.len * 2;
-	}
-	this.len++;
-}
-
-
-S.prototype.toString = function() {
-	return this.f.join("");
-}
-
-
-S.prototype.isNil = function() {
-	if (this.cap !== 0) {
-		return false;
-	}
-	return true;
+Slice.prototype.str = function() {
+	var _s = this.get();
+	return _s.join("");
 }
 
 
@@ -97,15 +111,57 @@ S.prototype.isNil = function() {
 
 
 
-function M(f, zero) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Map(f, zero) {
 	this.f=f;
 	this.zero=zero;
+
 }
 
 
 
 
-M.prototype.get = function(k) {
+Map.prototype.get = function(k) {
 	var v = this.f;
 
 
@@ -120,9 +176,11 @@ M.prototype.get = function(k) {
 }
 
 g.Export = Export;
-g.S = S;
-g.NewSlice = NewSlice;
+g.Slice = Slice;
+g.NilSlice = NilSlice;
 g.MakeSlice = MakeSlice;
-g.M = M;
+g.NewSlice = NewSlice;
+g.NewSliceFrom = NewSliceFrom;
+g.Map = Map;
 
 })();

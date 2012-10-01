@@ -2,31 +2,38 @@ package main
 
 import "fmt"
 
-func valueNil() {
-	var s []byte
+func initialValue() {
+	var s1 []byte
+	s2 := []byte{}
+	s3 := []byte{2}
+	s4 := []byte{2, 4}
+	s5 := make([]byte, 0)
+	s6 := make([]byte, 5)
+	s7 := make([]byte, 5, 10)
 
-	// Checking
-	msg := "value"
-	if s == nil {
+	msg := "nil"
+	if s1 == nil && s2 != nil && s3 != nil && s4 != nil &&
+	s5 != nil && s6 != nil && s7 != nil {
 		println("[OK]", msg)
 	} else {
 		fmt.Println("[Error]", msg)
 	}
 
 	msg = "length"
-	if len(s) == 0 {
+	if len(s1) == 0 && len(s2) == 0 && len(s3) == 1 && len(s4) == 2 &&
+	len(s5) == 0 && len(s6) == 5 && len(s7) == 5 {
 		println("[OK]", msg)
 	} else {
 		fmt.Println("[Error]", msg)
 	}
 
 	msg = "capacity"
-	if cap(s) == 0 {
+	if cap(s1) == 0 && cap(s2) == 0 && cap(s3) == 1 && cap(s4) == 2 &&
+	cap(s5) == 0 && cap(s6) == 5 && cap(s7) == 10 {
 		println("[OK]", msg)
 	} else {
 		fmt.Println("[Error]", msg)
 	}
-	//==
 }
 
 func shortHand() {
@@ -175,7 +182,7 @@ func useFunc() {
 
 // * * *
 
-func PrintByteSlice(name string, slice []byte) {
+func PrintByteSlice(name string, slice []byte) string {
 	s := fmt.Sprintf("%s is : [", name)
 	for index := 0; index < len(slice)-1; index++ {
 		s += fmt.Sprintf("%q,", slice[index])
@@ -183,6 +190,7 @@ func PrintByteSlice(name string, slice []byte) {
 	s += fmt.Sprintf("%q]", slice[len(slice)-1])
 
 	println(s)
+	return s
 }
 
 func reference() {
@@ -258,8 +266,8 @@ func resize() {
 // * * *
 
 func main() {
-	println("\n== valueNil")
-	valueNil()
+	println("\n== initialValue")
+	initialValue()
 	println("\n== shortHand")
 	shortHand()
 	println("\n== useFunc")

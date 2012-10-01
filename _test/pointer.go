@@ -13,7 +13,7 @@ func init() {
 	println("helloPtr:", helloPtr)
 }
 
-func valueNil() {
+func nilValue() {
 	var num = 10
 	var p *int
 
@@ -216,8 +216,8 @@ func byReference_3() {
 }
 
 func main() {
-	println("\n== valueNil")
-	valueNil()
+	println("\n== nilValue")
+	nilValue()
 	println("\n== declaration")
 	declaration()
 	println("\n== showAddress")

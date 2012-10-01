@@ -128,8 +128,6 @@ func (tr *transform) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
 // http://golang.org/doc/go_spec.html#Variable_declarations
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/var
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/let
-//
-// TODO: use let for local variables
 func (tr *transform) getVar(spec []ast.Spec, isGlobal bool) {
 	isMultipleLine := false
 
@@ -633,7 +631,7 @@ func (tr *transform) zeroValue(init bool, typ interface{}) (value string, dt dat
 			return tr.getExpression(t).String(), otherType
 		}
 		if !Bootstrap {
-			return fmt.Sprintf("new g.S([],%s0,%s0)", SP, SP), sliceType
+			return "g.NilSlice()", sliceType
 		}
 		return "[]", sliceType
 

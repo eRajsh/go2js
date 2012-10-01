@@ -13,7 +13,7 @@ var p = {p:undefined};
 	document.write("helloPtr: " + helloPtr + "<br>");
 }());
 
-function valueNil() {
+function nilValue() {
 	var num = {p:10};
 	var p = {p:undefined};
 
@@ -216,8 +216,8 @@ function byReference_3() {
 }
 
 function main() {
-	document.write("<br>== valueNil<br>");
-	valueNil();
+	document.write("<br>== nilValue<br>");
+	nilValue();
 	document.write("<br>== declaration<br>");
 	declaration();
 	document.write("<br>== showAddress<br>");

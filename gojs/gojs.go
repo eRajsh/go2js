@@ -249,10 +249,10 @@ func Compile(filename string) error {
 				trans.getImport(genDecl.Specs)
 			case token.CONST:
 				trans.getConst(genDecl.TokPos, genDecl.Specs, true)
-			case token.TYPE:
-				trans.getType(genDecl.Specs, true)
 			case token.VAR:
 				trans.getVar(genDecl.Specs, true)
+			case token.TYPE:
+				trans.getType(genDecl.Specs, true)
 			}
 
 		default:
@@ -262,7 +262,7 @@ func Compile(filename string) error {
 
 	// Any error?
 	if trans.hasError {
-		fmt.Fprintln(os.Stderr, " == Errors\n")
+		fmt.Fprint(os.Stderr, " == Errors\n\n")
 
 		for _, err := range trans.err {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
@@ -332,7 +332,7 @@ func Compile(filename string) error {
 
 	// Print warnings
 	if len(trans.warn) != 0 {
-		fmt.Fprintln(os.Stderr, " == Warnings\n")
+		fmt.Fprint(os.Stderr, " == Warnings\n\n")
 
 		for _, v := range trans.warn {
 			fmt.Fprintln(os.Stderr, v)

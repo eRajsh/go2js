@@ -2,9 +2,9 @@
 
 
 
-var rating = new g.M({"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}, 0);
+var rating = new g.Map({"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}, 0);
 
-function valueNil() {
+function nilValue() {
 	var n;
 
 
@@ -16,7 +16,7 @@ function valueNil() {
 	}
 
 
-	n = new g.M({}, 0);
+	n = new g.Map({}, 0);
 
 
 	msg = "using make";
@@ -32,7 +32,7 @@ function declare_1() {
 
 
 	var numbers;
-	numbers = new g.M({}, 0);
+	numbers = new g.Map({}, 0);
 
 	numbers.f["one"] = 1;
 	numbers.f["ten"] = 10;
@@ -49,10 +49,10 @@ function declare_1() {
 
 function declare_2() {
 
-	var rating2 = new g.M({"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}, 0);
+	var rating2 = new g.Map({"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}, 0);
 
 
-	var rating = new g.M({}, 0);
+	var rating = new g.Map({}, 0);
 	rating.f["C"] = 5;
 	rating.f["Go"] = 4.5;
 	rating.f["Python"] = 4.5;
@@ -81,7 +81,7 @@ function declare_2() {
 
 function reference() {
 
-	var m = new g.M({}, "");
+	var m = new g.Map({}, "");
 	m.f["Hello"] = "Bonjour";
 
 	var m1 = m;
@@ -106,7 +106,7 @@ function checkKey() {
 	}
 
 
-	var multMap = new g.M({1: {1: "one"}, 2: {2: "two"}}, "");
+	var multMap = new g.Map({1: {1: "one"}, 2: {2: "two"}}, "");
 	var k_multMap = multMap.get(1, 2)[0];
 
 	if (k_multMap === "") {
@@ -206,7 +206,7 @@ function blankIdentifierInRange() {
 	var A3 = []; for (var i=0; i<1; i++){ A3[i]=0; } A3 = [1];
 
 
-	var slice = new g.S([], 0, 0);
+	var slice = g.NilSlice();
 
 	slice.set(A1, 0);
 	if (Max(slice.f) !== 9) {
@@ -230,8 +230,8 @@ function blankIdentifierInRange() {
 }
 
 function main() {
-	document.write("<br>== valueNil<br>");
-	valueNil();
+	document.write("<br>== nilValue<br>");
+	nilValue();
 	document.write("<br>== declare_1<br>");
 	declare_1();
 	document.write("<br>== declare_2<br>");

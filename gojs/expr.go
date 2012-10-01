@@ -198,7 +198,7 @@ func (e *expression) transform(expr ast.Expr) {
 				if isOpNot {
 					e.WriteString("!")
 				}
-				e.WriteString(xStr + ".isNil()")
+				e.WriteString(xStr + ".isNil")
 				break
 			}
 			if x.isNil && e.tr.isType(sliceType, yStr) {
@@ -289,12 +289,12 @@ func (e *expression) transform(expr ast.Expr) {
 					e.WriteString("," + SP + e.tr.getExpression(typ.Args[2]).String())
 				}
 
-//				e.tr.slices[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
+				e.tr.slices[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
 				e.isMake = true
 
 			case *ast.MapType:
 				e.tr.maps[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
-				e.WriteString("new g.M({}," + SP + e.tr.zeroOfMap(argType) + ")")
+				e.WriteString("new g.Map({}," + SP + e.tr.zeroOfMap(argType) + ")")
 
 			case *ast.ChanType:
 				e.transform(typ.Fun)
@@ -323,11 +323,11 @@ func (e *expression) transform(expr ast.Expr) {
 			arg := e.tr.getExpression(typ.Args[0]).String()
 			_arg := stripField(arg)
 
-			if !e.tr.isType(sliceType, _arg) {
+			if e.tr.isType(sliceType, _arg) {
+				e.WriteString(_arg + ".toString()")
+			} else {
 				e.WriteString(arg)
 				e.returnBasicLit = true
-			} else {
-				e.WriteString(_arg + ".toString()")
 			}
 
 		case "uint", "uint8", "uint16", "uint32",
@@ -433,9 +433,10 @@ func (e *expression) transform(expr ast.Expr) {
 			}
 
 			// Slice
-/*			if compoType.Len == nil {
+			if compoType.Len == nil {
 				e.tr.slices[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
-			}*/
+				e.isSlice = true
+			}
 			// For arrays with elements
 			if len(typ.Elts) != 0 {
 				if !e.arrayHasElts && compoType.Len != nil {
@@ -447,6 +448,8 @@ func (e *expression) transform(expr ast.Expr) {
 				e.WriteString("]")
 
 				e.skipSemicolon = false
+			} else if e.isSlice {
+				e.WriteString("[]")
 			}
 
 		case *ast.Ident: // Custom types
@@ -475,7 +478,7 @@ func (e *expression) transform(expr ast.Expr) {
 			}
 			e.tr.maps[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
 
-			e.WriteString("new g.M({")
+			e.WriteString("new g.Map({")
 			e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
 			e.WriteString("}," + SP + e.tr.zeroOfMap(compoType) + ")")
 

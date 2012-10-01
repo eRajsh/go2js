@@ -93,7 +93,7 @@ function resultVariable() {
 		return [s, ok];
 	};
 
-	var results = new g.M({
+	var results = new g.Map({
 		1: 1,
 		2: 1.4142135623730951,
 		3: 1.7320508075688772,

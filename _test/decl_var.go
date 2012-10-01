@@ -27,8 +27,10 @@ var (
 	a6 = [3][5]int{}
 	a7 = [2][2][2]float64{} // same as [2]([2]([2]float64))
 
-	b1 = [32]byte{1, 2, 3, 4}
-	b2 = [4]byte{1, _, _, 4}
+	a8 = [32]byte{1, 2, 3, 4}
+	a9 = [4]byte{1, _, _, 4}
+
+	a10 = [...]string{"a", "b", "c"} // [3]string
 )
 
 // Slice
@@ -38,7 +40,7 @@ var (
 
 	s3 = []int{2, 4, 6}
 	s4 = []int{1, _, 3}
-	s5 = [...]string{"a", "b", "c"}
+	s5 = []int{}
 )
 
 // Map

@@ -2,38 +2,45 @@
 
 
 
-function valueNil() {
-	var s = new g.S([], 0, 0);
+function initialValue() {
+	var s1 = g.NilSlice();
+	var s2 = g.NewSlice([]);
+	var s3 = g.NewSlice([2]);
+	var s4 = g.NewSlice([2, 4]);
+	var s5 = g.MakeSlice(0, 0);
+	var s6 = g.MakeSlice(0, 5);
+	var s7 = g.MakeSlice(0, 5, 10);
 
+	var msg = "nil";
+	if (s1.isNil && !s2.isNil && !s3.isNil && !s4.isNil && !s5.isNil && !s6.isNil && !s7.isNil) {
 
-	var msg = "value";
-	if (s.isNil()) {
 		document.write("[OK] " + msg + "<br>");
 	} else {
 		document.write("[Error] " + msg + "<br>");
 	}
 
 	msg = "length";
-	if (s.len === 0) {
+	if (s1.len === 0 && s2.len === 0 && s3.len === 1 && s4.len === 2 && s5.len === 0 && s6.len === 5 && s7.len === 5) {
+
 		document.write("[OK] " + msg + "<br>");
 	} else {
 		document.write("[Error] " + msg + "<br>");
 	}
 
 	msg = "capacity";
-	if (s.cap === 0) {
+	if (s1.cap === 0 && s2.cap === 0 && s3.cap === 1 && s4.cap === 2 && s5.cap === 0 && s6.cap === 5 && s7.cap === 10) {
+
 		document.write("[OK] " + msg + "<br>");
 	} else {
 		document.write("[Error] " + msg + "<br>");
 	}
-
 }
 
 function shortHand() {
 
 	var array = []; for (var i=0; i<10; i++){ array[i]=0; } array = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
 
-	var a_slice = new g.S([], 0, 0), b_slice = new g.S([], 0, 0);
+	var a_slice = g.NilSlice(), b_slice = g.NilSlice();
 
 	var msg = "slicing";
 
@@ -143,7 +150,7 @@ function useFunc() {
 	var A3 = []; for (var i=0; i<1; i++){ A3[i]=0; } A3 = [1];
 
 
-	var slice = new g.S([], 0, 0);
+	var slice = g.NilSlice();
 
 	slice.set(A1, 0);
 
@@ -183,6 +190,7 @@ function PrintByteSlice(name, slice) {
 	s += "" + slice.f[slice.len - 1] + "]";
 
 	document.write(s + "<br>");
+	return s;
 }
 
 function reference() {
@@ -221,7 +229,7 @@ function reference() {
 
 
 function resize() {
-	var slice = new g.S([], 0, 0);
+	var slice = g.NilSlice();
 
 
 	slice = g.MakeSlice(0, 4, 5);
@@ -258,8 +266,8 @@ function resize() {
 
 
 function main() {
-	document.write("<br>== valueNil<br>");
-	valueNil();
+	document.write("<br>== initialValue<br>");
+	initialValue();
 	document.write("<br>== shortHand<br>");
 	shortHand();
 	document.write("<br>== useFunc<br>");
