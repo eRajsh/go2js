@@ -218,4 +218,4 @@ wathever platform (web, desktop, mobile) would be almost zero.
 The tests are basedd in the examples of Big Yuuta's book for novices
 (http://go-book.appspot.com/).
 */
-package main
+package gojs
