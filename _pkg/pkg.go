@@ -49,7 +49,6 @@ type arrayType struct {
 
 // MakeArray initializes an array of dimension "dim" to value "zero",
 // inserting the elemnts of "elem" if any.
-// TODO: checking slices that have positions in elem ([1,2,5:5])
 func MakeArray(dim []uint, zero interface{}, elem []interface{}) *arrayType {
 	a := new(arrayType)
 
@@ -73,11 +72,25 @@ func (a arrayType) kind() uint { return arrayKind }
 
 // mergeArray merges src in array dst.
 func mergeArray(dst, src []interface{}) {
-	for i, v := range src {
-		if Array.isArray(v) {
-			mergeArray(dst[i], v)
+	for i, srcVal := range src {
+		if Array.isArray(srcVal) {
+			mergeArray(dst[i], srcVal)
 		} else {
-			dst[i] = v
+			isHashMap := false
+
+			// The position is into a hash map, if any
+			if typeof(srcVal) == "object" {
+				for k, v := range srcVal {
+					if srcVal.hasOwnProperty(k) { // identify a hashmap
+						isHashMap = true
+						i = k
+						dst[i] = v
+					}
+				}
+			}
+			if !isHashMap {
+				dst[i] = srcVal
+			}
 		}
 	}
 }
@@ -184,6 +197,7 @@ func MakeSlice(zero interface{}, len, cap uint) *sliceType {
 }
 
 // NewSlice creates a new slice.
+// TODO: check if there is any position
 func NewSlice(elem []interface{}) *sliceType {
 	s := new(sliceType)
 

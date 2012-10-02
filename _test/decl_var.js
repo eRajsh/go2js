@@ -28,7 +28,7 @@ var a6 = g.MakeArray([3,5], 0);
 var a7 = g.MakeArray([2,2,2], 0);
 
 var a8 = g.MakeArray([32], 0, [1, 2, 3, 4]);
-var a9 = g.MakeArray([4], 0, [1, 3:4]);
+var a9 = g.MakeArray([4], 0, [1, {3:4}]);
 
 var a10 = g.MakeArray([3], "", ["a", "b", "c"]);
 
@@ -39,7 +39,7 @@ var s1 = g.MakeSlice(0, 10);
 var s2 = g.MakeSlice(0, 10, 20);
 
 var s3 = g.NewSlice([2, 4, 6]);
-var s4 = g.NewSlice([1, 2:3]);
+var s4 = g.NewSlice([1, {2:3}]);
 var s5 = g.NewSlice([]);
 
 

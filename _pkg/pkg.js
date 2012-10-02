@@ -49,7 +49,6 @@ function arrayType(f, len, cap) {
 
 
 
-
 function MakeArray(dim, zero, elem) {
 	var a = new arrayType([], 0, 0);
 
@@ -73,11 +72,25 @@ arrayType.prototype.kind = function() { return arrayKind; }
 
 
 function mergeArray(dst, src) {
-	var v; for (var i in src) { v = src[i];
-		if (Array.isArray(v)) {
-			mergeArray(dst[i], v);
+	var srcVal; for (var i in src) { srcVal = src[i];
+		if (Array.isArray(srcVal)) {
+			mergeArray(dst[i], srcVal);
 		} else {
-			dst[i] = v;
+			var isHashMap = false;
+
+
+			if (typeof(srcVal) === "object") {
+				var v; for (var k in srcVal) { v = srcVal[k];
+					if (srcVal.hasOwnProperty(k)) {
+						isHashMap = true;
+						i = k;
+						dst[i] = v;
+					}
+				}
+			}
+			if (!isHashMap) {
+				dst[i] = srcVal;
+			}
 		}
 	}
 }
@@ -182,6 +195,7 @@ function MakeSlice(zero, len, cap) {
 
 	return s;
 }
+
 
 
 function NewSlice(elem) {

@@ -40,9 +40,8 @@ type expression struct {
 	varName  string
 	funcName string
 	mapName  string
-	name     string // used for slice
+	zero     string
 
-	zero string
 	kind Kind
 
 	hasError bool
@@ -85,7 +84,6 @@ func (tr *transform) newExpression(iVar interface{}) *expression {
 		tr,
 		new(bytes.Buffer),
 		id,
-		"",
 		"",
 		"",
 		"",
@@ -656,7 +654,7 @@ func (e *expression) transform(expr ast.Expr) {
 		if !e.tr.isArray && e.kind != sliceKind {
 			e.WriteString(key + ":" + SP + value)
 		} else {
-			e.WriteString(key + ":" + value)
+			e.WriteString(fmt.Sprintf("{%s:%s}", key, value))
 		}
 
 	// godoc go/ast MapType
@@ -755,7 +753,6 @@ func (e *expression) transform(expr ast.Expr) {
 			e.WriteString(fmt.Sprintf("g.NewSlice(%s,%s)", x, SP+slice))
 		}
 
-		e.name = x
 		e.kind = sliceKind
 
 	// godoc go/ast StructType
