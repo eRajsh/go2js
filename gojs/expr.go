@@ -651,7 +651,11 @@ func (e *expression) transform(expr ast.Expr) {
 			value = "{" + value[1:len(value)-1] + "}"
 		}
 
-		e.WriteString(key + ":" + SP + value)
+		if !e.tr.isArray && e.kind != sliceKind {
+			e.WriteString(key + ":" + SP + value)
+		} else {
+			e.WriteString(key + ":" + value)
+		}
 
 	// godoc go/ast MapType
 	//  Map   token.Pos // position of "map" keyword
