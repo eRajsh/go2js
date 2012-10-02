@@ -12,7 +12,7 @@ function testIf() {
 	} else {
 		code = "OK";
 	}
-	console.log("[" + code + "] simple\n");
+	document.write("[" + code + "] simple<br>");
 
 
 	var x = 12; if (x > 10) {
@@ -20,7 +20,7 @@ function testIf() {
 	} else {
 		code = "Error";
 	}
-	console.log("[" + code + "] with statement\n");
+	document.write("[" + code + "] with statement<br>");
 
 
 	var i = 7;
@@ -32,7 +32,7 @@ function testIf() {
 	} else {
 		code = "OK";
 	}
-	console.log("[" + code + "] multiple\n");
+	document.write("[" + code + "] multiple<br>");
 }
 
 function testSwitch() {
@@ -50,7 +50,7 @@ function testSwitch() {
 	case 10:
 		code = "OK";
 	}
-	console.log("[" + code + "] simple\n");
+	document.write("[" + code + "] simple<br>");
 
 
 	i = 5; switch (true) {
@@ -63,13 +63,13 @@ function testSwitch() {
 	default:
 		code = "Error";
 	}
-	console.log("[" + code + "] with statement\n");
+	document.write("[" + code + "] with statement<br>");
 
 	switch (true) {
 	case i === 5:
 		code = "OK";
 	}
-	console.log("[" + code + "] without expression\n");
+	document.write("[" + code + "] without expression<br>");
 
 
 	switch (i) {
@@ -89,7 +89,7 @@ function testSwitch() {
 	default:
 		code = "Error";
 	}
-	console.log("[" + code + "] with fallthrough\n");
+	document.write("[" + code + "] with fallthrough<br>");
 }
 
 function testFor() {
@@ -106,7 +106,7 @@ function testFor() {
 	} else {
 		code = "Error";
 	}
-	console.log("[" + code + "] simple\n");
+	document.write("[" + code + "] simple<br>");
 
 
 
@@ -120,7 +120,7 @@ function testFor() {
 	} else {
 		code = "Error";
 	}
-	console.log("[" + code + "] 2 expressions omitted\n");
+	document.write("[" + code + "] 2 expressions omitted<br>");
 
 
 
@@ -134,7 +134,7 @@ function testFor() {
 	} else {
 		code = "Error";
 	}
-	console.log("[" + code + "] 2 expressions omitted, no semicolons\n");
+	document.write("[" + code + "] 2 expressions omitted, no semicolons<br>");
 
 
 
@@ -153,7 +153,7 @@ function testFor() {
 	} else {
 		code = "Error";
 	}
-	console.log("[" + code + "] infinite loop\n");
+	document.write("[" + code + "] infinite loop<br>");
 
 
 
@@ -166,9 +166,9 @@ function testFor() {
 	}
 
 	if (s === "10 9 8 7 6 5 ") {
-		console.log("[OK] break\n");
+		document.write("[OK] break<br>");
 	} else {
-		alert("[Error] value in break: " + s + "\n");
+		document.write("[Error] value in break: " + s + "<br>");
 	}
 
 
@@ -182,28 +182,44 @@ function testFor() {
 	}
 
 	if (s === "10 9 8 7 6 4 3 2 1 ") {
-		console.log("[OK] continue\n");
+		document.write("[OK] continue<br>");
 	} else {
-		alert("[Error] value in continue: " + s + "\n");
+		document.write("[Error] value in continue: " + s + "<br>");
 	}
 
 }
 
 function testRange() {
-	var s = [2, 3, 5];
+	var hasError = false;
+	var s = g.NewSlice([2, 3, 5]);
 
-	var v; for (i in s.f) { v = s.f[i];
-		console.log("key: " + i + " " + "value: " + v + "\n");
+	var resultOk = new g.Map({
+		0: 2,
+		1: 3,
+		2: 5
+	}, 0);
+
+	var v; for (var i in s.f) { v = s.f[i];
+		if (JSON.stringify(resultOk.get(i)[0]) !== JSON.stringify(v)) {
+			hasError = true;
+			document.write("[Error] value in continue: " + s.f + "<br>");
+		}
+
+		document.write("key: " + i + " " + "value: " + v + "<br>");
+	}
+
+	if (!hasError) {
+		document.write("[OK]<br>");
 	}
 }
 
 function main() {
-	console.log("\n== testIf\n");
+	document.write("<br>== testIf<br>");
 	testIf();
-	console.log("\n== testSwitch\n");
+	document.write("<br>== testSwitch<br>");
 	testSwitch();
-	console.log("\n== testFor\n");
+	document.write("<br>== testFor<br>");
 	testFor();
-
-
-}
+	document.write("<br>== testRange<br>");
+	testRange();
+} main();

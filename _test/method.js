@@ -65,7 +65,7 @@ function AgesByNames(t) { this.t=t; }
 
 SliceOfints.prototype.sum = function() {
 	var sum = 0;
-	var value; for (_ in s) { value = s[_];
+	var value; for (var _ in s) { value = s[_];
 		sum += value;
 	}
 	return sum;
@@ -74,7 +74,7 @@ SliceOfints.prototype.sum = function() {
 AgesByNames.prototype.older = function() {
 	var a = 0;
 	var n = "";
-	var value; for (key in people) { value = people[key];
+	var value; for (var key in people) { value = people[key];
 		if (value > a) {
 			a = value;
 			n = key;

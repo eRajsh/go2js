@@ -16,7 +16,7 @@ function Older(people) {
 	}
 	var older = people[0];
 
-	var value; for (_ in people) { value = people[_];
+	var value; for (var _ in people) { value = people[_];
 
 		if (value.age > older.age) {
 			older = value;

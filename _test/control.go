@@ -190,10 +190,26 @@ func testFor() {
 }
 
 func testRange() {
+	hasError := false
 	s := []int{2, 3, 5}
 
+	resultOk := map[int]int {
+		0: 2,
+		1: 3,
+		2: 5,
+	}
+
 	for i, v := range s {
+		if resultOk[i] != v {
+			hasError = true
+			fmt.Printf("[Error] value in continue: %s\n", s)
+		}
+
 		println("key:", i, "value:", v)
+	}
+
+	if !hasError {
+		println("[OK]")
 	}
 }
 
@@ -204,15 +220,6 @@ func main() {
 	testSwitch()
 	println("\n== testFor")
 	testFor()
-/*	println("\n== testRange")
-	testRange()*/
+	println("\n== testRange")
+	testRange()
 }
-
-/*
-
-== testRange()
-
-key: 0 value: 2
-key: 1 value: 3
-key: 2 value: 5
-*/

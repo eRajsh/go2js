@@ -73,7 +73,7 @@ arrayType.prototype.kind = function() { return arrayKind; }
 
 
 function mergeArray(dst, src) {
-	var v; for (i in src) { v = src[i];
+	var v; for (var i in src) { v = src[i];
 		if (Array.isArray(v)) {
 			mergeArray(dst[i], v);
 		} else {
@@ -88,7 +88,7 @@ function equalDim(d1, d2) {
 	if (d1.length !== d2.length) {
 		return false;
 	}
-	var v; for (i in d1) { v = d1[i];
+	var v; for (var i in d1) { v = d1[i];
 		if (JSON.stringify(v) !== JSON.stringify(d2[i])) {
 			return false;
 		}
@@ -306,7 +306,7 @@ Map.prototype.get = function(k) {
 
 
 function Export(pkg, exported) {
-	var v; for (_ in exported) { v = exported[_];
+	var v; for (var _ in exported) { v = exported[_];
 		pkg.v = v;
 	}
 }

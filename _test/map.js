@@ -148,7 +148,7 @@ function testRange() {
 	var hasError = false;
 
 
-	var value; for (key in rating.m) { value = rating.get(key)[0];
+	var value; for (var key in rating.m) { value = rating.get(key)[0];
 		switch (key) {
 		case "C":
 			if (value !== 5) {
@@ -175,7 +175,7 @@ function testRange() {
 	}
 
 
-	for (key in rating.m) {
+	for (var key in rating.m) {
 		if (key !== "C" && key !== "Go" && key !== "Python") {
 			document.write("[Error] key not expected: " + key + "<br>");
 			hasError = true;
@@ -192,7 +192,7 @@ function blankIdentifierInRange() {
 
 	var Max = function(slice) {
 		var max = slice[0];
-		var value; for (_ in slice) { value = slice[_];
+		var value; for (var _ in slice) { value = slice[_];
 			if (value > max) {
 				max = value;
 			}
