@@ -193,11 +193,11 @@ function testRange() {
 	var hasError = false;
 	var s = g.Slice(0, [2, 3, 5]);
 
-	var resultOk = new g.Map({
+	var resultOk = g.Map(0, {
 		0: 2,
 		1: 3,
 		2: 5
-	}, 0);
+	});
 
 	var v; for (var i in s.f) { v = s.f[i];
 		if (JSON.stringify(resultOk.get(i)[0]) !== JSON.stringify(v)) {

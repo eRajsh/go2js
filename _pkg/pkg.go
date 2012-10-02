@@ -20,6 +20,7 @@ package g
 const (
 	invalid uint = iota
 	arrayKind
+	mapKind
 	sliceKind
 )
 
@@ -302,19 +303,29 @@ func (s sliceType) append(elt interface{}) {
 // == Map
 //
 
-// M represents a map.
+// mapType represents a map type.
 // The compiler adds the appropriate zero value for the map (which it is work out
 // from the map type).
-type Map struct {
+type mapType struct {
 	f    map[interface{}]interface{} // map's field
-	zero interface{}                 // zero value for the map
-	// TODO add "cap"
+	zero interface{}                 // zero value for the map's value
+
+	cap uint
+}
+
+// Map creates a map storing its zero value.
+func Map(zero interface{}, m map[interface{}]interface{}, cap uint) *mapType {
+	m := &mapType{m, zero}
+	if cap != nil {
+		m.cap = cap
+	}
+	return m
 }
 
 // Gets the value for the key "k".
 // If looking some key up in M's map gets you "nil" ("undefined" in JS),
 // then return a copy of the zero value.
-func (m Map) get(k interface{}) (interface{}, bool) {
+func (m mapType) get(k interface{}) (interface{}, bool) {
 	v := m.f
 
 	// Allow multi-dimensional index (separated by commas)

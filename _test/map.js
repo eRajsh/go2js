@@ -2,7 +2,7 @@
 
 
 
-var rating = new g.Map({"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}, 0);
+var rating = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
 
 function nilValue() {
 	var n;
@@ -16,7 +16,7 @@ function nilValue() {
 	}
 
 
-	n = new g.Map({}, 0);
+	n = g.Map(0, {});
 
 
 	msg = "using make";
@@ -32,7 +32,7 @@ function declare_1() {
 
 
 	var numbers;
-	numbers = new g.Map({}, 0);
+	numbers = g.Map(0, {});
 
 	numbers.f["one"] = 1;
 	numbers.f["ten"] = 10;
@@ -49,10 +49,10 @@ function declare_1() {
 
 function declare_2() {
 
-	var rating2 = new g.Map({"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}, 0);
+	var rating2 = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
 
 
-	var rating = new g.Map({}, 0);
+	var rating = g.Map(0, {});
 	rating.f["C"] = 5;
 	rating.f["Go"] = 4.5;
 	rating.f["Python"] = 4.5;
@@ -81,7 +81,7 @@ function declare_2() {
 
 function reference() {
 
-	var m = new g.Map({}, "");
+	var m = g.Map("", {});
 	m.f["Hello"] = "Bonjour";
 
 	var m1 = m;
@@ -106,7 +106,7 @@ function checkKey() {
 	}
 
 
-	var multMap = new g.Map({1: {1: "one"}, 2: {2: "two"}}, "");
+	var multMap = g.Map("", {1: {1: "one"}, 2: {2: "two"}});
 	var k_multMap = multMap.get(1, 2)[0];
 
 	if (k_multMap === "") {

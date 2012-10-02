@@ -20,7 +20,8 @@ var g = {}; (function() {
 const 
 invalid = 0,
 arrayKind = 1,
-sliceKind = 2;
+mapKind = 2,
+sliceKind = 3;
 
 
 (function() {
@@ -305,16 +306,26 @@ sliceType.prototype.kind = function() { return sliceKind; }
 
 
 
-function Map(f, zero) {
+function mapType(f, zero, cap) {
 	this.f=f;
 	this.zero=zero;
 
+	this.cap=cap;
+}
+
+
+function Map(zero, m, cap) {
+	var m = new mapType(m, zero);
+	if (cap !== undefined) {
+		m.cap = cap;
+	}
+	return m;
 }
 
 
 
 
-Map.prototype.get = function(k) {
+mapType.prototype.get = function(k) {
 	var v = this.f;
 
 

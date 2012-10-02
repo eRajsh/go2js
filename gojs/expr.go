@@ -50,7 +50,7 @@ type expression struct {
 	//isFunc    bool // anonymous function
 	isIdent   bool
 	isValue   bool // is it on the right of the assignment?
-	isAddress bool
+	isVarAddress bool
 	isPointer bool
 	isMake    bool
 	isNil     bool
@@ -233,7 +233,7 @@ func (e *expression) transform(expr ast.Expr) {
 			e.WriteString(x.String())
 		}
 		// To know when a pointer is compared with the value nil.
-		if y.isNil && !x.isPointer && !x.isAddress {
+		if y.isNil && !x.isPointer && !x.isVarAddress {
 			e.WriteString(NIL)
 		}
 
@@ -244,7 +244,7 @@ func (e *expression) transform(expr ast.Expr) {
 		} else {
 			e.WriteString(y.String())
 		}
-		if x.isNil && !y.isPointer && !y.isAddress {
+		if x.isNil && !y.isPointer && !y.isVarAddress {
 			e.WriteString(NIL)
 		}
 
@@ -303,7 +303,7 @@ func (e *expression) transform(expr ast.Expr) {
 
 			case *ast.MapType:
 				e.tr.maps[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
-				e.WriteString("new g.Map({}," + SP + e.tr.zeroOfMap(argType) + ")")
+				e.WriteString(fmt.Sprintf("g.Map(%s,%s{})", e.tr.zeroOfMap(argType), SP))
 
 			case *ast.ChanType:
 				e.transform(typ.Fun)
@@ -471,6 +471,7 @@ func (e *expression) transform(expr ast.Expr) {
 
 		case *ast.Ident: // Custom types
 			useField := false
+			e.isVarAddress = false // it is the address to a type
 			e.WriteString("new " + typ.Type.(*ast.Ident).Name)
 
 			if len(typ.Elts) != 0 {
@@ -495,9 +496,9 @@ func (e *expression) transform(expr ast.Expr) {
 			}
 			e.tr.maps[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
 
-			e.WriteString("new g.Map({")
+			e.WriteString(fmt.Sprintf("g.Map(%s,%s{", e.tr.zeroOfMap(compoType), SP))
 			e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
-			e.WriteString("}," + SP + e.tr.zeroOfMap(compoType) + ")")
+			e.WriteString("})")
 
 		case nil:
 			e.WriteString("[")
@@ -564,7 +565,7 @@ func (e *expression) transform(expr ast.Expr) {
 		default:
 			if e.isPointer { // `*x` => `x.p`
 				name += ".p"
-			} else if e.isAddress { // `&x` => `x`
+			} else if e.isVarAddress { // `&x` => `x`
 				e.tr.addPointer(name)
 			} else {
 				if !e.tr.isVar {
@@ -759,18 +760,18 @@ func (e *expression) transform(expr ast.Expr) {
 
 		e.kind = sliceKind
 
-	// godoc go/ast StructType
-	//  Struct     token.Pos  // position of "struct" keyword
-	//  Fields     *FieldList // list of field declarations
-	//  Incomplete bool       // true if (source) fields are missing in the Fields list
-	case *ast.StructType:
-
 	// godoc go/ast StarExpr
 	//  Star token.Pos // position of "*"
 	//  X    Expr      // operand
 	case *ast.StarExpr:
 		e.isPointer = true
 		e.transform(typ.X)
+
+	// godoc go/ast StructType
+	//  Struct     token.Pos  // position of "struct" keyword
+	//  Fields     *FieldList // list of field declarations
+	//  Incomplete bool       // true if (source) fields are missing in the Fields list
+	case *ast.StructType:
 
 	// godoc go/ast UnaryExpr
 	//  OpPos token.Pos   // position of Op
@@ -781,14 +782,12 @@ func (e *expression) transform(expr ast.Expr) {
 		op := typ.Op.String()
 
 		switch typ.Op {
-		// Bitwise complement
-		case token.XOR:
+		case token.XOR: // bitwise complement
 			op = "~"
-		// Address operator
-		case token.AND:
-			e.isAddress = true
+		case token.AND: // address operator
+			e.isVarAddress = true
 			writeOp = false
-		case token.ARROW:
+		case token.ARROW: // channel
 			e.tr.addError("%s: channel operator", e.tr.fset.Position(typ.OpPos))
 			e.tr.hasError = true
 			return

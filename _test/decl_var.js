@@ -45,18 +45,18 @@ var s5 = g.Slice();
 
 
 
-var m1 = new g.Map({}, 0);
-var m2 = new g.Map({}, 0);
-var m3 = new g.Map({
+var m1 = g.Map(0, {});
+var m2 = g.Map(0, {});
+var m3 = g.Map("", {
 	1: "first",
 	2: "second",
 	3: "third"
-}, "");
-var m4 = new g.Map({
+});
+var m4 = g.Map(undefined, {
 	1: "first",
 	2: 2,
 	3: 3
-}, undefined);
+});
 
 
 

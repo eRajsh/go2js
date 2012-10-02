@@ -493,7 +493,7 @@ _noFunc:
 
 				_, typeIs = tr.zeroValue(false, type_)
 
-				if expr.isAddress {
+				if expr.isVarAddress {
 					tr.addr[tr.funcId][tr.blockId][name] = true
 					if !isNewVar {
 						nameExpr += ADDR
@@ -553,7 +553,7 @@ _noFunc:
 			}
 
 			// Could be addressed ahead
-			if value != "" && !expr.isPointer && !expr.isAddress && !typeIsPointer {
+			if value != "" && !expr.isPointer && !expr.isVarAddress && !typeIsPointer {
 				value = tagPointer(isZeroValue, 'L', tr.funcId, tr.blockId, name) +
 					value +
 					tagPointer(isZeroValue, 'R', tr.funcId, tr.blockId, name)
