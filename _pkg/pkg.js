@@ -197,12 +197,36 @@ function MakeSlice(zero, len, cap) {
 }
 
 
-
-function NewSlice(elem) {
+function NewSlice(zero, elem) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
-	s.elem = elem;
-	s.len = elem.length;
+	if (elem === undefined) {
+		s.isNil = true;
+		return s;
+	}
+
+	var srcVal; for (var i in elem) { srcVal = elem[i];
+		var isHashMap = false;
+
+
+		if (typeof(srcVal) === "object") {
+			var v; for (var k in srcVal) { v = srcVal[k];
+				if (srcVal.hasOwnProperty(k)) {
+					isHashMap = true;
+
+					for (i; i < k; i++) {
+						s.elem[i] = zero;
+					}
+					s.elem[i] = v;
+				}
+			}
+		}
+		if (!isHashMap) {
+			s.elem[i] = srcVal;
+		}
+	}
+
+	s.len = s.elem.length;
 	s.cap = s.len;
 	return s;
 }

@@ -5,8 +5,8 @@
 function initialValue() {
 	var s1 = g.NilSlice();
 	var s2 = g.NewSlice([]);
-	var s3 = g.NewSlice([2]);
-	var s4 = g.NewSlice([2, 4]);
+	var s3 = g.NewSlice(0, [2]);
+	var s4 = g.NewSlice(0, [2, 4]);
 	var s5 = g.MakeSlice(0, 0);
 	var s6 = g.MakeSlice(0, 5);
 	var s7 = g.MakeSlice(0, 5, 10);

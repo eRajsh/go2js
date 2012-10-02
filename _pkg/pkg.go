@@ -197,12 +197,36 @@ func MakeSlice(zero interface{}, len, cap uint) *sliceType {
 }
 
 // NewSlice creates a new slice.
-// TODO: check if there is any position
-func NewSlice(elem []interface{}) *sliceType {
+func NewSlice(zero interface{}, elem []interface{}) *sliceType {
 	s := new(sliceType)
 
-	s.elem = elem
-	s.len = len(elem)
+	if elem == nil {
+		s.isNil = true
+		return s
+	}
+
+	for i, srcVal := range elem {
+		isHashMap := false
+
+		// The position is into a hash map, if any
+		if typeof(srcVal) == "object" {
+			for k, v := range srcVal {
+				if srcVal.hasOwnProperty(k) { // identify a hashmap
+					isHashMap = true
+
+					for i; i < k; i++ {
+						s.elem[i] = zero
+					}
+					s.elem[i] = v
+				}
+			}
+		}
+		if !isHashMap {
+			s.elem[i] = srcVal
+		}
+	}
+
+	s.len = len(s.elem)
 	s.cap = s.len
 	return s
 }

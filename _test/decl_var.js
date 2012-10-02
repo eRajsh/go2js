@@ -38,8 +38,8 @@ var a10 = g.MakeArray([3], "", ["a", "b", "c"]);
 var s1 = g.MakeSlice(0, 10);
 var s2 = g.MakeSlice(0, 10, 20);
 
-var s3 = g.NewSlice([2, 4, 6]);
-var s4 = g.NewSlice([1, {2:3}]);
+var s3 = g.NewSlice(0, [2, 4, 6]);
+var s4 = g.NewSlice(0, [1, {2:3}]);
 var s5 = g.NewSlice([]);
 
 

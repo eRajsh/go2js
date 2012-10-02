@@ -457,6 +457,10 @@ func (e *expression) transform(expr ast.Expr) {
 					e.WriteString("," + SP)
 					e.arrayHasElts = true
 				}
+				if e.kind == sliceKind {
+					e.zero, _ = e.tr.zeroValue(true, compoType.Elt)
+					e.WriteString(e.zero + "," + SP)
+				}
 				e.WriteString("[")
 				e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
 				e.WriteString("]")
