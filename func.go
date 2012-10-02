@@ -66,7 +66,7 @@ func (tr *transform) getFunc(decl *ast.FuncDecl) {
 		tr.blockId = 0
 
 		if decl.Name.Name == "main" {
-			tr.WriteString(SP+"main();") // call to function main
+			tr.WriteString(SP + "main();") // call to function main
 		}
 	}
 	if decl.Recv != nil {
@@ -98,7 +98,7 @@ func (tr *transform) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.Fu
 		tr.recvVar = field.Names[0].Name
 
 		tr.WriteString(fmt.Sprintf("%s.prototype.%s%s=%sfunction(%s)%s",
-			field.Type, name,SP, SP, joinParams(typ), SP))
+			field.Type, name, SP, SP, joinParams(typ), SP))
 	} else if name != nil {
 		tr.WriteString(fmt.Sprintf("function %s(%s)%s", name, joinParams(typ), SP))
 	} else { // Literal function
@@ -124,7 +124,7 @@ func joinParams(f *ast.FuncType) string {
 	s := ""
 
 	//if f.Params == nil {
-		//return s
+	//return s
 	//}
 
 	for _, list := range f.Params.List {

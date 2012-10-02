@@ -47,7 +47,7 @@ func tagPointer(zero bool, typ rune, funcId, blockId int, name string) string {
 		zeroStr = "z"
 	}
 
-	return fmt.Sprintf("<<%s:%d:%d:%s>>", zeroStr + string(typ), funcId, blockId, name)
+	return fmt.Sprintf("<<%s:%d:%d:%s>>", zeroStr+string(typ), funcId, blockId, name)
 }
 
 // Search the point where the variable was declared for tag it as pointer.

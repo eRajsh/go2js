@@ -271,7 +271,7 @@ func Compile(filename string) error {
 		if len(trans.exported) != 0 {
 			for i, v := range trans.exported {
 				if i == 0 {
-					trans.WriteString(NL+NL)
+					trans.WriteString(NL + NL)
 				}
 
 				if !Bootstrap {
@@ -312,8 +312,8 @@ func Compile(filename string) error {
 	if err := ioutil.WriteFile(baseFilename+".js", []byte(deb), 0664); err != nil {
 		return err
 	}
-/*
-	// Minimized version
+
+	/*// Minimized version
 	min := strings.Replace(str, NL, "", -1)
 	min = strings.Replace(min, TAB, "", -1)
 	min = strings.Replace(min, SP, "", -1)
@@ -333,10 +333,9 @@ func Compile(filename string) error {
 			fmt.Fprintln(os.Stderr, "\n Too many warnings")
 		}
 	}
-/*
-for k, v := range trans.slices {
-	fmt.Println(k, v)
-}
-*/
+
+	/*for k, v := range trans.slices {
+		fmt.Println(k, v)
+	}*/
 	return nil
 }

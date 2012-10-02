@@ -40,12 +40,12 @@ type expression struct {
 	useIota  bool
 
 	//isFunc    bool // anonymous function
-	isIdent   bool
-	isValue   bool // is it on the right of the assignment?
+	isIdent      bool
+	isValue      bool // is it on the right of the assignment?
 	isVarAddress bool
-	isPointer bool
-	isMake    bool
-	isNil     bool
+	isPointer    bool
+	isMake       bool
+	isNil        bool
 
 	arrayHasElts bool // does array has elements?
 	isEllipsis   bool
@@ -605,7 +605,7 @@ func (e *expression) transform(expr ast.Expr) {
 		index := ""
 		indexArgs := ""
 
-		for i := len(e.index)-1; i >= 0; i-- { // inverse order
+		for i := len(e.index) - 1; i >= 0; i-- { // inverse order
 			idx := e.index[i]
 			index += "[" + idx + "]"
 
@@ -745,7 +745,7 @@ func (e *expression) transform(expr ast.Expr) {
 		}
 
 		if e.tr.isVar {
-			e.WriteString(x + "," + SP+slice)
+			e.WriteString(x + "," + SP + slice)
 		} else {
 			e.WriteString(fmt.Sprintf("g.Slice(%s,%s)", x, SP+slice))
 		}
@@ -814,8 +814,8 @@ func (e *expression) writeElts(elts []ast.Expr, Lbrace, Rbrace token.Pos) {
 			e.WriteString(",")
 		}
 		if posNewElt != posOldElt {
-			e.WriteString(strings.Repeat(NL, posNewElt - posOldElt))
-			e.WriteString(strings.Repeat(TAB, e.tr.tabLevel + 1))
+			e.WriteString(strings.Repeat(NL, posNewElt-posOldElt))
+			e.WriteString(strings.Repeat(TAB, e.tr.tabLevel+1))
 		} else if i != 0 { // in the same line
 			e.WriteString(SP)
 		}
@@ -827,7 +827,7 @@ func (e *expression) writeElts(elts []ast.Expr, Lbrace, Rbrace token.Pos) {
 	// The right brace
 	posNewElt = e.tr.getLine(Rbrace)
 	if posNewElt != posOldElt {
-		e.WriteString(strings.Repeat(NL, posNewElt - posOldElt))
+		e.WriteString(strings.Repeat(NL, posNewElt-posOldElt))
 		e.WriteString(strings.Repeat(TAB, e.tr.tabLevel))
 	}
 
@@ -863,7 +863,7 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 			e.WriteString(",")
 		}
 		if posNewElt != posOldElt {
-			e.WriteString(strings.Repeat(NL, posNewElt - posOldElt))
+			e.WriteString(strings.Repeat(NL, posNewElt-posOldElt))
 			e.WriteString(strings.Repeat(TAB, e.tr.tabLevel))
 		} else { // in the same line
 			e.WriteString(SP)
@@ -871,8 +871,8 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 
 		e.WriteString(fmt.Sprintf("%s%s=%s",
 			e.tr.lastVarName,
-			key + SP,
-			SP + e.tr.getExpression(kv.Value).String(),
+			key+SP,
+			SP+e.tr.getExpression(kv.Value).String(),
 		))
 
 		posOldElt = posNewElt

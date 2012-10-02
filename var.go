@@ -88,7 +88,7 @@ func (tr *transform) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
 					tr.WriteString(strings.Repeat(TAB, tr.tabLevel))
 				}
 				if isMultipleLine {
-					tr.WriteString(ident.Name+SP + "=" + SP+value)
+					tr.WriteString(ident.Name + SP + "=" + SP + value)
 				} else {
 					tr.WriteString(fmt.Sprintf("const %s=%s", ident.Name+SP, SP+value))
 				}
@@ -238,8 +238,8 @@ func (tr *transform) getType(spec []ast.Spec, isGlobal bool) {
 					posNewField = tr.getLine(v.Pos())
 
 					if posNewField != posOldField {
-						fieldLines += strings.Repeat(NL, posNewField - posOldField)
-						fieldLines += strings.Repeat(TAB, tr.tabLevel + 1)
+						fieldLines += strings.Repeat(NL, posNewField-posOldField)
+						fieldLines += strings.Repeat(TAB, tr.tabLevel+1)
 					} else {
 						fieldLines += SP
 					}
@@ -263,7 +263,7 @@ func (tr *transform) getType(spec []ast.Spec, isGlobal bool) {
 			posNewField = tr.getLine(typ.Fields.Closing)
 
 			if posNewField != posOldField {
-				fieldLines += strings.Repeat(NL, posNewField - posOldField)
+				fieldLines += strings.Repeat(NL, posNewField-posOldField)
 				fieldLines += strings.Repeat(TAB, tr.tabLevel)
 			} else {
 				fieldLines += SP
@@ -278,10 +278,10 @@ func (tr *transform) getType(spec []ast.Spec, isGlobal bool) {
 			tr.addLine(tSpec.Pos())
 			tr.WriteString(fmt.Sprintf(
 				"function %s(%s)%s{%s}", tSpec.Name, fieldNames, SP, fieldLines))
-/*			tr.WriteString(fmt.Sprintf("function %s(%s)%s{%sthis._z=%q;%s}",
-				tSpec.Name, fieldNames, SP,
-				SP, fieldsInit, fieldLines))
-*/
+			//tr.WriteString(fmt.Sprintf("function %s(%s)%s{%sthis._z=%q;%s}",
+			//tSpec.Name, fieldNames, SP,
+			//SP, fieldsInit, fieldLines))
+
 			// Store the name of new type with its values initialized
 			tr.zeroType[tr.funcId][tr.blockId][tSpec.Name.Name] = fieldsInit
 
@@ -339,7 +339,7 @@ func (tr *transform) writeVar(names interface{}, values []ast.Expr, type_ interf
 	}
 
 	// === Names
-	var _names        []string
+	var _names []string
 	var idxValidNames []int // index of variables which are not in blank
 	var nameIsPointer []bool
 
@@ -406,8 +406,7 @@ func (tr *transform) writeVar(names interface{}, values []ast.Expr, type_ interf
 			}
 			if len(idxValidNames) == 1 {
 				i := idxValidNames[0]
-				tr.WriteString(fmt.Sprintf("%s[%d];",
-					_names[i] + SP + sign + SP + fun, i))
+				tr.WriteString(fmt.Sprintf("%s[%d];", _names[i]+SP+sign+SP+fun, i))
 				return
 			}
 
@@ -447,7 +446,7 @@ _noFunc:
 			nameExpr += name
 			isFirst = false
 		} else {
-			 nameExpr += "," + SP + name
+			nameExpr += "," + SP + name
 		}
 
 		if !isNewVar {
@@ -501,13 +500,13 @@ _noFunc:
 					if len(idxValidNames) == 1 {
 						tr.WriteString(fmt.Sprintf("%s%s%s[%d];",
 							_names[idxValidNames[0]],
-							SP + sign + SP,
+							SP+sign+SP,
 							value, idxValidNames[0]))
 					} else {
 						tr.WriteString(fmt.Sprintf("_%s,%s_[%d],%s_[%d];",
-							SP + sign + SP + value,
-							SP + _names[0] + SP + sign + SP, 0,
-							SP + _names[1] + SP + sign + SP, 1))
+							SP+sign+SP+value,
+							SP+_names[0]+SP+sign+SP, 0,
+							SP+_names[1]+SP+sign+SP, 1))
 					}
 
 					return
@@ -557,7 +556,6 @@ _noFunc:
 
 			/*switch expr.kind {
 			case sliceKind:
-				
 			}*/
 
 			if expr.kind == sliceKind {
