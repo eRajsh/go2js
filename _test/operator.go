@@ -1,17 +1,21 @@
+// Copyright 2011 Jonas mg
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at
+// http://mozilla.org/MPL/2.0/.
+
 package main
 
 var x, y = 14, 9
 
 var (
 	and = x & y
-	or = x | y
+	or  = x | y
 	xor = x ^ y
 	not = !y
 
-	lShift = 9 << 2
-	rShift = 9 >> 2
+	lShift    = 9 << 2
+	rShift    = 9 >> 2
+	lShiftNeg = -9 << 2
 	rShiftNeg = -9 >> 2
-
-	zRShift = 9 >>> 2
-	zRShiftNeg = -9 >>> 2
 )
