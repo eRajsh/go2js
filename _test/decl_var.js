@@ -19,18 +19,18 @@ var o = "OMDB";
 
 
 
-var a1 = []; for (var i=0; i<32; i++){ a1[i]=0; }
-var a2 = []; for (var i=0; i<2; i++){ a2[i]=[]; for (var j=0; j<4; j++){ a2[i][j]=0; }}
+var a1 = g.MakeArray([32], 0);
+var a2 = g.MakeArray([2,4], 0);
 
-var a4 = []; for (var i=0; i<10; i++){ a4[i]={p:undefined}; }
-var a5 = []; for (var i=0; i<4; i++){ a5[i]=0; }
-var a6 = []; for (var i=0; i<3; i++){ a6[i]=[]; for (var j=0; j<5; j++){ a6[i][j]=0; }}
-var a7 = []; for (var i=0; i<2; i++){ a7[i]=[]; for (var j=0; j<2; j++){ a7[i][j]=[]; for (var k=0; k<2; k++){ a7[i][j][k]=0; }}}
+var a4 = g.MakeArray([10], {p:undefined});
+var a5 = g.MakeArray([4], 0);
+var a6 = g.MakeArray([3,5], 0);
+var a7 = g.MakeArray([2,2,2], 0);
 
-var a8 = []; for (var i=0; i<32; i++){ a8[i]=0; } a8 = [1, 2, 3, 4];
-var a9 = []; for (var i=0; i<4; i++){ a9[i]=0; } a9 = [1, , , 4];
+var a8 = g.MakeArray([32], 0, [1, 2, 3, 4]);
 
-var a10 = ["a", "b", "c"];
+
+var a10 = g.MakeArray([3], "", ["a", "b", "c"]);
 
 
 
@@ -39,7 +39,7 @@ var s1 = g.MakeSlice(0, 10);
 var s2 = g.MakeSlice(0, 10, 20);
 
 var s3 = g.NewSlice([2, 4, 6]);
-var s4 = g.NewSlice([1, _, 3]);
+
 var s5 = g.NewSlice([]);
 
 

@@ -72,7 +72,7 @@ function Older10(people) {
 
 function testArray() {
 
-	var array = []; for (var i=0; i<10; i++){ array[i]=new person("", 0); }
+	var array = g.MakeArray([10], new person("", 0));
 
 
 
@@ -96,7 +96,7 @@ function testArray() {
 
 function initializeArray() {
 
-	var array1 = []; for (var i=0; i<10; i++){ array1[i]=new person("", 0); } array1 = [
+	var array1 = g.MakeArray([10], new person("", 0), [
 		new person("", 0),
 		new person("Paul", 23),
 		new person("Jim", 24),
@@ -107,10 +107,10 @@ function initializeArray() {
 		new person("", 0),
 		new person("Karl", 10),
 		new person("", 0)
-	];
+	]);
 
 
-	var array2 = [
+	var array2 = g.MakeArray([10], new person("", 0), [
 		new person("", 0),
 		new person("Paul", 23),
 		new person("Jim", 24),
@@ -120,7 +120,7 @@ function initializeArray() {
 		new person("", 0),
 		new person("", 0),
 		new person("Karl", 10),
-		new person("", 0)];
+		new person("", 0)]);
 
 
 	if (array1.length === array2.length) {
@@ -140,17 +140,17 @@ function initializeArray() {
 
 function multiArray() {
 
-	var doubleArray_1 = []; for (var i=0; i<2; i++){ doubleArray_1[i]=[]; for (var j=0; j<4; j++){ doubleArray_1[i][j]=0; }} doubleArray_1 = [[1, 2, 3, 4], [5, 6, 7, 8]];
+	var doubleArray_1 = g.MakeArray([2,4], 0, [[1, 2, 3, 4], [5, 6, 7, 8]]);
 
 
-	var doubleArray_2 = []; for (var i=0; i<2; i++){ doubleArray_2[i]=[]; for (var j=0; j<4; j++){ doubleArray_2[i][j]=0; }} doubleArray_2 = [
-		[1, 2, 3, 4], [5, 6, 7, 8]];
+	var doubleArray_2 = g.MakeArray([2,4], 0, [
+		[1, 2, 3, 4], [5, 6, 7, 8]]);
 
 
-	var doubleArray_3 = []; for (var i=0; i<2; i++){ doubleArray_3[i]=[]; for (var j=0; j<4; j++){ doubleArray_3[i][j]=0; }} doubleArray_3 = [
+	var doubleArray_3 = g.MakeArray([2,4], 0, [
 		[1, 2, 3, 4],
 		[5, 6, 7, 8]
-	];
+	]);
 
 
 	if (JSON.stringify(doubleArray_1) === JSON.stringify(doubleArray_2) && JSON.stringify(doubleArray_2) === JSON.stringify(doubleArray_3)) {

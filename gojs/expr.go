@@ -19,7 +19,17 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
+	"strconv"
 	"strings"
+)
+
+type Kind uint8
+
+const (
+	invalidKind Kind = iota
+	//arrayKind TODO: remove
+	ellipsisKind
+	sliceKind
 )
 
 // Represents an expression.
@@ -32,21 +42,22 @@ type expression struct {
 	mapName  string
 	name     string // used for slice
 
+	kind Kind
+	zero string
+
 	hasError bool
 
 	//isFunc     bool // anonymous function
 	isAddress  bool
-	isEllipsis bool
 	isIdent    bool
 	isMake     bool
 	isNil      bool
 	isPointer  bool
-	isSlice    bool
 	isValue    bool // is it on the right of the assignment?
 
 	arrayHasElts  bool // does array has elements?
-	skipSemicolon bool
 	useIota       bool
+	isMultiDim    bool // multi-dimensional array
 
 	// To handle comparisons
 	isBasicLit     bool
@@ -76,8 +87,8 @@ func (tr *transform) newExpression(iVar interface{}) *expression {
 		"",
 		"",
 		"",
-		false,
-		false,
+		invalidKind,
+		"",
 		false,
 		false,
 		false,
@@ -121,35 +132,33 @@ func (e *expression) transform(expr ast.Expr) {
 		if typ.Len == nil { // slice
 			break
 		}
+
 		if _, ok := typ.Len.(*ast.Ellipsis); ok {
-			e.isEllipsis = true
+			e.zero, _ = e.tr.zeroValue(true, typ.Elt)
+			e.kind = ellipsisKind
 			break
 		}
 
-		if len(e.lenArray) != 0 {
-			e.writeLoop()
-			e.WriteString(fmt.Sprintf("{%s%s=", SP+e.varName, e.printArray()))
+		if !e.isMultiDim {
+			e.WriteString("g.MakeArray([")
+		} else {
+			e.WriteString(",")
 		}
-		e.WriteString("[]")
-		e.addLenArray(typ.Len)
+		e.WriteString(e.tr.getExpression(typ.Len).String())
+		e.tr.isArray = true
 
 		switch t := typ.Elt.(type) {
 		case *ast.ArrayType: // multi-dimensional array
+			e.isMultiDim = true
 			e.transform(typ.Elt)
 		case *ast.Ident, *ast.StarExpr: // the type is initialized
-			zero, _ := e.tr.zeroValue(true, typ.Elt)
+			e.zero, _ = e.tr.zeroValue(true, typ.Elt)
 
-			e.writeLoop()
-			e.WriteString(fmt.Sprintf("{%s=%s;%s}",
-				SP+e.tr.lastVarName+e.printArray(), zero, SP))
+			e.WriteString(fmt.Sprintf("],%s", SP+e.zero))
 
-			if len(e.lenArray) > 1 {
-				e.WriteString(strings.Repeat("}", len(e.lenArray)-1))
-			}
 		default:
 			panic(fmt.Sprintf("*expression.transform: type unimplemented: %T", t))
 		}
-		e.skipSemicolon = true
 
 	// godoc go/ast BasicLit
 	//  Kind     token.Token // token.INT, token.FLOAT, token.IMAG, token.CHAR, or token.STRING
@@ -425,30 +434,34 @@ func (e *expression) transform(expr ast.Expr) {
 				e.transform(typ.Type)
 			}
 
-			if e.isEllipsis {
+			if e.kind == ellipsisKind {
+				e.WriteString(fmt.Sprintf("g.MakeArray([%s],%s,%s",
+					strconv.Itoa(len(typ.Elts)), SP+e.zero, SP))
+
 				e.WriteString("[")
 				e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
-				e.WriteString("]")
+				e.WriteString("])")
 				break
 			}
+
+			//e.kind = arrayKind TODO: remove
 
 			// Slice
 			if compoType.Len == nil {
 				e.tr.slices[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
-				e.isSlice = true
+				e.kind = sliceKind
 			}
 			// For arrays with elements
 			if len(typ.Elts) != 0 {
 				if !e.arrayHasElts && compoType.Len != nil {
-					e.WriteString(fmt.Sprintf("%s=%s", SP+e.varName+SP, SP))
+					e.WriteString("," + SP)
 					e.arrayHasElts = true
 				}
 				e.WriteString("[")
 				e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
 				e.WriteString("]")
 
-				e.skipSemicolon = false
-			} else if e.isSlice {
+			} else if e.kind == sliceKind {
 				e.WriteString("[]")
 			}
 
@@ -737,7 +750,7 @@ func (e *expression) transform(expr ast.Expr) {
 		}
 
 		e.name = x
-		e.isSlice = true
+		e.kind = sliceKind
 
 	// godoc go/ast StructType
 	//  Struct     token.Pos  // position of "struct" keyword
@@ -789,31 +802,6 @@ func (e *expression) transform(expr ast.Expr) {
 
 //
 // === Utility
-
-// Appends a new length of array.
-func (e *expression) addLenArray(expr ast.Expr) {
-	e.lenArray = append(e.lenArray, e.tr.getExpression(expr).String())
-}
-
-// Returns the values of an array formatted like "[i][j]..."
-func (e *expression) printArray() string {
-	a := ""
-
-	for i := 0; i < len(e.lenArray); i++ {
-		vArray := string('i' + i)
-		a += fmt.Sprintf("[%s]", vArray)
-	}
-	return a
-}
-
-// Writes the loop for the last length of the array.
-func (e *expression) writeLoop() {
-	iArray := len(e.lenArray) - 1  // index of array
-	vArray := string('i' + iArray) // variable's name for the loop
-
-	e.WriteString(fmt.Sprintf(";%sfor%s(var %s=0;%s<%s;%s++)",
-		SP, SP, vArray, SP+vArray, e.lenArray[iArray], SP+vArray))
-}
 
 // Writes the list of composite elements.
 func (e *expression) writeElts(elts []ast.Expr, Lbrace, Rbrace token.Pos) {

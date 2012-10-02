@@ -563,7 +563,12 @@ _noFunc:
 		if !isFuncLit {
 			tr.WriteString(nameExpr)
 
-			if expr.isSlice {
+			/*switch expr.kind {
+			case sliceKind:
+				
+			}*/
+
+			if expr.kind == sliceKind {
 				if isNewVar {
 					tr.WriteString(fmt.Sprintf("%sg.NewSlice(%s)", SP+sign+SP, value))
 				} else {
@@ -572,17 +577,20 @@ _noFunc:
 			} else if expr.isMake {
 				tr.WriteString(fmt.Sprintf("%sg.MakeSlice(%s)", SP+sign+SP, value))
 
-			} else if value != "" {
-				tr.WriteString(SP + sign + SP + value)
+			} else {
+				if value != "" {
+					tr.WriteString(SP + sign + SP + value)
+				}
+				if tr.isArray {
+					tr.WriteString(")")
+					tr.isArray = false
+				}
 			}
 		}
 	}
 
-	if !isFirst && !expr.skipSemicolon && !tr.skipSemicolon {
+	if !isFirst {
 		tr.WriteString(";")
-	}
-	if tr.skipSemicolon {
-		tr.skipSemicolon = false
 	}
 }
 
@@ -627,7 +635,6 @@ func (tr *transform) zeroValue(init bool, typ interface{}) (value string, dt dat
 
 	case *ast.ArrayType:
 		if t.Len != nil {
-			tr.skipSemicolon = true
 			return tr.getExpression(t).String(), otherType
 		}
 		if !Bootstrap {

@@ -12,24 +12,141 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Handle Go features.
+// Package g handles the features and Go types in JavaScript.
 
 package g
 
-// Export adds public names from "exported" to the map "pkg".
-func Export(pkg map[interface{}]interface{}, exported []interface{}) {
-	for _, v := range exported {
-		pkg.v = v
+// The specific kind of type that it represents.
+const (
+	invalid uint8 = iota
+	arrayKind
+	sliceKind
+)
+
+func init() {
+	// Use the toString() method when Array.isArray isn't implemented:
+	// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray#Compatibility
+	if !Array.isArray {
+		Array.isArray = func(arg interface{}) {
+			return Object.prototype.toString.call(arg) == "[object Array]"
+		}
 	}
 }
+
+// == Array
+//
+
+// TODO 1: mergeArray could be integrated in initArray ?
+
+// arrayType represents a fixed array type.
+type arrayType struct {
+	f []interface{} // array's field
+
+	len uint
+	cap uint
+	// Note: the array in Go can not be compared with nil
+}
+
+// MakeArray initializes an array of dimension "dim" to value "zero",
+// inserting the elemnts of "elem" if any.
+// TODO: checking slices that have positions in elem ([1,2,5:5])
+func MakeArray(dim []uint, zero interface{}, elem []interface{}) *arrayType {
+	a := new(arrayType)
+
+	if elem != nil {
+		if !equalDim(dim, getDimArray(elem)) {
+			a.f = initArray(dim, zero)
+			mergeArray(a.f, elem)
+		} else {
+			a.f = elem
+		}
+	} else {
+		a.f = initArray(dim, zero)
+	}
+
+	a.len = dim[0]
+	a.cap = a.len
+	return a
+}
+
+func (a arrayType) kind() uint { return arrayKind }
+
+// mergeArray merges src in array dst.
+func mergeArray(dst, src []interface{}) {
+	for i, v := range src {
+		if Array.isArray(v) {
+			mergeArray(dst[i], v)
+		} else {
+			dst[i] = v
+		}
+	}
+}
+
+// TODO: could be done during transformation, if it isn't possible TODO 1
+// equalDim reports whether d1 and d2 are equal.
+func equalDim(d1, d2 []uint) bool {
+	if len(d1) != len(d2) {
+		return false
+	}
+	for i, v := range d1 {
+		if v != d2[i] {
+			return false
+		}
+	}
+	return true
+}
+
+// TODO: could be done during transformation, if it isn't possible TODO 1
+// getDimArray returns the dimension of an array.
+func getDimArray(a []interface{}) (dim []uint) {
+	for {
+		dim.push(len(a))
+
+		if Array.isArray(a[0]) {
+			a = a[0]
+		} else {
+			break
+		}
+	}
+	return
+}
+
+// initArray returns an array of dimension given in "dim" initialized to "zero".
+func initArray(dim []uint, zero interface{}) (a []interface{}) {
+	if len(dim) == 0 {
+		return zero
+	}
+	nextArray := initArray(dim.slice(1), zero)
+
+	for i := 0; i < dim[0]; i++ {
+		a[i] = nextArray
+	}
+	return
+}
+
+/*
+func initArray(dim []uint, zero interface{}) (a []interface{}) {
+	if len(dim) > 1 {
+		nextArray := initArray(dim.slice(1), zero)
+
+		for i := 0; i < dim[0]; i++ {
+			a[i] = nextArray
+		}
+	} else {
+		for i := 0; i < dim[0]; i++ {
+			a[i] = zero
+		}
+	}
+	return
+}*/
 
 // == Slice
 //
 
-// Slice represents a slice.
-type Slice struct {
+// sliceType represents a slice.
+type sliceType struct {
 	array interface{}   // the array where this slice is got, if any
-	elts  []interface{} // elements from scratch (make) or appended to the array
+	elem  []interface{} // elements from scratch (make) or appended to the array
 
 	low  uint // indexes for the array
 	high uint
@@ -41,22 +158,20 @@ type Slice struct {
 
 // NilSlice creates a null slice.
 // For variables declared like slices.
-func NilSlice() *Slice {
-	s := new(Slice)
+func NilSlice() *sliceType {
+	s := new(sliceType)
 	s.isNil = true
 	s.len, s.cap = 0, 0
 	return s
 }
 
-// * * *
-
 // MakeSlice initializes a slice with the zero value.
-func MakeSlice(zero interface{}, len, cap uint) *Slice {
-	s := new(Slice)
+func MakeSlice(zero interface{}, len, cap uint) *sliceType {
+	s := new(sliceType)
 	s.len = len
 
 	for i := 0; i < len; i++ {
-		s.elts[i] = zero
+		s.elem[i] = zero
 	}
 
 	if cap != nil {
@@ -69,17 +184,19 @@ func MakeSlice(zero interface{}, len, cap uint) *Slice {
 }
 
 // NewSlice creates a new slice.
-func NewSlice(elts []interface{}) *Slice {
-	s := new(Slice)
-	s.elts = elts
-	s.len = len(elts)
+func NewSlice(elem []interface{}) *sliceType {
+	s := new(sliceType)
+
+	s.elem = elem
+	s.len = len(elem)
 	s.cap = s.len
 	return s
 }
 
 // NewSliceFrom creates a new slice from an array using the indexes low and high.
-func NewSliceFrom(a interface{}, low, high uint) *Slice {
-	s := new(Slice)
+func NewSliceFrom(a interface{}, low, high uint) *sliceType {
+	s := new(sliceType)
+
 	s.array = a
 	s.low = low
 	s.high = high
@@ -90,23 +207,39 @@ func NewSliceFrom(a interface{}, low, high uint) *Slice {
 
 // * * *
 
+// set sets the elements of a slice.
+func (s sliceType) set(i interface{}, low, high uint) {
+	s.low, s.high = low, high
+
+	if i.elem != nil { // from make
+		s.elem = i.elem.slice(low, high)
+		s.cap = i.cap - low
+		s.len = len(s.elem)
+
+	} else { // from array
+		s.array = i
+		s.cap = len(i) - low
+		s.len = high - low
+	}
+}
+
 // get gets the slice.
-func (s Slice) get() []interface{} {
-	if len(s.elts) != 0 {
-		return s.elts
+func (s sliceType) get() []interface{} {
+	if len(s.elem) != 0 {
+		return s.elem
 	}
 	//      a := s.array
 	return s.array.slice(s.low, s.high)
 }
 
 // str returns the slice like a string.
-func (s Slice) str() string {
+func (s sliceType) str() string {
 	_s := s.get()
 	return _s.join("")
 }
 
 /*
-func (s Slice) setSlice(i interface{}, low, high uint) {
+func (s sliceType) setSlice(i interface{}, low, high uint) {
         s.low, s.high = low, high
         s.len = high - low
 
@@ -119,26 +252,8 @@ func (s Slice) setSlice(i interface{}, low, high uint) {
         }
 }
 
-// Sets the slice from an .
-func (s Slice) set(i interface{}, low, high uint) {
-
-
-        if i.elts != nil { // from make
-                s.elts = i.elts.slice(low, high)
-                s.cap = i.cap - low
-                s.len = len(s.elts)
-
-        } else { // from array
-                s.array = i
-                s.cap = len(i) - low
-                s.len = high - low
-        }
-
-        s.low, s.high = low, high
-}
-
 // Appends an element to the slice.
-func (s Slice) append(elt interface{}) {
+func (s sliceType) append(elt interface{}) {
         if s.len == s.cap {
                 s.cap = s.len * 2
         }
@@ -153,7 +268,7 @@ func (s Slice) append(elt interface{}) {
 // The compiler adds the appropriate zero value for the map (which it is work out
 // from the map type).
 type Map struct {
-	f    map[interface{}]interface{} // map
+	f    map[interface{}]interface{} // map's field
 	zero interface{}                 // zero value for the map
 	// TODO add "cap"
 }
@@ -177,12 +292,21 @@ func (m Map) get(k interface{}) (interface{}, bool) {
 
 /*
 function getType(obj){
-        if(obj===null)return "[object Null]"; // special case
-        return Object.prototype.toString.call(obj);
+	if(obj===null)return "[object Null]"; // special case
+	return Object.prototype.toString.call(obj);
 }
 
 function isArray(o) {
-        return Object.prototype.toString.call(o) === '[object Array]';
+	return Object.prototype.toString.call(o) === '[object Array]';
 }
-
 */
+
+// == Utility
+//
+
+// Export adds public names from "exported" to the map "pkg".
+func Export(pkg map[interface{}]interface{}, exported []interface{}) {
+	for _, v := range exported {
+		pkg.v = v
+	}
+}

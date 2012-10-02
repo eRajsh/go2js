@@ -38,7 +38,7 @@ function initialValue() {
 
 function shortHand() {
 
-	var array = []; for (var i=0; i<10; i++){ array[i]=0; } array = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+	var array = g.MakeArray([10], 0, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
 
 	var a_slice = g.NilSlice(), b_slice = g.NilSlice();
 
@@ -145,9 +145,9 @@ function Max(slice) {
 
 function useFunc() {
 
-	var A1 = []; for (var i=0; i<10; i++){ A1[i]=0; } A1 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-	var A2 = []; for (var i=0; i<4; i++){ A2[i]=0; } A2 = [1, 2, 3, 4];
-	var A3 = []; for (var i=0; i<1; i++){ A3[i]=0; } A3 = [1];
+	var A1 = g.MakeArray([10], 0, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+	var A2 = g.MakeArray([4], 0, [1, 2, 3, 4]);
+	var A3 = g.MakeArray([1], 0, [1]);
 
 
 	var slice = g.NilSlice();
@@ -195,7 +195,7 @@ function PrintByteSlice(name, slice) {
 
 function reference() {
 
-	var A = []; for (var i=0; i<10; i++){ A[i]=0; } A = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+	var A = g.MakeArray([10], 0, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
 
 
 	var slice1 = g.NewSlice(A, 3, 7);

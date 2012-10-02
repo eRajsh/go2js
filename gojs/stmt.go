@@ -31,6 +31,7 @@ type dataStmt struct {
 	lenCase int // number of "case" statements
 	iCase   int // index in "case" statements
 
+	isArray        bool // to close the parenthesis
 	isConst        bool
 	isVar          bool
 	initIsPointer  bool // the value initialized is a pointer?

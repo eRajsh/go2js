@@ -17,19 +17,136 @@
 var g = {}; (function() {
 
 
-function Export(pkg, exported) {
-	var v; for (_ in exported) { v = exported[_];
-		pkg.v = v;
+const 
+invalid = 0,
+arrayKind = 1,
+sliceKind = 2;
+
+
+(function() {
+
+
+	if (!Array.isArray) {
+		Array.isArray = function(arg) {
+			return Object.prototype.toString.call(arg) === "[object Array]";
+		};
 	}
+}());
+
+
+
+
+
+
+
+function arrayType(f, len, cap) {
+	this.f=f;
+
+	this.len=len;
+	this.cap=cap;
+
+}
+
+
+
+
+function MakeArray(dim, zero, elem) {
+	var a = new arrayType([], 0, 0);
+
+	if (elem !== undefined) {
+		if (!equalDim(dim, getDimArray(elem))) {
+			a.f = initArray(dim, zero);
+			mergeArray(a.f, elem);
+		} else {
+			a.f = elem;
+		}
+	} else {
+		a.f = initArray(dim, zero);
+	}
+
+	a.len = dim[0];
+	a.cap = a.len;
+	return a;
+}
+
+arrayType.prototype.kind = function() { return arrayKind; }
+
+
+function mergeArray(dst, src) {
+	var v; for (i in src) { v = src[i];
+		if (Array.isArray(v)) {
+			mergeArray(dst[i], v);
+		} else {
+			dst[i] = v;
+		}
+	}
+}
+
+
+
+function equalDim(d1, d2) {
+	if (d1.length !== d2.length) {
+		return false;
+	}
+	var v; for (i in d1) { v = d1[i];
+		if (JSON.stringify(v) !== JSON.stringify(d2[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+
+function getDimArray(a) { var dim = [];
+	for (;;) {
+		dim.push(a.length);
+
+		if (Array.isArray(a[0])) {
+			a = a[0];
+		} else {
+			break;
+		}
+	}
+	return dim;
+}
+
+
+function initArray(dim, zero) { var a = [];
+	if (dim.length === 0) {
+		return zero;
+	}
+	var nextArray = initArray(dim.slice(1), zero);
+
+	for (var i = 0; i < dim[0]; i++) {
+		a[i] = nextArray;
+	}
+	return a;
 }
 
 
 
 
 
-function Slice(array, elts, low, high, len, cap, isNil) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function sliceType(array, elem, low, high, len, cap, isNil) {
 	this.array=array;
-	this.elts=elts;
+	this.elem=elem;
 
 	this.low=low;
 	this.high=high;
@@ -42,21 +159,19 @@ function Slice(array, elts, low, high, len, cap, isNil) {
 
 
 function NilSlice() {
-	var s = new Slice(undefined, [], 0, 0, 0, 0, false);
+	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 	s.isNil = true;
 	s.len = 0, s.cap = 0;
 	return s;
 }
 
 
-
-
 function MakeSlice(zero, len, cap) {
-	var s = new Slice(undefined, [], 0, 0, 0, 0, false);
+	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 	s.len = len;
 
 	for (var i = 0; i < len; i++) {
-		s.elts[i] = zero;
+		s.elem[i] = zero;
 	}
 
 	if (cap !== undefined) {
@@ -69,17 +184,19 @@ function MakeSlice(zero, len, cap) {
 }
 
 
-function NewSlice(elts) {
-	var s = new Slice(undefined, [], 0, 0, 0, 0, false);
-	s.elts = elts;
-	s.len = elts.length;
+function NewSlice(elem) {
+	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
+
+	s.elem = elem;
+	s.len = elem.length;
 	s.cap = s.len;
 	return s;
 }
 
 
 function NewSliceFrom(a, low, high) {
-	var s = new Slice(undefined, [], 0, 0, 0, 0, false);
+	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
+
 	s.array = a;
 	s.low = low;
 	s.high = high;
@@ -91,37 +208,35 @@ function NewSliceFrom(a, low, high) {
 
 
 
-Slice.prototype.get = function() {
-	if (this.elts.length !== 0) {
-		return this.elts;
+sliceType.prototype.set = function(i, low, high) {
+	this.low = low, this.high = high;
+
+	if (i.elem !== undefined) {
+		this.elem = i.elem.slice(low, high);
+		this.cap = i.cap - low;
+		this.len = this.elem.length;
+
+	} else {
+		this.array = i;
+		this.cap = i.length - low;
+		this.len = high - low;
+	}
+}
+
+
+sliceType.prototype.get = function() {
+	if (this.elem.length !== 0) {
+		return this.elem;
 	}
 
 	return this.array.slice(this.low, this.high);
 }
 
 
-Slice.prototype.str = function() {
+sliceType.prototype.str = function() {
 	var _s = this.get();
 	return _s.join("");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -175,12 +290,33 @@ Map.prototype.get = function(k) {
 	return [v, true];
 }
 
-g.Export = Export;
-g.Slice = Slice;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Export(pkg, exported) {
+	var v; for (_ in exported) { v = exported[_];
+		pkg.v = v;
+	}
+}
+
+g.MakeArray = MakeArray;
 g.NilSlice = NilSlice;
 g.MakeSlice = MakeSlice;
 g.NewSlice = NewSlice;
 g.NewSliceFrom = NewSliceFrom;
 g.Map = Map;
+g.Export = Export;
 
 })();
