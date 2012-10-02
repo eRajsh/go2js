@@ -2,6 +2,12 @@
 
 
 
+
+
+
+
+
+
 function initialValue() {
 	var s1 = g.NilSlice();
 	var s2 = g.Slice();

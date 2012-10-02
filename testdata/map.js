@@ -2,6 +2,12 @@
 
 
 
+
+
+
+
+
+
 var rating = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
 
 function nilValue() {

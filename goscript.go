@@ -4,7 +4,7 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at
 // http://mozilla.org/MPL/2.0/.
 
-package gojs
+package main
 
 import (
 	"bytes"
@@ -39,7 +39,7 @@ const (
 var void struct{} // A struct without any elements occupies no space at all.
 
 var (
-	Bootstrap  bool // is transforming the gojs's package?
+	Bootstrap  bool // to translate the JS library
 	MaxMessage = 10 // maximum number of errors and warnings to show.
 )
 

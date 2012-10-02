@@ -4,13 +4,13 @@
 // If a copy of the MPL was not distributed with this file, You can obtain one at
 // http://mozilla.org/MPL/2.0/.
 
-package gojs
+package main
 
 import "testing"
 
 const (
-	DIR_PKG  = "../_pkg/"
-	DIR_TEST = "../_test/"
+	DIR_PKG  = "./jslib/"
+	DIR_TEST = "./testdata/"
 )
 
 func init() {
@@ -37,7 +37,7 @@ func ExampleControl() {
 	// Output:
 	// == Warnings
 	//
-	// ../_test/control.go:44:2: 'default' clause above 'case' clause in switch statement
+	// ./testdata/control.go:50:2: 'default' clause above 'case' clause in switch statement
 }
 
 func ExampleDecl() {
@@ -47,27 +47,27 @@ func ExampleDecl() {
 	// == Errors
 	//
 	// os: import from core library
-	// ../_test/error_decl.go:13:10: complex128 type
-	// ../_test/error_decl.go:14:10: complex128 type
-	// ../_test/error_decl.go:15:10: complex128 type
-	// ../_test/error_decl.go:16:10: complex128 type
-	// ../_test/error_decl.go:18:6: built-in function complex()
-	// ../_test/error_decl.go:23:17: complex64 type
-	// ../_test/error_decl.go:24:13: complex64 type
-	// ../_test/error_decl.go:25:11: complex64 type
-	// ../_test/error_decl.go:30:14: complex128 type
-	// ../_test/error_decl.go:31:9: complex128 type
-	// ../_test/error_decl.go:32:12: complex128 type
-	// ../_test/error_decl.go:37:16: complex64 type
-	// ../_test/error_decl.go:38:23: complex64 type
-	// ../_test/error_decl.go:39:11: complex64 type
-	// ../_test/error_decl.go:48:12: channel type
-	// ../_test/error_decl.go:49:12: channel type
-	// ../_test/error_decl.go:50:7: channel operator
-	// ../_test/error_decl.go:60:2: function type in struct
-	// ../_test/error_decl.go:64:4: int64 type
-	// ../_test/error_decl.go:65:2: anonymous field in struct
-	// ../_test/error_decl.go:66:4: complex128 type
+	// ./testdata/error_decl.go:19:10: complex128 type
+	// ./testdata/error_decl.go:20:10: complex128 type
+	// ./testdata/error_decl.go:21:10: complex128 type
+	// ./testdata/error_decl.go:22:10: complex128 type
+	// ./testdata/error_decl.go:24:6: built-in function complex()
+	// ./testdata/error_decl.go:29:17: complex64 type
+	// ./testdata/error_decl.go:30:13: complex64 type
+	// ./testdata/error_decl.go:31:11: complex64 type
+	// ./testdata/error_decl.go:36:14: complex128 type
+	// ./testdata/error_decl.go:37:9: complex128 type
+	// ./testdata/error_decl.go:38:12: complex128 type
+	// ./testdata/error_decl.go:43:16: complex64 type
+	// ./testdata/error_decl.go:44:23: complex64 type
+	// ./testdata/error_decl.go:45:11: complex64 type
+	// ./testdata/error_decl.go:54:12: channel type
+	// ./testdata/error_decl.go:55:12: channel type
+	// ./testdata/error_decl.go:56:7: channel operator
+	// ./testdata/error_decl.go:66:2: function type in struct
+	// ./testdata/error_decl.go:70:4: int64 type
+	// ./testdata/error_decl.go:71:2: anonymous field in struct
+	// ./testdata/error_decl.go:72:4: complex128 type
 }
 
 func ExampleStmt() {
@@ -76,18 +76,18 @@ func ExampleStmt() {
 	// Output:
 	// == Errors
 	//
-	// ../_test/error_stmt.go:6:13: channel type
-	// ../_test/error_stmt.go:8:2: goroutine
-	// ../_test/error_stmt.go:9:2: defer directive
-	// ../_test/error_stmt.go:12:2: built-in function recover()
-	// ../_test/error_stmt.go:18:1: use of label
-	// ../_test/error_stmt.go:23:3: goto directive
+	// ./testdata/error_stmt.go:12:13: channel type
+	// ./testdata/error_stmt.go:14:2: goroutine
+	// ./testdata/error_stmt.go:15:2: defer directive
+	// ./testdata/error_stmt.go:18:2: built-in function recover()
+	// ./testdata/error_stmt.go:24:1: use of label
+	// ./testdata/error_stmt.go:29:3: goto directive
 }
 
 // === Library
 //
 
-func TestPkg(t *testing.T) { compile('p', "pkg.go", t) }
+func TestPkg(t *testing.T) { compile('p', "lib.go", t) }
 
 // * * *
 
