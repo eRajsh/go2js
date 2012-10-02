@@ -4,12 +4,12 @@
 
 function initialValue() {
 	var s1 = g.NilSlice();
-	var s2 = g.NewSlice([]);
-	var s3 = g.NewSlice(0, [2]);
-	var s4 = g.NewSlice(0, [2, 4]);
-	var s5 = g.MakeSlice(0, 0);
-	var s6 = g.MakeSlice(0, 5);
-	var s7 = g.MakeSlice(0, 5, 10);
+	var s2 = g.Slice();
+	var s3 = g.Slice(0, [2]);
+	var s4 = g.Slice(0, [2, 4]);
+	var s5 = g.MkSlice(0, 0);
+	var s6 = g.MkSlice(0, 5);
+	var s7 = g.MkSlice(0, 5, 10);
 
 	var msg = "nil";
 	if (s1.isNil && !s2.isNil && !s3.isNil && !s4.isNil && !s5.isNil && !s6.isNil && !s7.isNil) {
@@ -38,7 +38,7 @@ function initialValue() {
 
 function shortHand() {
 
-	var array = g.MakeArray([10], 0, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
+	var array = g.MkArray([10], 0, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
 
 	var a_slice = g.NilSlice(), b_slice = g.NilSlice();
 
@@ -145,9 +145,9 @@ function Max(slice) {
 
 function useFunc() {
 
-	var A1 = g.MakeArray([10], 0, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-	var A2 = g.MakeArray([4], 0, [1, 2, 3, 4]);
-	var A3 = g.MakeArray([1], 0, [1]);
+	var A1 = g.MkArray([10], 0, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+	var A2 = g.MkArray([4], 0, [1, 2, 3, 4]);
+	var A3 = g.MkArray([1], 0, [1]);
 
 
 	var slice = g.NilSlice();
@@ -195,16 +195,16 @@ function PrintByteSlice(name, slice) {
 
 function reference() {
 
-	var A = g.MakeArray([10], 0, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
+	var A = g.MkArray([10], 0, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
 
 
-	var slice1 = g.NewSlice(A, 3, 7);
-	var slice2 = g.NewSlice(A, 5);
-	var slice3 = g.NewSlice(slice1, 0, 2);
+	var slice1 = g.Slice(A, 3, 7);
+	var slice2 = g.Slice(A, 5);
+	var slice3 = g.Slice(slice1, 0, 2);
 
 
 	document.write("=== First content of A and the slices<br>");
-	PrintByteSlice("A", g.NewSlice(A, 0));
+	PrintByteSlice("A", g.Slice(A, 0));
 	PrintByteSlice("slice1", slice1);
 	PrintByteSlice("slice2", slice2);
 	PrintByteSlice("slice3", slice3);
@@ -212,7 +212,7 @@ function reference() {
 
 	A[4] = 'E';
 	document.write("<br>=== Content of A and the slices, after changing 'e' to 'E' in array A<br>");
-	PrintByteSlice("A", g.NewSlice(A, 0));
+	PrintByteSlice("A", g.Slice(A, 0));
 	PrintByteSlice("slice1", slice1);
 	PrintByteSlice("slice2", slice2);
 	PrintByteSlice("slice3", slice3);
@@ -220,7 +220,7 @@ function reference() {
 
 	slice2[1] = 'G';
 	document.write("<br>=== Content of A and the slices, after changing 'g' to 'G' in slice2<br>");
-	PrintByteSlice("A", g.NewSlice(A, 0));
+	PrintByteSlice("A", g.Slice(A, 0));
 	PrintByteSlice("slice1", slice1);
 	PrintByteSlice("slice2", slice2);
 	PrintByteSlice("slice3", slice3);
@@ -232,7 +232,7 @@ function resize() {
 	var slice = g.NilSlice();
 
 
-	slice = g.MakeSlice(0, 4, 5);
+	slice = g.MkSlice(0, 4, 5);
 
 	if (slice.len === 4 && slice.cap === 5 && slice.f[0] === 0 && slice.f[1] === 0 && slice.f[2] === 0 && slice.f[3] === 0) {
 
@@ -253,7 +253,7 @@ function resize() {
 
 
 
-	slice = g.MakeSlice(0, 2);
+	slice = g.MkSlice(0, 2);
 
 	if (slice.len === 2 && slice.cap === 2 && slice.f[0] === 0 && slice.f[1] === 0) {
 		document.write("[OK] resize<br>");

@@ -140,7 +140,7 @@ func (e *expression) transform(expr ast.Expr) {
 		}
 
 		if !e.isMultiDim {
-			e.WriteString("g.MakeArray([")
+			e.WriteString("g.MkArray([")
 		} else {
 			e.WriteString(",")
 		}
@@ -435,7 +435,7 @@ func (e *expression) transform(expr ast.Expr) {
 			}
 
 			if e.isEllipsis {
-				e.WriteString(fmt.Sprintf("g.MakeArray([%s],%s,%s",
+				e.WriteString(fmt.Sprintf("g.MkArray([%s],%s,%s",
 					strconv.Itoa(len(typ.Elts)), SP+e.zero, SP))
 
 				e.WriteString("[")
@@ -465,9 +465,9 @@ func (e *expression) transform(expr ast.Expr) {
 				e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
 				e.WriteString("]")
 
-			} else if e.kind == sliceKind {
+			} /*else if e.kind == sliceKind {
 				e.WriteString("[]")
-			}
+			}*/
 
 		case *ast.Ident: // Custom types
 			useField := false
@@ -754,7 +754,7 @@ func (e *expression) transform(expr ast.Expr) {
 		if e.tr.isVar {
 			e.WriteString(x + "," + SP+slice)
 		} else {
-			e.WriteString(fmt.Sprintf("g.NewSlice(%s,%s)", x, SP+slice))
+			e.WriteString(fmt.Sprintf("g.Slice(%s,%s)", x, SP+slice))
 		}
 
 		e.kind = sliceKind

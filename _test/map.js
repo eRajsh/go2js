@@ -201,9 +201,9 @@ function blankIdentifierInRange() {
 	};
 
 
-	var A1 = g.MakeArray([10], 0, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-	var A2 = g.MakeArray([4], 0, [1, 2, 3, 4]);
-	var A3 = g.MakeArray([1], 0, [1]);
+	var A1 = g.MkArray([10], 0, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+	var A2 = g.MkArray([4], 0, [1, 2, 3, 4]);
+	var A3 = g.MkArray([1], 0, [1]);
 
 
 	var slice = g.NilSlice();

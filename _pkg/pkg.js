@@ -49,7 +49,7 @@ function arrayType(f, len, cap) {
 
 
 
-function MakeArray(dim, zero, elem) {
+function MkArray(dim, zero, elem) {
 	var a = new arrayType([], 0, 0);
 
 	if (elem !== undefined) {
@@ -179,7 +179,7 @@ function NilSlice() {
 }
 
 
-function MakeSlice(zero, len, cap) {
+function MkSlice(zero, len, cap) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 	s.len = len;
 
@@ -197,10 +197,10 @@ function MakeSlice(zero, len, cap) {
 }
 
 
-function NewSlice(zero, elem) {
+function Slice(zero, elem) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
-	if (elem === undefined) {
+	if (arguments.length === 0) {
 		s.isNil = true;
 		return s;
 	}
@@ -232,7 +232,7 @@ function NewSlice(zero, elem) {
 }
 
 
-function NewSliceFrom(a, low, high) {
+function SliceFrom(a, low, high) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
 	s.array = a;
@@ -242,8 +242,6 @@ function NewSliceFrom(a, low, high) {
 	s.cap = a.cap - low;
 	return s;
 }
-
-
 
 
 sliceType.prototype.set = function(i, low, high) {
@@ -275,6 +273,8 @@ sliceType.prototype.str = function() {
 	var _s = this.get();
 	return _s.join("");
 }
+
+sliceType.prototype.kind = function() { return sliceKind; }
 
 
 
@@ -332,28 +332,17 @@ Map.prototype.get = function(k) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 function Export(pkg, exported) {
 	var v; for (var _ in exported) { v = exported[_];
 		pkg.v = v;
 	}
 }
 
-g.MakeArray = MakeArray;
+g.MkArray = MkArray;
 g.NilSlice = NilSlice;
-g.MakeSlice = MakeSlice;
-g.NewSlice = NewSlice;
-g.NewSliceFrom = NewSliceFrom;
+g.MkSlice = MkSlice;
+g.Slice = Slice;
+g.SliceFrom = SliceFrom;
 g.Map = Map;
 g.Export = Export;
 

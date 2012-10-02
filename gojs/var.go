@@ -570,12 +570,12 @@ _noFunc:
 
 			if expr.kind == sliceKind {
 				if isNewVar {
-					tr.WriteString(fmt.Sprintf("%sg.NewSlice(%s)", SP+sign+SP, value))
+					tr.WriteString(fmt.Sprintf("%sg.Slice(%s)", SP+sign+SP, value))
 				} else {
 					tr.WriteString(".set(" + value + ")")
 				}
 			} else if expr.isMake {
-				tr.WriteString(fmt.Sprintf("%sg.MakeSlice(%s)", SP+sign+SP, value))
+				tr.WriteString(fmt.Sprintf("%sg.MkSlice(%s)", SP+sign+SP, value))
 
 			} else {
 				if value != "" {

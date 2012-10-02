@@ -18,7 +18,7 @@ package g
 
 // The specific kind of type that it represents.
 const (
-	invalid uint8 = iota
+	invalid uint = iota
 	arrayKind
 	sliceKind
 )
@@ -47,9 +47,9 @@ type arrayType struct {
 	// Note: the array in Go can not be compared with nil
 }
 
-// MakeArray initializes an array of dimension "dim" to value "zero",
-// inserting the elemnts of "elem" if any.
-func MakeArray(dim []uint, zero interface{}, elem []interface{}) *arrayType {
+// MkArray initializes an array of dimension "dim" to value "zero",
+// merging the elements of "elem" if any.
+func MkArray(dim []uint, zero interface{}, elem []interface{}) *arrayType {
 	a := new(arrayType)
 
 	if elem != nil {
@@ -156,7 +156,7 @@ func initArray(dim []uint, zero interface{}) (a []interface{}) {
 // == Slice
 //
 
-// sliceType represents a slice.
+// sliceType represents a slice type.
 type sliceType struct {
 	array interface{}   // the array where this slice is got, if any
 	elem  []interface{} // elements from scratch (make) or appended to the array
@@ -166,7 +166,7 @@ type sliceType struct {
 	len  uint // total of elements
 	cap  uint
 
-	isNil bool
+	isNil bool // for variables declared like slices
 }
 
 // NilSlice creates a null slice.
@@ -178,8 +178,8 @@ func NilSlice() *sliceType {
 	return s
 }
 
-// MakeSlice initializes a slice with the zero value.
-func MakeSlice(zero interface{}, len, cap uint) *sliceType {
+// MkSlice initializes a slice with the zero value.
+func MkSlice(zero interface{}, len, cap uint) *sliceType {
 	s := new(sliceType)
 	s.len = len
 
@@ -196,11 +196,11 @@ func MakeSlice(zero interface{}, len, cap uint) *sliceType {
 	return s
 }
 
-// NewSlice creates a new slice.
-func NewSlice(zero interface{}, elem []interface{}) *sliceType {
+// Slice creates a new slice with the elements in "elem".
+func Slice(zero interface{}, elem []interface{}) *sliceType {
 	s := new(sliceType)
 
-	if elem == nil {
+	if len(arguments) == 0 {
 		s.isNil = true
 		return s
 	}
@@ -231,8 +231,8 @@ func NewSlice(zero interface{}, elem []interface{}) *sliceType {
 	return s
 }
 
-// NewSliceFrom creates a new slice from an array using the indexes low and high.
-func NewSliceFrom(a interface{}, low, high uint) *sliceType {
+// SliceFrom creates a new slice from an array using the indexes low and high.
+func SliceFrom(a interface{}, low, high uint) *sliceType {
 	s := new(sliceType)
 
 	s.array = a
@@ -242,8 +242,6 @@ func NewSliceFrom(a interface{}, low, high uint) *sliceType {
 	s.cap = a.cap - low
 	return s
 }
-
-// * * *
 
 // set sets the elements of a slice.
 func (s sliceType) set(i interface{}, low, high uint) {
@@ -266,7 +264,7 @@ func (s sliceType) get() []interface{} {
 	if len(s.elem) != 0 {
 		return s.elem
 	}
-	//      a := s.array
+//	a := s.array
 	return s.array.slice(s.low, s.high)
 }
 
@@ -276,26 +274,28 @@ func (s sliceType) str() string {
 	return _s.join("")
 }
 
+func (s sliceType) kind() uint { return sliceKind }
+
 /*
 func (s sliceType) setSlice(i interface{}, low, high uint) {
-        s.low, s.high = low, high
-        s.len = high - low
+	s.low, s.high = low, high
+	s.len = high - low
 
-        if i.array != nil { // from slice
-                s.array = i.array
-                s.cap = i.cap - low
-        } else { // from array
-                s.array = i
-                s.cap = len(i) - low
-        }
+	if i.array != nil { // from slice
+		s.array = i.array
+		s.cap = i.cap - low
+	} else { // from array
+		s.array = i
+		s.cap = len(i) - low
+	}
 }
 
 // Appends an element to the slice.
 func (s sliceType) append(elt interface{}) {
-        if s.len == s.cap {
-                s.cap = s.len * 2
-        }
-        s.len++
+	if s.len == s.cap {
+		s.cap = s.len * 2
+	}
+	s.len++
 }
 */
 
@@ -327,17 +327,6 @@ func (m Map) get(k interface{}) (interface{}, bool) {
 	}
 	return v, true
 }
-
-/*
-function getType(obj){
-	if(obj===null)return "[object Null]"; // special case
-	return Object.prototype.toString.call(obj);
-}
-
-function isArray(o) {
-	return Object.prototype.toString.call(o) === '[object Array]';
-}
-*/
 
 // == Utility
 //

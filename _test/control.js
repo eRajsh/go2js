@@ -191,7 +191,7 @@ function testFor() {
 
 function testRange() {
 	var hasError = false;
-	var s = g.NewSlice(0, [2, 3, 5]);
+	var s = g.Slice(0, [2, 3, 5]);
 
 	var resultOk = new g.Map({
 		0: 2,
