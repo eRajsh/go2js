@@ -28,7 +28,7 @@ type Kind uint8
 const (
 	invalidKind Kind = iota
 	//arrayKind TODO: remove
-	ellipsisKind
+	//ellipsisKind
 	sliceKind
 )
 
@@ -42,22 +42,23 @@ type expression struct {
 	mapName  string
 	name     string // used for slice
 
-	kind Kind
 	zero string
+	kind Kind
 
 	hasError bool
+	useIota  bool
 
-	//isFunc     bool // anonymous function
-	isAddress  bool
-	isIdent    bool
-	isMake     bool
-	isNil      bool
-	isPointer  bool
-	isValue    bool // is it on the right of the assignment?
+	//isFunc    bool // anonymous function
+	isIdent   bool
+	isValue   bool // is it on the right of the assignment?
+	isAddress bool
+	isPointer bool
+	isMake    bool
+	isNil     bool
 
-	arrayHasElts  bool // does array has elements?
-	useIota       bool
-	isMultiDim    bool // multi-dimensional array
+	arrayHasElts bool // does array has elements?
+	isEllipsis   bool
+	isMultiDim   bool // multi-dimensional array
 
 	// To handle comparisons
 	isBasicLit     bool
@@ -87,8 +88,9 @@ func (tr *transform) newExpression(iVar interface{}) *expression {
 		"",
 		"",
 		"",
-		invalidKind,
 		"",
+		invalidKind,
+		false,
 		false,
 		false,
 		false,
@@ -135,7 +137,7 @@ func (e *expression) transform(expr ast.Expr) {
 
 		if _, ok := typ.Len.(*ast.Ellipsis); ok {
 			e.zero, _ = e.tr.zeroValue(true, typ.Elt)
-			e.kind = ellipsisKind
+			e.isEllipsis = true
 			break
 		}
 
@@ -434,7 +436,7 @@ func (e *expression) transform(expr ast.Expr) {
 				e.transform(typ.Type)
 			}
 
-			if e.kind == ellipsisKind {
+			if e.isEllipsis {
 				e.WriteString(fmt.Sprintf("g.MakeArray([%s],%s,%s",
 					strconv.Itoa(len(typ.Elts)), SP+e.zero, SP))
 
