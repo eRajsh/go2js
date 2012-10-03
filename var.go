@@ -81,6 +81,8 @@ func (tr *transform) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
 			}
 
 			// === Write
+			name := validIdent(ident.Name)
+
 			if isFirst {
 				isFirst = false
 
@@ -88,13 +90,13 @@ func (tr *transform) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
 					tr.WriteString(strings.Repeat(TAB, tr.tabLevel))
 				}
 				if isMultipleLine {
-					tr.WriteString(ident.Name + SP + "=" + SP + value)
+					tr.WriteString(name + SP + "=" + SP + value)
 				} else {
-					tr.WriteString(fmt.Sprintf("const %s=%s", ident.Name+SP, SP+value))
+					tr.WriteString(fmt.Sprintf("const %s=%s", name+SP, SP+value))
 				}
 
 			} else {
-				tr.WriteString(fmt.Sprintf(",%s=%s", SP+ident.Name+SP, SP+value))
+				tr.WriteString(fmt.Sprintf(",%s=%s", SP+name+SP, SP+value))
 			}
 		}
 
@@ -176,7 +178,7 @@ func (tr *transform) getType(spec []ast.Spec, isGlobal bool) {
 		default:
 			tr.addLine(tSpec.Pos())
 			tr.WriteString(fmt.Sprintf("function %s(t)%s{%sthis.t=t;%s}",
-				tSpec.Name, SP, SP, SP))
+				tSpec.Name, SP, SP, SP)) // TODO: add validIdent()
 		}
 
 		if tr.hasError {
@@ -239,7 +241,7 @@ func (tr *transform) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 		zero, _ := tr.zeroValue(true, field.Type)
 
 		for _, v := range field.Names {
-			fieldName := v.Name
+			fieldName := validIdent(v.Name)
 			if fieldName == "_" {
 				continue
 			}
@@ -311,9 +313,9 @@ func (tr *transform) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 
 	if name != "" {
 		tr.WriteString(fmt.Sprintf(
-			"function %s(%s)%s{%s}", name, fieldNames, SP, fieldLines))
+			"function %s(%s)%s{%s}", validIdent(name), fieldNames, SP, fieldLines))
 		//tr.WriteString(fmt.Sprintf("function %s(%s)%s{%sthis._z=%q;%s}",
-		//name, fieldNames, SP,
+		//validIdent(name), fieldNames, SP,
 		//SP, fieldsInit, fieldLines))
 
 		// Store the name of new type with its values initialized
@@ -375,7 +377,7 @@ func (tr *transform) writeVar(names interface{}, values []ast.Expr, type_ interf
 		for i, v := range t {
 			expr := tr.getExpression(v)
 
-			_names[i] = expr.String()
+			_names[i] = validIdent(expr.String())
 			nameIsPointer[i] = expr.isPointer
 		}
 	case []ast.Expr: // like avobe

@@ -9,6 +9,7 @@ package main
 import (
 	"fmt"
 	"go/ast"
+	"strings"
 )
 
 // Functions
@@ -97,10 +98,16 @@ func (tr *transform) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.Fu
 		field := recv.List[0]
 		tr.recvVar = field.Names[0].Name
 
-		tr.WriteString(fmt.Sprintf("%s.prototype.%s%s=%sfunction(%s)%s",
-			field.Type, name, SP, SP, joinParams(typ), SP))
+		fType := tr.getExpression(field.Type).String()
+		if strings.HasSuffix(fType, ".p") { // is it a pointer?
+			fType = fType[:len(fType)-2]
+		}
+
+		tr.WriteString(fmt.Sprintf("%s.prototype.%s=%sfunction(%s)%s",
+			fType, validIdent(name)+SP, SP, joinParams(typ), SP))
 	} else if name != nil {
-		tr.WriteString(fmt.Sprintf("function %s(%s)%s", name, joinParams(typ), SP))
+		tr.WriteString(fmt.Sprintf("function %s(%s)%s",
+			validIdent(name), joinParams(typ), SP))
 	} else { // Literal function
 		tr.WriteString(fmt.Sprintf("%s=%sfunction(%s)%s", SP, SP, joinParams(typ), SP))
 		tr.recvVar = "_" // avoid that been added "this" in selectors
@@ -132,7 +139,7 @@ func joinParams(f *ast.FuncType) string {
 			if !isFirst {
 				s += "," + SP
 			}
-			s += v.Name
+			s += validIdent(v.Name)
 
 			if isFirst {
 				isFirst = false
@@ -168,7 +175,7 @@ func (tr *transform) joinResults(f *ast.FuncType) (decl, ret string) {
 				isFirst = false
 			}
 
-			decl += fmt.Sprintf("%s=%s", v.Name+SP, SP+value)
+			decl += fmt.Sprintf("%s=%s", validIdent(v.Name)+SP, SP+value)
 			ret += v.Name
 		}
 	}

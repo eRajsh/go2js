@@ -572,6 +572,8 @@ func (e *expression) transform(expr ast.Expr) {
 			e.tr.hasError = true
 
 		default:
+			name = validIdent(typ.Name)
+
 			if e.isPointer { // `*x` => `x.p`
 				name += ".p"
 			} else if e.isVarAddress { // `&x` => `x`
@@ -701,7 +703,7 @@ func (e *expression) transform(expr ast.Expr) {
 			x = t.Name
 		case *ast.IndexExpr:
 			e.transform(t)
-			e.WriteString("." + typ.Sel.Name)
+			e.WriteString("." + typ.Sel.Name) // TODO: validIdent?
 			return
 		default:
 			panic(fmt.Sprintf("'SelectorExpr': unimplemented: %T", t))
@@ -710,7 +712,7 @@ func (e *expression) transform(expr ast.Expr) {
 		if x == e.tr.recvVar {
 			x = "this"
 		}
-		goName := x + "." + typ.Sel.Name
+		goName := x + "." + validIdent(typ.Sel.Name)
 
 		// Check is the selector is a package
 		for _, v := range validImport {

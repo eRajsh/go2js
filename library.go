@@ -13,6 +13,64 @@ import (
 	"strings"
 )
 
+// JavaScript library name.
+const LIB_RESERVED_NAME = "g"
+
+// Reserved Words in JavaScript.
+//
+// https://developer.mozilla.org/en/JavaScript/Reference/Reserved_Words
+// http://golang.org/ref/spec#Keywords
+var reserved = map[string]struct{}{
+	/* These ones are reserved too in Go.
+	"break":     void,
+	"case":      void,
+	"const":     void,
+	"continue":  void,
+	"default":   void,
+	"delete":    void,
+	"else":      void,
+	"false":     void,
+	"for":       void,
+	"if":        void,
+	"import":    void,
+	"interface": void,
+	"package":   void,
+	"return":    void,
+	"switch":    void,
+	"true":      void,
+	"var":       void,*/
+
+	"catch":      void,
+	"debugger":   void,
+	"do":         void,
+	"finally":    void,
+	"function":   void,
+	"in":         void,
+	"instanceof": void,
+	"new":        void,
+	"this":       void,
+	"throw":      void,
+	"try":        void,
+	"typeof":     void,
+	"void":       void,
+	"while":      void,
+	"with":       void,
+
+	"class":      void,
+	"enum":       void,
+	"export":     void,
+	"extends":    void,
+	"implements": void,
+	"let":        void,
+	"null":       void,
+	"private":    void,
+	"protected":  void,
+	"public":     void,
+	"static":     void,
+	"super":      void,
+	"yield":      void,
+}
+
 var validImport = []string{"fmt", "math", "rand"}
 
 // Constants to transform.
@@ -119,6 +177,21 @@ func (tr *transform) GetArgs(funcName string, args []ast.Expr) string {
 
 //
 // === Utility
+
+// validIdent checks if the name is a reserved word in JavaScript, returning a
+// safe name adding "_" at the end of the name.
+// It checks also if the name is the JavaScript library.
+func validIdent(name interface{}) string {
+	name_ := fmt.Sprintf("%s", name)
+
+	if _, ok := reserved[name_]; ok {
+		return name_ + "_"
+	}
+	if !Bootstrap && name_ == LIB_RESERVED_NAME {
+		return name_ + "_"
+	}
+	return name_
+}
 
 // Returns arguments of Print, Println.
 func (tr *transform) joinArgsPrint(args []ast.Expr, addLine bool) string {

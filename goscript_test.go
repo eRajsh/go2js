@@ -17,11 +17,12 @@ func init() {
 	MaxMessage = 100 // to show all errors
 }
 
-func TestConst(t *testing.T)   { compile('t', "decl_const.go", t) }
-func TestVar(t *testing.T)     { compile('t', "decl_var.go", t) }
-func TestStruct(t *testing.T)  { compile('t', "decl_struct.go", t) }
-//func TestOp(t *testing.T)      { compile('t', "operator.go", t) }
-func TestPointer(t *testing.T) { compile('t', "pointer.go", t) }
+func TestConst(t *testing.T)    { compile('t', "decl_const.go", t) }
+func TestVar(t *testing.T)      { compile('t', "decl_var.go", t) }
+func TestStruct(t *testing.T)   { compile('t', "decl_struct.go", t) }
+func TestReserved(t *testing.T) { compile('t', "decl_reserved.go", t) }
+//func TestOp(t *testing.T)       { compile('t', "operator.go", t) }
+func TestPointer(t *testing.T)  { compile('t', "pointer.go", t) }
 
 func TestFunc(t *testing.T)  { compile('t', "func.go", t) }
 func TestCompo(t *testing.T) { compile('t', "composite.go", t) }
