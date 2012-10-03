@@ -11,6 +11,8 @@
 
 
 
+var PASS = true;
+
 var x = 10;
 
 (function() {
@@ -18,18 +20,19 @@ var x = 10;
 }());
 
 function testInit() {
-	var code = "";
 	if (x === 13) {
-		code = "OK";
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		code = "Error";
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: got " + x + ", want 13<br>");
+		PASS = false;
 	}
-	document.write("[" + code + "]<br>");
 }
 
-function singleLine() { document.write("[OK]<br>"); }
+function singleLine() { document.write("&nbsp;&nbsp;&nbsp;&nbsp;passsingleLine<br>"); }
 
 function simpleFunc() {
+	var pass = true;
+
 
 	var max = function(a, b) {
 		if (a > b) {
@@ -43,33 +46,30 @@ function simpleFunc() {
 	var z = 5;
 
 	var max_xy = max(x, y);
-
-	if (max_xy === 4) {
-		document.write("[OK] x,y<br>");
-	} else {
-		document.write("[Error] max(" + x + ", " + y + ") = " + max_xy + "<br>");
+	if (max_xy !== 4) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: max(x,y) => got " + max_xy + ", want 4)<br>");
+		pass = false, PASS = false;
 	}
-
 
 	var max_xz = max(x, z);
-
-	if (max_xz === 5) {
-		document.write("[OK] x,z<br>");
-	} else {
-		document.write("[Error] max(" + x + ", " + z + ") = " + max_xz + "<br>");
+	if (max_xz !== 5) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: max(x,z) => got " + max_xz + ", want 5)<br>");
+		pass = false, PASS = false;
 	}
 
-
-
-	if (max(y, z) === 5) {
-		document.write("[OK] y,z<br>");
-	} else {
-		document.write("[Error] max(" + y + ", " + z + ") = " + max(y, z) + "<br>");
+	if (max(y, z) !== 5) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: max(y,z) => got " + max(y, z) + ", want 5)<br>");
+		pass = false, PASS = false;
 	}
 
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
 }
 
 function twoOuputValues() {
+	var pass = true;
+
 
 	var SumAndProduct = function(A, B) {
 		return [A + B, A * B];
@@ -79,17 +79,23 @@ function twoOuputValues() {
 	var y = 4;
 	var _ = SumAndProduct(x, y), xPLUSy = _[0], xTIMESy = _[1];
 
-
-	if (xPLUSy === 7 && xTIMESy === 12) {
-		document.write("[OK]<br>");
-	} else {
-		document.write("[Error] " + x + " + " + y + " = " + xPLUSy + "\t");
-		document.write("" + x + " * " + y + " = " + xTIMESy + "<br>");
+	if (xPLUSy !== 7) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: sum => got " + xPLUSy + ", want 7)<br>");
+		pass = false, PASS = false;
+	}
+	if (xTIMESy !== 12) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: product => got " + xTIMESy + ", want 12)<br>");
+		pass = false, PASS = false;
 	}
 
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
 }
 
 function resultVariable() {
+	var pass = true;
+
 
 
 	var MySqrt = function(f) { var s = 0, ok = false;
@@ -99,7 +105,7 @@ function resultVariable() {
 		return [s, ok];
 	};
 
-	var results = g.Map(0, {
+	var tests = g.Map(0, {
 		1: 1,
 		2: 1.4142135623730951,
 		3: 1.7320508075688772,
@@ -112,27 +118,30 @@ function resultVariable() {
 		10: 3.1622776601683795
 	});
 
-	var err = false;
 	for (var i = -2.0; i <= 10; i++) {
 		var _ = MySqrt(i), sqroot = _[0], ok = _[1];
 		if (ok) {
-			if (JSON.stringify(sqroot) !== JSON.stringify(results.get(i)[0])) {
-				document.write("[Error] The square root of " + i + " is " + sqroot + "<br>");
-				err = true;
+			if (JSON.stringify(sqroot) !== JSON.stringify(tests.get(i)[0])) {
+				document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: square(" + i + ") => got " + sqroot + ", want " + tests.get(i)[0] + "<br>");
+
+				pass = false, PASS = false;
 			}
 		} else {
 			if (i !== -2.0 && i !== -1.0 && i !== 0) {
-				document.write("[Error] The square root for " + i + " should not be run<br>");
-				err = true;
+				document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: square(" + i + ") => should no be run<br>");
+				pass = false, PASS = false;
 			}
 		}
 	}
-	if (!err) {
-		document.write("[OK]<br>");
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
 function testReturn() {
+	var pass = true;
+
 	var MySqrt = function(f) { var squareroot = 0, ok = false;
 		if (f > 0) {
 			squareroot = Math.sqrt(f), ok = true;
@@ -140,24 +149,20 @@ function testReturn() {
 		return [squareroot, ok];
 	};
 
-	var check = MySqrt(5)[1];
-
-
-	var code = "";
-	if (check) {
-		code = "OK";
-	} else {
-		code = "Error";
+	var ok = MySqrt(5)[1];
+	if (!ok) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: MySqrt(5) => got " + ok + ", want " + !ok + "<br>");
+		pass = false, PASS = false;
 	}
-	document.write("[" + code + "]<br>");
 
-	var ok = MySqrt(0)[1]; if (!ok) {
-		code = "OK";
-	} else {
-		code = "Error";
+	var ok = MySqrt(0)[1]; if (ok) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: MySqrt(0) => got " + ok + ", want " + !ok + "<br>");
+		pass = false, PASS = false;
 	}
-	document.write("[" + code + "]<br>");
 
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
 }
 
 function testPanic() {
@@ -166,18 +171,27 @@ function testPanic() {
 }
 
 function main() {
-	document.write("<br>== testInit<br>");
+	document.write("<br><br>== Functions<br>");
+
+	document.write("<br>=== RUN testInit<br>");
 	testInit();
-	document.write("<br>== singleLine<br>");
+	document.write("<br>=== RUN singleLine<br>");
 	singleLine();
-	document.write("<br>== simpleFunc<br>");
+	document.write("<br>=== RUN simpleFunc<br>");
 	simpleFunc();
-	document.write("<br>== twoOuputValues<br>");
+	document.write("<br>=== RUN twoOuputValues<br>");
 	twoOuputValues();
-	document.write("<br>== resultVariable<br>");
+	document.write("<br>=== RUN resultVariable<br>");
 	resultVariable();
-	document.write("<br>== testReturn<br>");
+	document.write("<br>=== RUN testReturn<br>");
 	testReturn();
-	document.write("<br>== testPanic<br>");
+	document.write("<br>=== RUN testPanic<br>");
 	testPanic();
+
+	if (PASS) {
+		document.write("<br>PASS<br>");
+	} else {
+		document.write("<br>FAIL<br>");
+		alert("Fail: Functions");
+	}
 } main();

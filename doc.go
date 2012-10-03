@@ -128,6 +128,9 @@ its transformation would be:
 JavaScript has several built-in functions and constants which can be transformed
 from Go. They are defined in the maps "Constant", and "Function".
 
+Since the Go functions "print" and "println" are used to debug, they are
+transformed to "alert".
+
 "panic" is transformed to "throw new Error()".
 
 #### Modularity

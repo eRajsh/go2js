@@ -21,8 +21,6 @@ var m = 0      // m has type int
 var n = 3.0    // n has type float64
 var o = "OMDB" // o has type string
 
-//var _, found = entries[name] // map lookup; only interested in "found"
-
 // Array
 var (
 	a1 = new([32]byte)
@@ -34,7 +32,7 @@ var (
 	a7 = [2][2][2]float64{} // same as [2]([2]([2]float64))
 
 	a8 = [32]byte{1, 2, 3, 4}
-	a9 = [4]byte{1, 3:4} // [1 0 0 4]
+	a9 = [4]byte{1, 3: 4} // [1 0 0 4]
 
 	a10 = [...]string{"a", "b", "c"} // [3]string
 )
@@ -45,7 +43,7 @@ var (
 	s2 = make([]int, 10, 20)
 
 	s3 = []int{2, 4, 6}
-	s4 = []int{1, 2:3} // [1 0 3]
+	s4 = []int{1, 2: 3} // [1 0 3]
 	s5 = []int{}
 )
 
@@ -63,6 +61,8 @@ var (
 		2: 2,
 		3: 3,
 	}
+
+	_, found = m4[1] // map lookup; only interested in "found"
 )
 
 // Pointer
@@ -75,7 +75,7 @@ var (
 func main() {
 	Fa, Fb := 0, 10
 	var Fc = "c"
-	var(
+	var (
 		Fd uint = 20
 		Fe float32
 	)

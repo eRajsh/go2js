@@ -8,99 +8,70 @@ package main
 
 import "fmt"
 
-// We declare our new type
+var PASS = true
+
 type person struct {
 	name string
 	age  int
 }
 
 // Return the older person of p1 and p2, and the difference in their ages.
-func Older(p1, p2 person) (person, int) {
-	if p1.age > p2.age { // Compare p1 and p2's ages
+func older(p1, p2 person) (person, int) {
+	if p1.age > p2.age {
 		return p1, p1.age - p2.age
 	}
 	return p2, p2.age - p1.age
 }
 
-func testStruct() {
-	var tom person
-
-	tom.name, tom.age = "Tom", 18
-
-	// Look how to declare and initialize easily.
-	bob := person{age: 25, name: "Bob"} //specify the fields and their values
-	paul := person{"Paul", 43}          //specify values of fields in their order
-
-	tb_Older, tb_diff := Older(tom, bob)
-	// Checking
-	if tb_Older == bob && tb_diff == 7 {
-		println("[OK] Tom, Bob")
-	} else {
-		fmt.Printf("[Error] Of %s and %s, %s is older by %d years\n",
-			tom.name, bob.name, tb_Older.name, tb_diff)
-	}
-	//==
-
-	tp_Older, tp_diff := Older(tom, paul)
-	// Checking
-	if tp_Older == paul && tp_diff == 25 {
-		println("[OK] Tom, Paul")
-	} else {
-		fmt.Printf("[Error] Of %s and %s, %s is older by %d years\n",
-			tom.name, paul.name, tp_Older.name, tp_diff)
-	}
-	//==
-
-	bp_Older, bp_diff := Older(bob, paul)
-	// Checking
-	if bp_Older == paul && bp_diff == 18 {
-		println("[OK] Bob, Paul")
-	} else {
-		fmt.Printf("[Error] Of %s and %s, %s is older by %d years\n",
-			bob.name, paul.name, bp_Older.name, bp_diff)
-	}
-}
-
-// * * *
-
 // Return the older person in a group of 10 persons.
-func Older10(people [10]person) person {
+func older10(people [10]person) person {
 	older := people[0] // The first one is the older for now.
 
 	// Loop through the array and check if we could find an older person.
 	for index := 1; index < 10; index++ { // We skipped the first element here.
-		if people[index].age > older.age { // Current's persons age vs olderest so far.
-			older = people[index] // If people[index] is older, replace the value of older.
+		if people[index].age > older.age {
+			older = people[index]
 		}
 	}
 	return older
 }
 
-func testArray() {
-	// Declare an example array variable of 10 person called 'array'.
-	var array [10]person
+// == Array
+//
 
-	// Initialize some of the elements of the array, the others are by default
-	// set to person{"", 0}
-	array[1] = person{"Paul", 23}
-	array[2] = person{"Jim", 24}
-	array[3] = person{"Sam", 84}
-	array[4] = person{"Rob", 54}
-	array[8] = person{"Karl", 19}
+func zeroArray() {
+	pass := true
 
-	older := Older10(array) // Call the function by passing it our array.
+	var a1 [4]byte
+	a2 := [4]byte{}
 
-	// Checking
-	if older.name == "Sam" {
-		println("[OK]")
-	} else {
-		fmt.Printf("[Error] The older of the group is: %s\n", older.name)
+	tests := []struct {
+		msg string
+		in  bool
+		out bool
+	}{
+		//{"nil a1", a1 == nil, true},
+		//{"nil a2", a2 == nil, false},
+		{"len a1", len(a1) == 40, true},
+		{"len a2", len(a2) == 4, true},
+		{"cap a1", cap(a1) == 4, true},
+		{"cap a2", cap(a2) == 4, true},
+	}
+
+	for _, t := range tests {
+		if t.in != t.out {
+			fmt.Printf("\tFAIL: %s => got %v, want %v\n", t.msg, t.in, t.out)
+			pass, PASS = false, false
+		}
+	}
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
-// * * *
+func initArray() {
+	pass := true
 
-func initializeArray() {
 	// Declare and initialize an array A of 10 person.
 	array1 := [10]person{
 		person{"", 0},
@@ -128,53 +99,135 @@ func initializeArray() {
 		person{"Karl", 10},
 		person{"", 0}}
 
-	// Checking
-	if len(array1) == len(array2) {
-		println("[OK] length")
-	} else {
-		fmt.Printf("[Error] len => array1: %d, array2: %d\n", len(array1), len(array2))
+	tests := []struct {
+		msg string
+		in  bool
+		out bool
+	}{
+		{"len", len(array1) == len(array2), true},
+		{"cap", cap(array1) == cap(array2), true},
+		{"equality", array1 == array2, true},
 	}
 
-	if array1 == array2 {
-		println("[OK] comparison")
-	} else {
-		fmt.Printf("[Error] array1: %v\narray2: %v\n", array1, array2)
+	for _, t := range tests {
+		if t.in != t.out {
+			fmt.Printf("\tFAIL: %s => got %v, want %v\n", t.msg, t.in, t.out)
+			pass, PASS = false, false
+		}
+	}
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
-// * * *
+func testArray() {
+	// Declare an example array variable of 10 person called 'array'.
+	var array [10]person
+
+	// Initialize some of the elements of the array, the others are by default
+	// set to person{"", 0}
+	array[1] = person{"Paul", 23}
+	array[2] = person{"Jim", 24}
+	array[3] = person{"Sam", 84}
+	array[4] = person{"Rob", 54}
+	array[8] = person{"Karl", 19}
+
+	older := older10(array) // Call the function by passing it our array.
+
+	if older.name == "Sam" {
+		fmt.Println("\tpass")
+	} else {
+		fmt.Printf("\tFAIL: got %v, want Sam\n", older.name)
+		PASS = false
+	}
+}
 
 func multiArray() {
-	// declare and initialize an array of 2 arrays of 4 ints
+	// Declare and initialize an array of 2 arrays of 4 ints
 	doubleArray_1 := [2][4]int{[4]int{1, 2, 3, 4}, [4]int{5, 6, 7, 8}}
 
-	// simplify the previous declaration, with the '...' syntax
+	// Simplify the previous declaration, with the '...' syntax
 	doubleArray_2 := [2][4]int{
 		[...]int{1, 2, 3, 4}, [...]int{5, 6, 7, 8}}
 
-	// super simpification!
+	// Super simpification!
 	doubleArray_3 := [2][4]int{
 		{1, 2, 3, 4},
 		{5, 6, 7, 8},
 	}
 
-	// Checking
 	if doubleArray_1 == doubleArray_2 && doubleArray_2 == doubleArray_3 {
-		println("[OK]")
+		fmt.Println("\tpass")
 	} else {
-		fmt.Println("[Error] multi-dimensional")
+		fmt.Print("\tFAIL: got different arraies\n")
+		PASS = false
 	}
 }
 
-// * * *
+// == Struct
+//
+
+func testStruct() {
+	pass := true
+
+	var tom person
+	tom.name, tom.age = "Tom", 18
+
+	bob := person{age: 25, name: "Bob"} // specify the fields and their values
+	paul := person{"Paul", 43}          // specify values of fields in their order
+
+	TB_older, TB_diff := older(tom, bob)
+	TP_older, TP_diff := older(tom, paul)
+	BP_older, BP_diff := older(bob, paul)
+
+	tests := []struct {
+		msg       string
+		inPerson  person
+		outPerson person
+		inDiff    int
+		outDiff   int
+	}{
+		{"Tom,Bob", TB_older, bob, TB_diff, 7},
+		{"Tom,Paul", TP_older, paul, TP_diff, 25},
+		{"Bob,Paul", BP_older, paul, BP_diff, 18},
+	}
+
+	for _, t := range tests {
+		if t.inPerson != t.outPerson {
+			fmt.Printf("\tFAIL: %s => person got %v, want %v\n",
+				t.msg, t.inPerson, t.outPerson)
+			pass, PASS = false, false
+		}
+		if t.inDiff != t.outDiff {
+			fmt.Printf("\tFAIL: %s => difference got %v, want %v\n",
+				t.msg, t.inDiff, t.outDiff)
+			pass, PASS = false, false
+		}
+	}
+	if pass {
+		fmt.Println("\tpass")
+	}
+}
 
 func main() {
-	println("\n== testStruct")
-	testStruct()
-	println("\n== testArray")
+	fmt.Print("\n\n== Composite types\n")
+
+	fmt.Print("\n=== RUN zeroArray\n")
+	zeroArray()
+	fmt.Print("\n=== RUN initArray\n")
+	initArray()
+	fmt.Print("\n=== RUN testArray\n")
 	testArray()
-	println("\n== initializeArray")
-	initializeArray()
-	println("\n== multiArray")
+	fmt.Print("\n=== RUN multiArray\n")
 	multiArray()
+
+	fmt.Print("\n=== RUN testStruct\n")
+	testStruct()
+
+	if PASS {
+		fmt.Print("\nPASS\n")
+	} else {
+		fmt.Print("\nFAIL\n")
+		print("Fail: Composite types")
+	}
 }

@@ -8,6 +8,8 @@
 
 
 
+var PASS = true;
+
 
 var i = {p:undefined};
 var hello = {p:undefined};
@@ -16,32 +18,10 @@ var p = {p:undefined};
 (function() {
 	p = i;
 	var helloPtr = hello;
+
+	document.write("== init()<br>");
 	document.write("helloPtr: " + helloPtr + "<br>");
 }());
-
-function nilValue() {
-	var num = {p:10};
-	var p = {p:undefined};
-
-
-	var msg = "declaration";
-	if (p.p === undefined) {
-		document.write("[OK] " + msg + "<br>");
-	} else {
-		document.write("[Error] " + msg + "<br>");
-	}
-
-
-	p = num;
-
-	msg = "assignment";
-	if (p.p !== undefined) {
-		document.write("[OK] " + msg + "<br>");
-	} else {
-		document.write("[Error] " + msg + "<br>");
-	}
-
-}
 
 function declaration() {
 	var i = {p:undefined};
@@ -50,7 +30,7 @@ function declaration() {
 
 	p = i;
 	var helloPtr = hello;
-	document.write("p:  " + p + " " + "<br>helloPtr: " + helloPtr + "<br>");
+	document.write("p:&nbsp;&nbsp;&nbsp;&nbsp;  " + p + "<br>helloPtr: " + helloPtr);
 }
 
 function showAddress() {
@@ -61,56 +41,78 @@ function showAddress() {
 	var b = {p:true};
 
 
-	document.write("Hexadecimal address of 'i' is: " + i + "<br>");
-	document.write("Hexadecimal address of 'hello' is: " + hello + "<br>");
-	document.write("Hexadecimal address of 'pi' is: " + pi + "<br>");
-	document.write("Hexadecimal address of 'b' is: " + b + "<br>");
+	document.write("Hexadecimal address of:<br>");
+
+	document.write("'i':&nbsp;&nbsp;&nbsp;&nbsp; " + i + "<br>");
+	document.write("'hello': " + hello + "<br>");
+	document.write("'pi':&nbsp;&nbsp;&nbsp;&nbsp; " + pi + "<br>");
+	document.write("'b':&nbsp;&nbsp;&nbsp;&nbsp; " + b + "<br>");
 }
 
-function access_1() {
-	var hello = {p:"Hello, mina-san!"};
+function nilValue() {
+	var pass = true;
 
+	var num = {p:10};
+	var p = {p:undefined};
+
+	if (p.p === undefined) {
+
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: declaration => got " + p === undefined + "<br>");
+		pass = false, PASS = false;
+	}
+
+	p = num;
+	if (p.p !== undefined) {
+
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: assignment => got " + p === undefined + "<br>");
+		pass = false, PASS = false;
+	}
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
+}
+
+function access() {
+	var pass = true;
+
+	var hello = {p:"Hello, mina-san!"};
 	var helloPtr = {p:undefined};
 	helloPtr = hello;
 
 	var i = {p:6};
 	var iPtr = i;
 
-
-	if (hello.p === "Hello, mina-san!" && helloPtr.p === "Hello, mina-san!") {
-		document.write("[OK] string<br>");
-	} else {
-		document.write("[Error] The string \"hello\" is: " + hello + "<br>");
-		document.write("\tThe string pointed to by \"helloPtr\" is: " + helloPtr.p + "<br>");
+	if (helloPtr.p !== "Hello, mina-san!") {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: *helloPtr => got " + helloPtr.p + ", want " + hello + "<br>");
+		pass = false, PASS = false;
+	}
+	if (iPtr.p !== 6) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: *iPtr => got " + iPtr.p + ", want " + i + "<br>");
+		pass = false, PASS = false;
 	}
 
-	if (i.p === 6 && iPtr.p === 6) {
-		document.write("[OK] int<br>");
-	} else {
-		document.write("[Error] The value of \"i\" is: " + i + "<br>");
-		document.write("\tThe value pointed to by \"iPtr\" is: " + iPtr.p + "<br>");
-	}
-}
 
-function access_2() {
+
 	var x = {p:3};
 	var y = x;
 
 	y.p++;
-
-	if (x.p === 4) {
-		document.write("[OK]<br>");
-	} else {
-		document.write("[Error] x is: " + x + "<br>");
+	if (x.p !== 4) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x => got " + x + ", want 4<br>");
+		pass = false, PASS = false;
 	}
 
-
 	y.p++;
+	if (x.p !== 5) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x => got " + x + ", want 5<br>");
+		pass = false, PASS = false;
+	}
 
-	if (x.p === 5) {
-		document.write("[OK]<br>");
-	} else {
-		document.write("[Error] x is: " + x + "<br>");
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
@@ -124,12 +126,11 @@ function allocation() {
 	doubleSum.p = 0;
 	doubleSum.p = sum * 2;
 
-
 	if (sum === 45 && doubleSum.p === 90) {
-		document.write("[OK]<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("[Error] The sum of numbers from 0 to 10 is: " + sum + "<br>");
-		document.write("\tThe double of this sum is: " + doubleSum.p + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: sum=" + sum + ", *doubleSum=" + doubleSum.p + "<br>");
+		PASS = false;
 	}
 }
 
@@ -143,12 +144,11 @@ function parameterByValue() {
 	var x = 3;
 	var x1 = add(x);
 
-
-	if (x1 === 4 && x === 3) {
-		document.write("[OK]<br>");
+	if (x === 3 && x1 === 4) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("[Error] x+1 = " + x1 + "<br>");
-		document.write("\tx = " + x + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x=" + x + ", x1=" + x1 + "<br>");
+		PASS = false;
 	}
 }
 
@@ -159,51 +159,44 @@ function byReference_1() {
 	};
 
 	var x = {p:3};
-
 	var x1 = add(x);
 
 	if (x1 === 4 && x.p === 4) {
-		document.write("[OK]<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("[Error] x+1 = " + x1 + "<br>");
-		document.write("\tx = " + x + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x=" + x + ", x1=" + x1 + "<br>");
+		PASS = false;
 	}
-
 
 	x1 = add(x);
-
-	if (x1 === 5 && x.p === 5) {
-		document.write("[OK]<br>");
+	if (x.p === 5 && x1 === 5) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("[Error] x+1 = " + x1 + "<br>");
-		document.write("\tx = " + x + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x=" + x + ", x1=" + x1 + "<br>");
+		PASS = false;
 	}
-
 }
 
 function byReference_2() {
 	var add = function(v, i) { v.p += i; };
-
 	var value = {p:6};
 	var incr = 1;
 
 	add(value, incr);
-
 	if (value.p === 7) {
-		document.write("[OK]<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("[Error] value = " + value + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: value=" + value + "<br>");
+		PASS = false;
 	}
-
 
 	add(value, incr);
-
 	if (value.p === 8) {
-		document.write("[OK]<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("[Error] value = " + value + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: value=" + value + "<br>");
+		PASS = false;
 	}
-
 }
 
 function byReference_3() {
@@ -215,31 +208,41 @@ function byReference_3() {
 
 	f();
 	if (y.p === 4) {
-		document.write("[OK]<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("[Error] y =  " + y.p + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. *y=" + y.p + "<br>");
+		PASS = false;
 	}
 }
 
 function main() {
-	document.write("<br>== nilValue<br>");
-	nilValue();
-	document.write("<br>== declaration<br>");
+	document.write("<br><br>== Pointers<br>");
+
+	document.write("<br>=== RUN declaration<br>");
 	declaration();
-	document.write("<br>== showAddress<br>");
+	document.write("<br>=== RUN showAddress<br>");
 	showAddress();
-	document.write("<br>== access_1<br>");
-	access_1();
-	document.write("<br>== access_2<br>");
-	access_2();
-	document.write("<br>== allocation<br>");
+
+	document.write("<br>=== RUN nilValue<br>");
+	nilValue();
+	document.write("<br>=== RUN access<br>");
+	access();
+	document.write("<br>=== RUN allocation<br>");
 	allocation();
-	document.write("<br>== parameterByValue<br>");
+
+	document.write("<br>=== RUN parameterByValue<br>");
 	parameterByValue();
-	document.write("<br>== byReference_1<br>");
+	document.write("<br>=== RUN byReference_1<br>");
 	byReference_1();
-	document.write("<br>== byReference_2<br>");
+	document.write("<br>=== RUN byReference_2<br>");
 	byReference_2();
-	document.write("<br>== byReference_3<br>");
+	document.write("<br>=== RUN byReference_3<br>");
 	byReference_3();
+
+	if (PASS) {
+		document.write("<br>PASS<br>");
+	} else {
+		document.write("<br>FAIL<br>");
+		alert("Fail: Pointers");
+	}
 } main();

@@ -8,112 +8,138 @@
 
 
 
-function testIf() {
-	var x = 5;
-	var code = "";
+var PASS = true;
 
+function testIf() {
+	var pass = true;
+
+
+	var x = 5;
 
 	if (x > 10) {
-		code = "Error";
-	} else {
-		code = "OK";
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: simple<br>");
+		pass = false, PASS = false;
 	}
-	document.write("[" + code + "] simple<br>");
 
 
 	var x = 12; if (x > 10) {
-		code = "OK";
+
 	} else {
-		code = "Error";
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: with statement<br>");
+		pass = false, PASS = false;
 	}
-	document.write("[" + code + "] with statement<br>");
 
 
 	var i = 7;
 
 	if (i === 3) {
-		code = "Error";
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: multiple (i == 3)<br>");
+		pass = false, PASS = false;
 	} else if (i < 3) {
-		code = "Error";
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: multiple (i < 3)<br>");
+		pass = false, PASS = false;
 	} else {
-		code = "OK";
+
 	}
-	document.write("[" + code + "] multiple<br>");
+
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
 }
 
 function testSwitch() {
-	var i = 10;
-	var code = "";
+	var pass = true;
 
+
+	var i = 10;
 
 	switch (i) {
 	default:
-		code = "Error"; break;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: simple (default)<br>");
+		pass = false, PASS = false; break;
 	case 1:
-		code = "Error"; break;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: simple (1)<br>");
+		pass = false, PASS = false; break;
 	case 2: case 3: case 4:
-		code = "Error"; break;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: simple (2,3,4)<br>");
+		pass = false, PASS = false; break;
 	case 10:
-		code = "OK";
+
 	}
-	document.write("[" + code + "] simple<br>");
 
 
 	i = 5; switch (true) {
-	case i < 10:
-		code = "OK"; break;
+	case i < 10: break;
+
 	case i > 10: case i < 0:
-		code = "Error"; break;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: without expression (i>10, i<0)<br>");
+		pass = false, PASS = false; break;
 	case i === 10:
-		code = "Error"; break;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: without expression (i==10)<br>");
+		pass = false, PASS = false; break;
 	default:
-		code = "Error";
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: without expression (default)<br>");
+		pass = false, PASS = false;
 	}
-	document.write("[" + code + "] with statement<br>");
+
 
 	switch (true) {
-	case i === 5:
-		code = "OK";
+	case i === 5: break;
+
+	default:
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: without expression 2 (default)<br>");
+		pass = false, PASS = false;
 	}
-	document.write("[" + code + "] without expression<br>");
 
 
 	switch (i) {
 	case 4:
-		code = "Error";
+		pass = false;
 		
 	case 5:
-		code = "Error";
+		pass = false;
 		
 	case 6:
-		code = "Error";
+		pass = false;
 		
 	case 7:
-		code = "OK"; break;
+		pass = true; break;
 	case 8:
-		code = "Error"; break;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: with fallthrough (8)<br>");
+		pass = false, PASS = false; break;
 	default:
-		code = "Error";
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: with fallthrough (default)<br>");
+		pass = false, PASS = false;
 	}
-	document.write("[" + code + "] with fallthrough<br>");
+
+	if (JSON.stringify(pass) === JSON.stringify(false) && JSON.stringify(PASS) === JSON.stringify(true)) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: with fallthrough (4,5,6)<br>");
+		PASS = false;
+	}
+
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
 }
 
 function testFor() {
-	var sum = 0;
+	var pass = true;
 
+
+	var sum = 0;
 
 	for (var i = 0; i < 10; i++) {
 		sum += i;
 	}
 
-	var code = "";
 	if (sum === 45) {
-		code = "OK";
-	} else {
-		code = "Error";
-	}
-	document.write("[" + code + "] simple<br>");
 
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: simple<br>");
+		pass = false, PASS = false;
+	}
 
 
 	sum = 1;
@@ -122,12 +148,11 @@ function testFor() {
 	}
 
 	if (sum === 1024) {
-		code = "OK";
-	} else {
-		code = "Error";
-	}
-	document.write("[" + code + "] 2 expressions omitted<br>");
 
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2 expressions omitted<br>");
+		pass = false, PASS = false;
+	}
 
 
 	sum = 1;
@@ -136,16 +161,16 @@ function testFor() {
 	}
 
 	if (sum === 1024) {
-		code = "OK";
-	} else {
-		code = "Error";
-	}
-	document.write("[" + code + "] 2 expressions omitted, no semicolons<br>");
 
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2 expressions omitted, no semicolons<br>");
+		pass = false, PASS = false;
+	}
 
 
 	var i = 0;
 	var s = "";
+
 	for (;;) {
 		i++;
 		if (i === 3) {
@@ -155,12 +180,11 @@ function testFor() {
 	}
 
 	if (s === "3") {
-		code = "OK";
-	} else {
-		code = "Error";
-	}
-	document.write("[" + code + "] infinite loop<br>");
 
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: infinite loop<br>");
+		pass = false, PASS = false;
+	}
 
 
 	s = "";
@@ -172,11 +196,11 @@ function testFor() {
 	}
 
 	if (s === "10 9 8 7 6 5 ") {
-		document.write("[OK] break<br>");
-	} else {
-		document.write("[Error] value in break: " + s + "<br>");
-	}
 
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: break<br>");
+		pass = false, PASS = false;
+	}
 
 
 	s = "";
@@ -188,44 +212,57 @@ function testFor() {
 	}
 
 	if (s === "10 9 8 7 6 4 3 2 1 ") {
-		document.write("[OK] continue<br>");
+
 	} else {
-		document.write("[Error] value in continue: " + s + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: continue<br>");
+		pass = false, PASS = false;
 	}
 
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
 }
 
 function testRange() {
-	var hasError = false;
+	var pass = true;
+
 	var s = g.Slice(0, [2, 3, 5]);
 
-	var resultOk = g.Map(0, {
+	var tests = g.Map(0, {
 		0: 2,
 		1: 3,
 		2: 5
 	});
 
 	var v; for (var i in s.f) { v = s.f[i];
-		if (JSON.stringify(resultOk.get(i)[0]) !== JSON.stringify(v)) {
-			hasError = true;
-			document.write("[Error] value in continue: " + s.f + "<br>");
+		if (JSON.stringify(tests.get(i)[0]) !== JSON.stringify(v)) {
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + i + ". got " + v + ", want " + tests.get(i)[0] + "<br>");
+			pass = false, PASS = false;
 		}
-
-		document.write("key: " + i + " " + "value: " + v + "<br>");
 	}
 
-	if (!hasError) {
-		document.write("[OK]<br>");
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
 function main() {
-	document.write("<br>== testIf<br>");
+	document.write("<br><br>== Control statements<br>");
+
+	document.write("<br>=== RUN testIf<br>");
 	testIf();
-	document.write("<br>== testSwitch<br>");
+	document.write("<br>=== RUN testSwitch<br>");
 	testSwitch();
-	document.write("<br>== testFor<br>");
+	document.write("<br>=== RUN testFor<br>");
 	testFor();
-	document.write("<br>== testRange<br>");
+	document.write("<br>=== RUN testRange<br>");
 	testRange();
+
+	if (PASS) {
+		document.write("<br>PASS<br>");
+	} else {
+		document.write("<br>FAIL<br>");
+		alert("Fail: Control statements");
+	}
 } main();

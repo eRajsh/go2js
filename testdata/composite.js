@@ -8,6 +8,7 @@
 
 
 
+var PASS = true;
 
 function person(name, age) {
 	this.name=name;
@@ -15,56 +16,15 @@ function person(name, age) {
 }
 
 
-function Older(p1, p2) {
+function older(p1, p2) {
 	if (p1.age > p2.age) {
 		return [p1, p1.age - p2.age];
 	}
 	return [p2, p2.age - p1.age];
 }
 
-function testStruct() {
-	var tom = new person("", 0);
 
-	tom.name = "Tom", tom.age = 18;
-
-
-	var bob = new person(); bob.age = 25, bob.name = "Bob";
-	var paul = new person("Paul", 43);
-
-	var _ = Older(tom, bob), tb_Older = _[0], tb_diff = _[1];
-
-	if (JSON.stringify(tb_Older) === JSON.stringify(bob) && tb_diff === 7) {
-		document.write("[OK] Tom, Bob<br>");
-	} else {
-		document.write("[Error] Of " + tom.name + " and " + bob.name + ", " + tb_Older.name + " is older by " + tb_diff + " years<br>");
-
-	}
-
-
-	var _ = Older(tom, paul), tp_Older = _[0], tp_diff = _[1];
-
-	if (JSON.stringify(tp_Older) === JSON.stringify(paul) && tp_diff === 25) {
-		document.write("[OK] Tom, Paul<br>");
-	} else {
-		document.write("[Error] Of " + tom.name + " and " + paul.name + ", " + tp_Older.name + " is older by " + tp_diff + " years<br>");
-
-	}
-
-
-	var _ = Older(bob, paul), bp_Older = _[0], bp_diff = _[1];
-
-	if (JSON.stringify(bp_Older) === JSON.stringify(paul) && bp_diff === 18) {
-		document.write("[OK] Bob, Paul<br>");
-	} else {
-		document.write("[Error] Of " + bob.name + " and " + paul.name + ", " + bp_Older.name + " is older by " + bp_diff + " years<br>");
-
-	}
-}
-
-
-
-
-function Older10(people) {
+function older10(people) {
 	var older = people[0];
 
 
@@ -76,31 +36,42 @@ function Older10(people) {
 	return older;
 }
 
-function testArray() {
-
-	var array = g.MkArray([10], new person("", 0));
 
 
 
-	array[1] = new person("Paul", 23);
-	array[2] = new person("Jim", 24);
-	array[3] = new person("Sam", 84);
-	array[4] = new person("Rob", 54);
-	array[8] = new person("Karl", 19);
+function zeroArray() {
+	var pass = true;
 
-	var older = Older10(array);
+	var a1 = g.MkArray([4], 0);
+	var a2 = g.MkArray([4], 0);
+
+	var _ = function(msg, in_, out) { return {
+		msg:msg,
+		in_:in_,
+		out:out
+	};}; tests = [
 
 
-	if (older.name === "Sam") {
-		document.write("[OK]<br>");
-	} else {
-		document.write("[Error] The older of the group is: " + older.name + "<br>");
+		_("len a1", a1.length === 40, true),
+		_("len a2", a2.length === 4, true),
+		_("cap a1", a1.cap === 4, true),
+		_("cap a2", a2.cap === 4, true)
+	];
+
+	var t; for (var _ in tests.f) { t = tests.f[_];
+		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
+			pass = false, PASS = false;
+		}
+	}
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
+function initArray() {
+	var pass = true;
 
-
-function initializeArray() {
 
 	var array1 = g.MkArray([10], new person("", 0), [
 		new person("", 0),
@@ -128,21 +99,48 @@ function initializeArray() {
 		new person("Karl", 10),
 		new person("", 0)]);
 
+	var _ = function(msg, in_, out) { return {
+		msg:msg,
+		in_:in_,
+		out:out
+	};}; tests = [
+		_("len", array1.length === array2.length, true),
+		_("cap", array1.cap === array2.cap, true),
+		_("equality", JSON.stringify(array1) === JSON.stringify(array2), true)
+	];
 
-	if (array1.length === array2.length) {
-		document.write("[OK] length<br>");
-	} else {
-		document.write("[Error] len => array1: " + array1.length + ", array2: " + array2.length + "<br>");
+	var t; for (var _ in tests.f) { t = tests.f[_];
+		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
+			pass = false, PASS = false;
+		}
 	}
-
-	if (JSON.stringify(array1) === JSON.stringify(array2)) {
-		document.write("[OK] comparison<br>");
-	} else {
-		document.write("[Error] array1: " + array1 + "<br>array2: " + array2 + "<br>");
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
+function testArray() {
 
+	var array = g.MkArray([10], new person("", 0));
+
+
+
+	array[1] = new person("Paul", 23);
+	array[2] = new person("Jim", 24);
+	array[3] = new person("Sam", 84);
+	array[4] = new person("Rob", 54);
+	array[8] = new person("Karl", 19);
+
+	var older = older10(array);
+
+	if (older.name === "Sam") {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: got " + older.name + ", want Sam<br>");
+		PASS = false;
+	}
+}
 
 function multiArray() {
 
@@ -158,23 +156,78 @@ function multiArray() {
 		[5, 6, 7, 8]
 	]);
 
-
 	if (JSON.stringify(doubleArray_1) === JSON.stringify(doubleArray_2) && JSON.stringify(doubleArray_2) === JSON.stringify(doubleArray_3)) {
-		document.write("[OK]<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("[Error] multi-dimensional<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: got different arraies<br>");
+		PASS = false;
 	}
 }
 
 
 
+
+function testStruct() {
+	var pass = true;
+
+	var tom = new person("", 0);
+	tom.name = "Tom", tom.age = 18;
+
+	var bob = new person(); bob.age = 25, bob.name = "Bob";
+	var paul = new person("Paul", 43);
+
+	var _ = older(tom, bob), TB_older = _[0], TB_diff = _[1];
+	var _ = older(tom, paul), TP_older = _[0], TP_diff = _[1];
+	var _ = older(bob, paul), BP_older = _[0], BP_diff = _[1];
+
+	var _ = function(msg, inPerson, outPerson, inDiff, outDiff) { return {
+		msg:msg,
+		inPerson:inPerson,
+		outPerson:outPerson,
+		inDiff:inDiff,
+		outDiff:outDiff
+	};}; tests = [
+		_("Tom,Bob", TB_older, bob, TB_diff, 7),
+		_("Tom,Paul", TP_older, paul, TP_diff, 25),
+		_("Bob,Paul", BP_older, paul, BP_diff, 18)
+	];
+
+	var t; for (var _ in tests.f) { t = tests.f[_];
+		if (JSON.stringify(t.inPerson) !== JSON.stringify(t.outPerson)) {
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => person got " + t.inPerson + ", want " + t.outPerson + "<br>");
+
+			pass = false, PASS = false;
+		}
+		if (JSON.stringify(t.inDiff) !== JSON.stringify(t.outDiff)) {
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => difference got " + t.inDiff + ", want " + t.outDiff + "<br>");
+
+			pass = false, PASS = false;
+		}
+	}
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
+}
+
 function main() {
-	document.write("<br>== testStruct<br>");
-	testStruct();
-	document.write("<br>== testArray<br>");
+	document.write("<br><br>== Composite types<br>");
+
+	document.write("<br>=== RUN zeroArray<br>");
+	zeroArray();
+	document.write("<br>=== RUN initArray<br>");
+	initArray();
+	document.write("<br>=== RUN testArray<br>");
 	testArray();
-	document.write("<br>== initializeArray<br>");
-	initializeArray();
-	document.write("<br>== multiArray<br>");
+	document.write("<br>=== RUN multiArray<br>");
 	multiArray();
+
+	document.write("<br>=== RUN testStruct<br>");
+	testStruct();
+
+	if (PASS) {
+		document.write("<br>PASS<br>");
+	} else {
+		document.write("<br>FAIL<br>");
+		alert("Fail: Composite types");
+	}
 } main();

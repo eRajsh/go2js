@@ -8,192 +8,190 @@
 
 
 
+var PASS = true;
 var rating = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
 
 function nilValue() {
-	var n;
+	var pass = true;
 
+	var m1;
+	var m2 = g.Map(0, {});
+	var m3 = g.Map(0, {});
 
-	var msg = "declaration";
-	if (n === undefined) {
-		document.write("[OK] " + msg + "<br>");
-	} else {
-		document.write("[Error] " + msg + "<br>");
+	var _ = function(msg, in_, out) { return {
+		msg:msg,
+		in_:in_,
+		out:out
+	};}; tests = [
+		_("nil m1", m1 === undefined, true),
+		_("nil m2", m2 === undefined, false),
+		_("nil m3", m3 === undefined, false),
+		_("len m1", m1.length === 0, true),
+		_("len m2", m2.length === 0, true),
+		_("len m3", m3.length === 0, true)
+	];
+
+	var t; for (var _ in tests.f) { t = tests.f[_];
+		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
+			pass = false, PASS = false;
+		}
 	}
-
-
-	n = g.Map(0, {});
-
-
-	msg = "using make";
-	if (n !== undefined) {
-		document.write("[OK] " + msg + "<br>");
-	} else {
-		document.write("[Error] " + msg + "<br>");
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
-
 }
 
-function declare_1() {
-
+function declaration() {
+	var pass = true;
 
 	var numbers;
 	numbers = g.Map(0, {});
-
 	numbers.f["one"] = 1;
 	numbers.f["ten"] = 10;
 	numbers.f["trois"] = 3;
 
 
-	if (numbers.get("trois")[0] === 3) {
-		document.write("[OK]<br>");
-	} else {
-		document.write("[Error] Trois is the french word for the number: " + numbers.get("trois")[0] + "<br>");
+	var rating1 = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
+
+
+	var rating2 = g.Map(0, {});
+	rating2.f["C"] = 5;
+	rating2.f["Go"] = 4.5;
+	rating2.f["Python"] = 4.5;
+	rating2.f["C++"] = 2;
+
+	var _ = function(msg, in_, out) { return {
+		msg:msg,
+		in_:in_,
+		out:out
+	};}; tests = [
+		_("numbers[\"one\"]", numbers.get("one")[0], 1),
+		_("numbers[\"ten\"]", numbers.get("ten", "one")[0], 10),
+		_("numbers[\"trois\"]", numbers.get("trois", "ten", "one")[0], 3),
+
+		_("rating[\"C\"]", rating1.get("C", "trois", "ten", "one")[0], rating2.get("C", "C", "trois", "ten", "one")[0]),
+		_("rating[\"Go\"]", rating1.get("Go", "C", "C", "trois", "ten", "one")[0], rating2.get("Go", "Go", "C", "C", "trois", "ten", "one")[0]),
+		_("rating[\"Python\"]", rating1.get("Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0], rating2.get("Python", "Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0]),
+		_("rating[\"C++\"]", rating1.get("C++", "Python", "Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0], rating2.get("C++", "C++", "Python", "Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0])
+<<TAB[0];
+
+	var t; for (var _ in tests.f) { t = tests.f[_];
+		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
+			pass = false, PASS = false;
+		}
 	}
-
-}
-
-function declare_2() {
-
-	var rating2 = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
-
-
-	var rating = g.Map(0, {});
-	rating.f["C"] = 5;
-	rating.f["Go"] = 4.5;
-	rating.f["Python"] = 4.5;
-	rating.f["C++"] = 2;
-
-
-	var code = "";
-	if (JSON.stringify(rating.get("Go")[0]) === JSON.stringify(rating2.get("Go")[0])) {
-		document.write("[OK] comparing same value<br>");
-	} else {
-		document.write("[Error] rating[\"Go\"]: " + rating.get("Go")[0] + "\trating2[\"Go\"]: " + rating2.get("Go")[0] + "<br>");
-
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
-
-
-	rating.f["Go"] = 4.7;
-
-	if (JSON.stringify(rating.get("Go")[0]) !== JSON.stringify(rating2.get("Go")[0])) {
-		code = "OK";
-	} else {
-		code = "Error";
-	}
-	document.write("[" + code + "] comparing different value<br>");
-
 }
 
 function reference() {
-
 	var m = g.Map("", {});
 	m.f["Hello"] = "Bonjour";
 
 	var m1 = m;
 	m1.f["Hello"] = "Salut";
 
-
 	if (JSON.stringify(m.get("Hello")[0]) === JSON.stringify(m1.get("Hello")[0])) {
-		document.write("[OK]<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("[Error] value in key: " + m.get("Hello")[0] + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: m[\"Hello\"] => got " + m.get("Hello")[0] + ", want " + m1.get("Hello")[0] + "<br>");
+		PASS = false;
 	}
-
 }
 
-function checkKey() {
+function keyNoExistent() {
+	var pass = true;
+
 	var csharp_rating = rating.get("C#")[0];
+	var _ = rating.get("C#"), csharp_rating2 = _[0], found = _[1];
 
-	if (csharp_rating === 0.00) {
-		document.write("[OK] single key<br>");
-	} else {
-		document.write("[Error] value in key: " + csharp_rating + "<br>");
+	var multiDim = g.Map(0, {1: {1: 1.1}, 2: {2: 2.2}});
+	var k_multiDim = multiDim.get(1, 2)[0];
+
+	var _ = function(msg, in_, out) { return {
+		msg:msg,
+		in_:in_,
+		out:out
+	};}; tests = [
+		_("csharp_rating", csharp_rating, 0.00),
+		_("csharp_rating2", csharp_rating2, 0),
+		_("k_multiDim", k_multiDim, 0)
+	];
+
+	var t; for (var _ in tests.f) { t = tests.f[_];
+		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
+			pass = false, PASS = false;
+		}
 	}
-
-
-	var multMap = g.Map("", {1: {1: "one"}, 2: {2: "two"}});
-	var k_multMap = multMap.get(1, 2)[0];
-
-	if (k_multMap === "") {
-		document.write("[OK] multi-dimensional key<br>");
-	} else {
-		document.write("[Error] value in multi-dimensional key: " + k_multMap + "<br>");
+	if (found) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: using comma => got " + found + ", want " + !found + "<br>");
+		pass = false, PASS = false;
 	}
-
-
-	var _ = rating.get("C#"), csharp_rating2 = _[0], ok = _[1];
-
-	if (ok) {
-		document.write("[Error] using comma<br>");
-	} else {
-		document.write("[OK] using comma<br>");
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
-	if (csharp_rating2 === 0.00) {
-		document.write("[OK] value (using comma)<br>");
-	} else {
-		document.write("[Error] value in key (using comma): " + csharp_rating2 + "<br>");
-	}
-
 }
 
 function deleteKey() {
+	var pass = true;
+
 	delete rating.f["C++"];
+	var found = rating.get("C++")[1];
 
-	var ok = rating.get("C++")[1];
-
-	if (ok) {
-		document.write("[Error]<br>");
-	} else {
-		document.write("[OK]<br>");
+	if (found) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: got " + found + ", want " + !found + "<br>");
+		pass = false, PASS = false;
 	}
-
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
 }
 
 function testRange() {
-	var hasError = false;
-
+	var pass = true;
 
 	var value; for (var key in rating.m) { value = rating.get(key)[0];
 		switch (key) {
 		case "C":
 			if (value !== 5) {
-			document.write("[Error] key 'C': expected '5', got " + value + "<br>");
-			hasError = true;
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + key + " => got " + value + ", want 5<br>");
+			pass = false, PASS = false;
 		} break;
 		case "Go":
 			if (value !== 4.5) {
-			document.write("[Error] key 'Go': expected '4.5', got " + value + "<br>");
-			hasError = true;
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + key + " => got " + value + ", want 4.5<br>");
+			pass = false, PASS = false;
 		} break;
 		case "Python":
 			if (value !== 4.5) {
-			document.write("[Error] key 'Python': expected '4.5', got " + value + "<br>");
-			hasError = true;
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + key + " => got " + value + ", want 4.5<br>");
+			pass = false, PASS = false;
 		} break;
 		default:
-			document.write("[Error] key not expected: " + key + "<br>");
-			hasError = true;
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + key + " => no expected<br>");
+			pass = false, PASS = false;
 		}
-	}
-	if (!hasError) {
-		document.write("[OK]<br>");
 	}
 
 
 	for (var key in rating.m) {
 		if (key !== "C" && key !== "Go" && key !== "Python") {
-			document.write("[Error] key not expected: " + key + "<br>");
-			hasError = true;
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: key " + key + " no expected<br>");
+			pass = false, PASS = false;
 		}
 	}
-	if (!hasError) {
-		document.write("[OK] omitting value<br>");
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
-function blankIdentifierInRange() {
-	var hasError = false;
+function blankIdInRange() {
+	var pass = true;
 
 
 	var Max = function(slice) {
@@ -206,50 +204,55 @@ function blankIdentifierInRange() {
 		return max;
 	};
 
+	var slice = g.NilSlice();
 
 	var A1 = g.MkArray([10], 0, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
 	var A2 = g.MkArray([4], 0, [1, 2, 3, 4]);
 	var A3 = g.MkArray([1], 0, [1]);
 
-
-	var slice = g.NilSlice();
-
 	slice.set(A1, 0);
 	if (Max(slice.f) !== 9) {
-		document.write("[Error] 'A1': value expected '9', got " + Max(slice.f) + "<br>");
-		hasError = true;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.f) + ", want 9<br>");
+		pass = false, PASS = false;
 	}
 	slice.set(A2, 0);
 	if (Max(slice.f) !== 4) {
-		document.write("[Error] 'A2': value expected '4', got " + Max(slice.f) + "<br>");
-		hasError = true;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.f) + ", want 4<br>");
+		pass = false, PASS = false;
 	}
 	slice.set(A3, 0);
 	if (Max(slice.f) !== 1) {
-		document.write("[Error] 'A3': value expected '1', got " + Max(slice.f) + "<br>");
-		hasError = true;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.f) + ", want 1<br>");
+		pass = false, PASS = false;
 	}
 
-	if (!hasError) {
-		document.write("[OK]<br>");
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
 function main() {
-	document.write("<br>== nilValue<br>");
+	document.write("<br><br>== Maps<br>");
+
+	document.write("<br>=== RUN nilValue<br>");
 	nilValue();
-	document.write("<br>== declare_1<br>");
-	declare_1();
-	document.write("<br>== declare_2<br>");
-	declare_2();
-	document.write("<br>== reference<br>");
+	document.write("<br>=== RUN declaration<br>");
+	declaration();
+	document.write("<br>=== RUN reference<br>");
 	reference();
-	document.write("<br>== checkKey<br>");
-	checkKey();
-	document.write("<br>== deleteKey<br>");
+	document.write("<br>=== RUN keyNoExistent<br>");
+	keyNoExistent();
+	document.write("<br>=== RUN deleteKey<br>");
 	deleteKey();
-	document.write("<br>== testRange<br>");
+	document.write("<br>=== RUN testRange<br>");
 	testRange();
-	document.write("<br>== blankIdentifierInRange<br>");
+	document.write("<br>=== RUN blankIdentifierInRange<br>");
 	blankIdentifierInRange();
+
+	if (PASS) {
+		document.write("<br>PASS<br>");
+	} else {
+		document.write("<br>FAIL<br>");
+		alert("Fail: Maps");
+	}
 } main();

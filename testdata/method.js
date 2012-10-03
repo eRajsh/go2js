@@ -8,23 +8,36 @@
 
 
 
+
+
+
+var PASS = true;
+
 function Rectangle(width, height) {
 	this.width=width; this.height=height
 }
 
 function noMethod() {
+	var pass = true;
+
 	var area = function(r) {
 		return r.width * r.height;
 	};
 
 	var r1 = new Rectangle(12, 2);
 
+	if (area(r1) !== 24) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: area r1 => got " + area(r1) + ", want 24)<br>");
+		pass = false, PASS = false;
+	}
+	if (area(new Rectangle(9, 4)) !== 36) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: area Rectangle{9,4} => got " + area(new Rectangle(9, 4)) + ", want 36)<br>");
 
-	if (area(r1) === 24 && area(new Rectangle(9, 4)) === 36) {
-		document.write("[OK]<br>");
-	} else {
-		document.write("[Error] Area of r1 is: " + area(r1) + "<br>");
-		document.write("\tArea of \"Rectangle{9, 4}\" is: " + area(new Rectangle(9, 4)) + "<br>");
+		pass = false, PASS = false;
+	}
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
@@ -43,33 +56,41 @@ Circle.prototype.area = function() {
 }
 
 function method() {
+	var pass = true;
+
 	var r1 = new Rectangle(12, 2);
 	var r2 = new Rectangle(9, 4);
 	var c1 = new Circle(10);
 	var c2 = new Circle(25);
 
+	var _ = function(msg, in_, out) { return {
+		msg:msg,
+		in_:in_,
+		out:out
+	};}; tests = [
+		_("Rectangle{12,2}", r1.area(), 24),
+		_("Rectangle{9,4}", r2.area(), 36),
+		_("Circle{10}", c1.area(), 314.1592653589793),
+		_("Circle{25}", c2.area(), 1963.4954084936207)
+	];
 
-	if (r1.area() === 24 && r2.area() === 36) {
-		document.write("[OK] rectangle<br>");
-	} else {
-		document.write("[Error] Area of r1 is: " + r1.area() + "<br>");
-		document.write("\tArea of r2 is: " + r2.area() + "<br>");
+	var t; for (var _ in tests.f) { t = tests.f[_];
+		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
+			pass = false, PASS = false;
+		}
 	}
-
-	if (c1.area() === 314.1592653589793 && c2.area() === 1963.4954084936207) {
-		document.write("[OK] circle<br>");
-	} else {
-		document.write("[Error] Area of c1 is: " + c1.area() + "<br>");
-		document.write("\tArea of c2 is: " + c2.area() + "<br>");
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
 
 
-function SliceOfints(t) { this.t=t; }
-function AgesByNames(t) { this.t=t; }
+function sliceOfints(t) { this.t=t; }
+function agesByNames(t) { this.t=t; }
 
-SliceOfints.prototype.sum = function() {
+sliceOfints.prototype.sum = function() {
 	var sum = 0;
 	var value; for (var _ in s) { value = s[_];
 		sum += value;
@@ -77,7 +98,7 @@ SliceOfints.prototype.sum = function() {
 	return sum;
 }
 
-AgesByNames.prototype.older = function() {
+agesByNames.prototype.older = function() {
 	var a = 0;
 	var n = "";
 	var value; for (var key in people) { value = people[key];
@@ -90,35 +111,45 @@ AgesByNames.prototype.older = function() {
 }
 
 function withNamedType() {
-	var s = new SliceOfints(1, 2, 3, 4, 5);
-	var folks = new AgesByNames();
+	var pass = true;
+
+	var s = new sliceOfints(1, 2, 3, 4, 5);
+	var folks = new agesByNames();
 	folks["Bob"] = 36,
 	folks["Mike"] = 44,
 	folks["Jane"] = 30,
 	folks["Popey"] = 100;
 
 
+	if (s.sum() !== 15) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: s.sum => got " + s.sum() + ", want 15)<br>");
+		pass = false, PASS = false;
+	}
+	if (folks.older() !== "Popey") {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: folks.older => got " + folks.older() + ", want Popey)<br>");
 
-	if (s.sum() === 15) {
-		document.write("[OK] sum<br>");
-	} else {
-		document.write("[Error] The sum of ints in the slice s is: " + s.sum() + "<br>");
+		pass = false, PASS = false;
 	}
 
-	if (folks.older() === "Popey") {
-		document.write("[OK] older<br>");
-	} else {
-		document.write("[Error] The older in the map folks is: " + folks.older() + "<br>");
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
-
-
 function main() {
-	document.write("<br>== noMethod<br>");
+	document.write("<br><br>== Methods<br>");
+
+	document.write("<br>=== RUN noMethod<br>");
 	noMethod();
-	document.write("<br>== method<br>");
+	document.write("<br>=== RUN method<br>");
 	method();
-	document.write("<br>== withNamedType<br>");
+	document.write("<br>=== RUN withNamedType<br>");
 	withNamedType();
+
+	if (PASS) {
+		document.write("<br>PASS<br>");
+	} else {
+		document.write("<br>FAIL<br>");
+		alert("Fail: Methods");
+	}
 } main();

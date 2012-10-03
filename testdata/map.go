@@ -8,197 +8,195 @@ package main
 
 import "fmt"
 
+var PASS = true
 var rating = map[string]float32{"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}
 
 func nilValue() {
-	var n map[string]int
+	pass := true
 
-	// Checking
-	msg := "declaration"
-	if n == nil {
-		println("[OK]", msg)
-	} else {
-		fmt.Println("[Error]", msg)
+	var m1 map[string]int
+	m2 := map[string]int{}
+	m3 := make(map[string]int)
+
+	tests := []struct {
+		msg string
+		in  bool
+		out bool
+	}{
+		{"nil m1", m1 == nil, true},
+		{"nil m2", m2 == nil, false},
+		{"nil m3", m3 == nil, false},
+		{"len m1", len(m1) == 0, true},
+		{"len m2", len(m2) == 0, true},
+		{"len m3", len(m3) == 0, true},
 	}
-	//==
 
-	n = make(map[string]int)
-
-	// Checking
-	msg = "using make"
-	if n != nil {
-		println("[OK]", msg)
-	} else {
-		fmt.Println("[Error]", msg)
+	for _, t := range tests {
+		if t.in != t.out {
+			fmt.Printf("\tFAIL: %s => got %v, want %v\n", t.msg, t.in, t.out)
+			pass, PASS = false, false
+		}
 	}
-	//==
+	if pass {
+		fmt.Println("\tpass")
+	}
 }
 
-func declare_1() {
-	// A map that associates strings to int
-	// eg. "one" --> 1, "two" --> 2...
-	var numbers map[string]int //declare a map of strings to ints
-	numbers = make(map[string]int)
+func declaration() {
+	pass := true
 
+	var numbers map[string]float32 // declare a map of strings to ints
+	numbers = make(map[string]float32)
 	numbers["one"] = 1
 	numbers["ten"] = 10
-	numbers["trois"] = 3 //trois is "three" in french. I know that you know.
+	numbers["trois"] = 3 // trois is "three" in french
 
-	// Checking
-	if numbers["trois"] == 3 {
-		println("[OK]")
-	} else {
-		fmt.Println("[Error] Trois is the french word for the number:", numbers["trois"])
-	}
-	//==
-}
-
-func declare_2() {
 	// A map representing the rating given to some programming languages.
-	rating2 := map[string]float32{"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}
+	rating1 := map[string]float32{"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}
 
 	// This is equivalent to writing more verbosely
-	rating := make(map[string]float32)
-	rating["C"] = 5
-	rating["Go"] = 4.5
-	rating["Python"] = 4.5
-	rating["C++"] = 2 //Linus would put 1 at most. Go ask him
+	rating2 := make(map[string]float32)
+	rating2["C"] = 5
+	rating2["Go"] = 4.5
+	rating2["Python"] = 4.5
+	rating2["C++"] = 2
 
-	// Checking
-	code := ""
-	if rating["Go"] == rating2["Go"] {
-		println("[OK] comparing same value")
-	} else {
-		fmt.Printf("[Error] rating[\"Go\"]: %f\trating2[\"Go\"]: %f\n",
-			rating["Go"], rating2["Go"])
-	}
-	//==
+	tests := []struct {
+		msg string
+		in  float32
+		out float32
+	}{
+		{`numbers["one"]`, numbers["one"], 1},
+		{`numbers["ten"]`, numbers["ten"], 10},
+		{`numbers["trois"]`, numbers["trois"], 3},
 
-	rating["Go"] = 4.7
-	// Checking
-	if rating["Go"] != rating2["Go"] {
-		code = "OK"
-	} else {
-		code = "Error"
+		{`rating["C"]`, rating1["C"], rating2["C"]},
+		{`rating["Go"]`, rating1["Go"], rating2["Go"]},
+		{`rating["Python"]`, rating1["Python"], rating2["Python"]},
+		{`rating["C++"]`, rating1["C++"], rating2["C++"]},
 	}
-	println("[" + code + "] comparing different value")
-	//==
+
+	for _, t := range tests {
+		if t.in != t.out {
+			fmt.Printf("\tFAIL: %s => got %v, want %v\n", t.msg, t.in, t.out)
+			pass, PASS = false, false
+		}
+	}
+	if pass {
+		fmt.Println("\tpass")
+	}
 }
 
 func reference() {
-	//let's say a translation dictionary
 	m := make(map[string]string)
 	m["Hello"] = "Bonjour"
 
 	m1 := m
 	m1["Hello"] = "Salut" // Now: m["Hello"] == "Salut"
 
-	// Checking
 	if m["Hello"] == m1["Hello"] {
-		println("[OK]")
+		fmt.Println("\tpass")
 	} else {
-		fmt.Println("[Error] value in key:", m["Hello"])
+		fmt.Printf("\tFAIL: m[\"Hello\"] => got %v, want %v\n", m["Hello"], m1["Hello"])
+		PASS = false
 	}
-	//==
 }
 
-func checkKey() {
+func keyNoExistent() {
+	pass := true
+
 	csharp_rating := rating["C#"]
-	// Checking
-	if csharp_rating == 0.00 {
-		println("[OK] single key")
-	} else {
-		fmt.Println("[Error] value in key:", csharp_rating)
-	}
-	//==
+	csharp_rating2, found := rating["C#"]
 
-	multMap := map[int]map[int]string{1: {1: "one"}, 2: {2: "two"}}
-	k_multMap := multMap[1][2]
-	// Checking
-	if k_multMap == "" {
-		println("[OK] multi-dimensional key")
-	} else {
-		fmt.Println("[Error] value in multi-dimensional key:", k_multMap)
-	}
-	//==
+	multiDim := map[int]map[int]float32{1: {1: 1.1}, 2: {2: 2.2}}
+	k_multiDim := multiDim[1][2]
 
-	csharp_rating2, ok := rating["C#"]
-	// Checking
-	if ok {
-		fmt.Println("[Error] using comma")
-	} else {
-		println("[OK] using comma")
+	tests := []struct {
+		msg string
+		in  float32
+		out float32
+	}{
+		{"csharp_rating", csharp_rating, 0.00},
+		{"csharp_rating2", csharp_rating2, 0},
+		{"k_multiDim", k_multiDim, 0},
 	}
-	if csharp_rating2 == 0.00 {
-		println("[OK] value (using comma)")
-	} else {
-		fmt.Println("[Error] value in key (using comma):", csharp_rating2)
+
+	for _, t := range tests {
+		if t.in != t.out {
+			fmt.Printf("\tFAIL: %s => got %v, want %v\n", t.msg, t.in, t.out)
+			pass, PASS = false, false
+		}
 	}
-	// ==
+	if found {
+		fmt.Printf("\tFAIL: using comma => got %v, want %v\n", found, !found)
+		pass, PASS = false, false
+	}
+	if pass {
+		fmt.Println("\tpass")
+	}
 }
 
 func deleteKey() {
-	delete(rating, "C++") // We delete the entry with key "C++"
+	pass := true
 
-	_, ok := rating["C++"]
-	// Checking
-	if ok {
-		fmt.Println("[Error]")
-	} else {
-		println("[OK]")
+	delete(rating, "C++")
+	_, found := rating["C++"]
+
+	if found {
+		fmt.Printf("\tFAIL: got %v, want %v\n", found, !found)
+		pass, PASS = false, false
 	}
-	// ==
+	if pass {
+		fmt.Println("\tpass")
+	}
 }
 
 func testRange() {
-	hasError := false
+	pass := true
 
-	// == Iterate over the ratings map
 	for key, value := range rating {
 		switch key {
 		case "C":
 			if value != 5 {
-				fmt.Println("[Error] key 'C': expected '5', got", value)
-				hasError = true
+				fmt.Printf("\tFAIL: %s => got %v, want 5\n", key, value)
+				pass, PASS = false, false
 			}
 		case "Go":
 			if value != 4.5 {
-				fmt.Println("[Error] key 'Go': expected '4.5', got", value)
-				hasError = true
+				fmt.Printf("\tFAIL: %s => got %v, want 4.5\n", key, value)
+				pass, PASS = false, false
 			}
 		case "Python":
 			if value != 4.5 {
-				fmt.Println("[Error] key 'Python': expected '4.5', got", value)
-				hasError = true
+				fmt.Printf("\tFAIL: %s => got %v, want 4.5\n", key, value)
+				pass, PASS = false, false
 			}
 		default:
-			fmt.Println("[Error] key not expected:", key)
-			hasError = true
+			fmt.Printf("\tFAIL: %s => no expected\n", key)
+			pass, PASS = false, false
 		}
-	}
-	if !hasError {
-		println("[OK]")
 	}
 
-	// == Omit the value.
+	// Omit the value.
 	for key := range rating {
 		if key != "C" && key != "Go" && key != "Python" {
-			fmt.Println("[Error] key not expected:", key)
-			hasError = true
+			fmt.Printf("\tFAIL: key %q no expected\n", key)
+			pass, PASS = false, false
 		}
 	}
-	if !hasError {
-		println("[OK] omitting value")
+
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
-func blankIdentifierInRange() {
-	hasError := false
+func blankIdInRange() {
+	pass := true
 
 	// Return the biggest value in a slice of ints.
-	Max := func(slice []int) int { // The input parameter is a slice of ints.
-		max := slice[0]               //the first element is the max for now.
-		for _, value := range slice { // Notice how we iterate!
+	Max := func(slice []int) int {
+		max := slice[0] // The first element is the max for now.
+		for _, value := range slice {
 			if value > max { // We found a bigger value in our slice.
 				max = value
 			}
@@ -206,50 +204,55 @@ func blankIdentifierInRange() {
 		return max
 	}
 
+	var slice []int
 	// Declare three arrays of different sizes, to test the function Max.
 	A1 := [10]int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	A2 := [4]int{1, 2, 3, 4}
 	A3 := [1]int{1}
 
-	//declare a slice of ints
-	var slice []int
-
 	slice = A1[:] // Take all A1 elements.
 	if Max(slice) != 9 {
-		fmt.Println("[Error] 'A1': value expected '9', got", Max(slice))
-		hasError = true
+		fmt.Printf("\tFAIL: A1 => got %v, want 9\n", Max(slice))
+		pass, PASS = false, false
 	}
-	slice = A2[:] // Take all A2 elements.
+	slice = A2[:]
 	if Max(slice) != 4 {
-		fmt.Println("[Error] 'A2': value expected '4', got", Max(slice))
-		hasError = true
+		fmt.Printf("\tFAIL: A2 => got %v, want 4\n", Max(slice))
+		pass, PASS = false, false
 	}
-	slice = A3[:] // Take all A3 elements.
+	slice = A3[:]
 	if Max(slice) != 1 {
-		fmt.Println("[Error] 'A3': value expected '1', got", Max(slice))
-		hasError = true
+		fmt.Printf("\tFAIL: A3 => got %v, want 1\n", Max(slice))
+		pass, PASS = false, false
 	}
 
-	if !hasError {
-		println("[OK]")
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
 func main() {
-	println("\n== nilValue")
+	fmt.Print("\n\n== Maps\n")
+
+	fmt.Print("\n=== RUN nilValue\n")
 	nilValue()
-	println("\n== declare_1")
-	declare_1()
-	println("\n== declare_2")
-	declare_2()
-	println("\n== reference")
+	fmt.Print("\n=== RUN declaration\n")
+	declaration()
+	fmt.Print("\n=== RUN reference\n")
 	reference()
-	println("\n== checkKey")
-	checkKey()
-	println("\n== deleteKey")
+	fmt.Print("\n=== RUN keyNoExistent\n")
+	keyNoExistent()
+	fmt.Print("\n=== RUN deleteKey\n")
 	deleteKey()
-	println("\n== testRange")
+	fmt.Print("\n=== RUN testRange\n")
 	testRange()
-	println("\n== blankIdentifierInRange")
+	fmt.Print("\n=== RUN blankIdentifierInRange\n")
 	blankIdentifierInRange()
+
+	if PASS {
+		fmt.Print("\nPASS\n")
+	} else {
+		fmt.Print("\nFAIL\n")
+		print("Fail: Maps")
+	}
 }

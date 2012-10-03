@@ -12,7 +12,7 @@ import fmt "fmt" // Package implementing formatted I/O.
 import (
 	"os"
 
-	"github.com/kless/GoScript/gojscript"
+	"github.com/kless/goscript"
 )
 
 var (
@@ -56,7 +56,7 @@ var (
 	c3 = <-0
 )
 
-// === Struct
+// == Struct
 type i int
 
 type s1 struct {

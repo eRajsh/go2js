@@ -162,7 +162,17 @@ func (e *expression) transform(expr ast.Expr) {
 			typ.Value = template.JSEscapeString(typ.Value)
 			typ.Value = `"` + typ.Value[1:len(typ.Value)-1] + `"`
 		}
-		e.WriteString(strings.Replace(typ.Value, "\\n", "<br>", -1)) // replace new lines
+
+		// Replace new lines
+		if strings.Contains(typ.Value, "\\n") {
+			typ.Value = strings.Replace(typ.Value, "\\n", "<br>", -1)
+		}
+		// Replace tabulators
+		if strings.Contains(typ.Value, "\\t") {
+			typ.Value = strings.Replace(typ.Value, "\\t", "&nbsp;&nbsp;&nbsp;&nbsp;", -1)
+		}
+
+		e.WriteString(typ.Value)
 		e.isBasicLit = true
 
 	// http://golang.org/doc/go_spec.html#Comparison_operators
@@ -345,7 +355,7 @@ func (e *expression) transform(expr ast.Expr) {
 		// ==
 
 		case "print", "println":
-			e.WriteString(fmt.Sprintf("document.write(%s)", e.tr.GetArgs(call, typ.Args)))
+			e.WriteString(fmt.Sprintf("alert(%s)", e.tr.GetArgs(call, typ.Args)))
 
 		case "len":
 			arg := e.tr.getExpression(typ.Args[0]).String()

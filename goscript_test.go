@@ -38,7 +38,7 @@ func ExampleControl() {
 	// Output:
 	// == Warnings
 	//
-	// ./testdata/control.go:50:2: 'default' clause above 'case' clause in switch statement
+	// ./testdata/control.go:58:2: 'default' clause above 'case' clause in switch statement
 }
 
 func ExampleDecl() {
@@ -85,12 +85,12 @@ func ExampleStmt() {
 	// ./testdata/error_stmt.go:29:3: goto directive
 }
 
-// === Library
+// == JavaScript library
+
+func TestLib(t *testing.T) { compile('p', "lib.go", t) }
+
+// == Utility
 //
-
-func TestPkg(t *testing.T) { compile('p', "lib.go", t) }
-
-// * * *
 
 func compile(kind rune, filename string, t *testing.T) {
 	dir := ""

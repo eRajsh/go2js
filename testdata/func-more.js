@@ -8,6 +8,8 @@
 
 
 
+var PASS = true;
+
 
 function person(name, age) {
 	this.name=name;
@@ -16,23 +18,25 @@ function person(name, age) {
 
 
 
-function Older(people) {
+function getOlder(people) {
 	if (people.length === 0) {
-		return [false, new person()];
+		return [new person(), false];
 	}
+
 	var older = people[0];
 
 	var value; for (var _ in people) { value = people[_];
-
 		if (value.age > older.age) {
 			older = value;
 		}
 	}
-	return [true, older];
+	return [older, true];
 }
 
 function main() {
+	var pass = true;
 
+	document.write("<br><br>== More functions<br>");
 
 	
 	var ok = false;
@@ -46,21 +50,51 @@ function main() {
 	var rob = new person("Rob", 54);
 	var karl = new person("Karl", 19);
 
+	var tests = g.Slice("", ["Jim", "Sam", "Sam", "Karl"]);
 
-	older = Older(paul, jim)[1];
-	document.write("The older of Paul and Jim is:  " + older.name + "<br>");
+	older = getOlder(paul, jim)[0];
+	if (JSON.stringify(older.name) !== JSON.stringify(tests.f[0])) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim) => got " + older.name + ", want " + tests.f[0] + "<br>");
 
-	older = Older(paul, jim, sam)[1];
-	document.write("The older of Paul, Jim and Sam is:  " + older.name + "<br>");
+		pass = false, PASS = false;
+	}
 
-	older = Older(paul, jim, sam, rob)[1];
-	document.write("The older of Paul, Jim, Sam and Rob is:  " + older.name + "<br>");
+	older = getOlder(paul, jim, sam)[0];
+	if (JSON.stringify(older.name) !== JSON.stringify(tests.f[1])) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim,sam) => got " + older.name + ", want " + tests.f[1] + "<br>");
 
-	older = Older(karl)[1];
-	document.write("When Karl is alone in a group, the older is:  " + older.name + "<br>");
+		pass = false, PASS = false;
+	}
 
-	_ = Older(), ok = _[0], older = _[1];
-	if (!ok) {
-		document.write("In an empty group there is no older person<br>");
+	older = getOlder(paul, jim, sam, rob)[0];
+	if (JSON.stringify(older.name) !== JSON.stringify(tests.f[2])) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim,sam,rob) => got " + older.name + ", want " + tests.f[2] + "<br>");
+
+		pass = false, PASS = false;
+	}
+
+	older = getOlder(karl)[0];
+	if (JSON.stringify(older.name) !== JSON.stringify(tests.f[3])) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder karl) => got " + older.name + ", want " + tests.f[3] + "<br>");
+
+		pass = false, PASS = false;
+	}
+
+
+	_ = getOlder(), older = _[0], ok = _[1];
+	if (ok) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder) => got " + ok + ", want " + !ok + "<br>");
+		pass = false, PASS = false;
+	}
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
+
+	if (PASS) {
+		document.write("<br>PASS<br>");
+	} else {
+		document.write("<br>FAIL<br>");
+		alert("Fail: More functions");
 	}
 } main();

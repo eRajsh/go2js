@@ -8,144 +8,169 @@ package main
 
 import "fmt"
 
+var PASS = true
+
 func testIf() {
+	pass := true
+
+	// == Simple
 	x := 5
-	code := ""
 
-	// Simple
 	if x > 10 {
-		code = "Error"
-	} else {
-		code = "OK"
+		fmt.Print("\tFAIL: simple\n")
+		pass, PASS = false, false
 	}
-	println("[" + code + "] simple")
 
-	// Leading initial short
+	// == Leading initial short
 	if x := 12; x > 10 {
-		code = "OK"
+		// ok
 	} else {
-		code = "Error"
+		fmt.Print("\tFAIL: with statement\n")
+		pass, PASS = false, false
 	}
-	println("[" + code + "] with statement")
 
-	// Multiple if/else
+	// == Multiple if/else
 	i := 7
 
 	if i == 3 {
-		code = "Error"
+		fmt.Print("\tFAIL: multiple (i == 3)\n")
+		pass, PASS = false, false
 	} else if i < 3 {
-		code = "Error"
+		fmt.Print("\tFAIL: multiple (i < 3)\n")
+		pass, PASS = false, false
 	} else {
-		code = "OK"
+		// ok
 	}
-	println("[" + code + "] multiple")
+	// ==
+
+	if pass {
+		fmt.Println("\tpass")
+	}
 }
 
 func testSwitch() {
-	i := 10
-	code := ""
+	pass := true
 
-	// Simple
+	// == Simple
+	i := 10
+
 	switch i {
 	default:
-		code = "Error"
+		fmt.Print("\tFAIL: simple (default)\n")
+		pass, PASS = false, false
 	case 1:
-		code = "Error"
+		fmt.Print("\tFAIL: simple (1)\n")
+		pass, PASS = false, false
 	case 2, 3, 4:
-		code = "Error"
+		fmt.Print("\tFAIL: simple (2,3,4)\n")
+		pass, PASS = false, false
 	case 10:
-		code = "OK"
+		// ok
 	}
-	println("[" + code + "] simple")
 
-	// Without expression
+	// == Without expression
 	switch i = 5; {
 	case i < 10:
-		code = "OK"
+		// ok
 	case i > 10, i < 0:
-		code = "Error"
+		fmt.Print("\tFAIL: without expression (i>10, i<0)\n")
+		pass, PASS = false, false
 	case i == 10:
-		code = "Error"
+		fmt.Print("\tFAIL: without expression (i==10)\n")
+		pass, PASS = false, false
 	default:
-		code = "Error"
+		fmt.Print("\tFAIL: without expression (default)\n")
+		pass, PASS = false, false
 	}
-	println("[" + code + "] with statement")
 
+	// == Without expression 2
 	switch {
 	case i == 5:
-		code = "OK"
+		// ok
+	default:
+		fmt.Print("\tFAIL: without expression 2 (default)\n")
+		pass, PASS = false, false
 	}
-	println("[" + code + "] without expression")
 
-	// With fallthrough
+	// == With fallthrough
 	switch i {
 	case 4:
-		code = "Error"
+		pass = false
 		fallthrough
 	case 5:
-		code = "Error"
+		pass = false
 		fallthrough
 	case 6:
-		code = "Error"
+		pass = false
 		fallthrough
 	case 7:
-		code = "OK"
+		pass = true
 	case 8:
-		code = "Error"
+		fmt.Print("\tFAIL: with fallthrough (8)\n")
+		pass, PASS = false, false
 	default:
-		code = "Error"
+		fmt.Print("\tFAIL: with fallthrough (default)\n")
+		pass, PASS = false, false
 	}
-	println("[" + code + "] with fallthrough")
+
+	if pass == false && PASS == true {
+		fmt.Print("\tFAIL: with fallthrough (4,5,6)\n")
+		PASS = false
+	}
+	// ==
+
+	if pass {
+		fmt.Println("\tpass")
+	}
 }
 
 func testFor() {
+	pass := true
+
+	// == Simple
 	sum := 0
 
-	// Simple
 	for i := 0; i < 10; i++ {
 		sum += i
 	}
-	// Checking
-	code := ""
+
 	if sum == 45 {
-		code = "OK"
+		// ok
 	} else {
-		code = "Error"
+		fmt.Print("\tFAIL: simple\n")
+		pass, PASS = false, false
 	}
-	println("[" + code + "] simple")
-	//==
 
-	// Expression1 and expression3 are omitted here
-	sum = 1
-	for ; sum < 1000; {
-		sum += sum
-	}
-	// Checking
-	if sum == 1024 {
-		code = "OK"
-	} else {
-		code = "Error"
-	}
-	println("[" + code + "] 2 expressions omitted")
-	//==
-
-	// Expression1 and expression3 are omitted here, and semicolons gone
+	// == Expression1 and expression3 are omitted here
 	sum = 1
 	for sum < 1000 {
 		sum += sum
 	}
-	// Checking
-	if sum == 1024 {
-		code = "OK"
-	} else {
-		code = "Error"
-	}
-	println("[" + code + "] 2 expressions omitted, no semicolons")
-	//==
 
-	// Infinite loop (limited to show the output), no semicolons at all
+	if sum == 1024 {
+		// ok
+	} else {
+		fmt.Print("\tFAIL: 2 expressions omitted\n")
+		pass, PASS = false, false
+	}
+
+	// == Expression1 and expression3 are omitted here, and semicolons gone
+	sum = 1
+	for sum < 1000 {
+		sum += sum
+	}
+
+	if sum == 1024 {
+		// ok
+	} else {
+		fmt.Print("\tFAIL: 2 expressions omitted, no semicolons\n")
+		pass, PASS = false, false
+	}
+
+	// == Infinite loop (limited to show the output), no semicolons at all
 	i := 0
 	s := ""
+
 	for {
 		i++
 		if i == 3 {
@@ -153,16 +178,15 @@ func testFor() {
 			break
 		}
 	}
-	// Checking
-	if s == "3" {
-		code = "OK"
-	} else {
-		code = "Error"
-	}
-	println("[" + code + "] infinite loop")
-	//==
 
-	// break
+	if s == "3" {
+		// ok
+	} else {
+		fmt.Print("\tFAIL: infinite loop\n")
+		pass, PASS = false, false
+	}
+
+	// == break
 	s = ""
 	for i := 10; i > 0; i-- {
 		if i < 5 {
@@ -170,15 +194,15 @@ func testFor() {
 		}
 		s += fmt.Sprintf("%d ", i)
 	}
-	// Checking
-	if s == "10 9 8 7 6 5 " {
-		println("[OK] break")
-	} else {
-		fmt.Printf("[Error] value in break: %s\n", s)
-	}
-	//==
 
-	// continue
+	if s == "10 9 8 7 6 5 " {
+		// ok
+	} else {
+		fmt.Print("\tFAIL: break\n")
+		pass, PASS = false, false
+	}
+
+	// == continue
 	s = ""
 	for i := 10; i > 0; i-- {
 		if i == 5 {
@@ -186,46 +210,59 @@ func testFor() {
 		}
 		s += fmt.Sprintf("%d ", i)
 	}
-	// Checking
+
 	if s == "10 9 8 7 6 4 3 2 1 " {
-		println("[OK] continue")
+		// ok
 	} else {
-		fmt.Printf("[Error] value in continue: %s\n", s)
+		fmt.Print("\tFAIL: continue\n")
+		pass, PASS = false, false
 	}
 	//==
+
+	if pass {
+		fmt.Println("\tpass")
+	}
 }
 
 func testRange() {
-	hasError := false
+	pass := true
+
 	s := []int{2, 3, 5}
 
-	resultOk := map[int]int {
+	tests := map[int]int{
 		0: 2,
 		1: 3,
 		2: 5,
 	}
 
 	for i, v := range s {
-		if resultOk[i] != v {
-			hasError = true
-			fmt.Printf("[Error] value in continue: %s\n", s)
+		if tests[i] != v {
+			fmt.Printf("\tFAIL: %d. got %v, want %v\n", i, v, tests[i])
+			pass, PASS = false, false
 		}
-
-		println("key:", i, "value:", v)
 	}
 
-	if !hasError {
-		println("[OK]")
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
 func main() {
-	println("\n== testIf")
+	fmt.Print("\n\n== Control statements\n")
+
+	fmt.Print("\n=== RUN testIf\n")
 	testIf()
-	println("\n== testSwitch")
+	fmt.Print("\n=== RUN testSwitch\n")
 	testSwitch()
-	println("\n== testFor")
+	fmt.Print("\n=== RUN testFor\n")
 	testFor()
-	println("\n== testRange")
+	fmt.Print("\n=== RUN testRange\n")
 	testRange()
+
+	if PASS {
+		fmt.Print("\nPASS\n")
+	} else {
+		fmt.Print("\nFAIL\n")
+		print("Fail: Control statements")
+	}
 }

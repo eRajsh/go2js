@@ -8,6 +8,8 @@ package main
 
 import "fmt"
 
+var PASS = true
+
 // Global declaration of a pointer
 var i int
 var hello string
@@ -15,32 +17,10 @@ var p *int
 
 func init() {
 	p = &i             // p points to i (p stores the address of i)
-	helloPtr := &hello // pointer variable of type *string and it points hello
-	println("helloPtr:", helloPtr)
-}
+	helloPtr := &hello // pointer variable of type *string which points to hello
 
-func nilValue() {
-	var num = 10
-	var p *int
-
-	// Checking
-	msg := "declaration"
-	if p == nil {
-		println("[OK]", msg)
-	} else {
-		fmt.Println("[Error]", msg)
-	}
-	//==
-
-	p = &num
-	// Checking
-	msg = "assignment"
-	if p != nil {
-		println("[OK]", msg)
-	} else {
-		fmt.Println("[Error]", msg)
-	}
-	//==
+	fmt.Print("== init()\n")
+	fmt.Println("helloPtr:", helloPtr)
 }
 
 func declaration() {
@@ -50,7 +30,7 @@ func declaration() {
 
 	p = &i
 	helloPtr := &hello
-	println("p: ", p, "\nhelloPtr:", helloPtr)
+	fmt.Print("p:\t  ", p, "\nhelloPtr: ", helloPtr)
 }
 
 func showAddress() {
@@ -61,56 +41,78 @@ func showAddress() {
 		b     bool    = true
 	)
 
-	println("Hexadecimal address of 'i' is:", &i)
-	println("Hexadecimal address of 'hello' is:", &hello)
-	println("Hexadecimal address of 'pi' is:", &pi)
-	println("Hexadecimal address of 'b' is:", &b)
+	fmt.Println("Hexadecimal address of:")
+
+	fmt.Println("'i':\t", &i)
+	fmt.Println("'hello':", &hello)
+	fmt.Println("'pi':\t", &pi)
+	fmt.Println("'b':\t", &b)
 }
 
-func access_1() {
-	hello := "Hello, mina-san!"
+func nilValue() {
+	pass := true
 
+	var num = 10
+	var p *int
+
+	if p == nil {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: declaration => got %v\n", p == nil)
+		pass, PASS = false, false
+	}
+
+	p = &num
+	if p != nil {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: assignment => got %v\n", p == nil)
+		pass, PASS = false, false
+	}
+
+	if pass {
+		fmt.Println("\tpass")
+	}
+}
+
+func access() {
+	pass := true
+
+	hello := "Hello, mina-san!"
 	var helloPtr *string
 	helloPtr = &hello
 
 	i := 6
 	iPtr := &i
 
-	// Checking
-	if hello == "Hello, mina-san!" && *helloPtr == "Hello, mina-san!" {
-		println("[OK] string")
-	} else {
-		fmt.Printf("[Error] The string \"hello\" is: %v\n", hello)
-		fmt.Printf("\tThe string pointed to by \"helloPtr\" is: %v\n", *helloPtr)
+	if *helloPtr != "Hello, mina-san!" {
+		fmt.Printf("\tFAIL: *helloPtr => got %v, want %v\n", *helloPtr, hello)
+		pass, PASS = false, false
+	}
+	if *iPtr != 6 {
+		fmt.Printf("\tFAIL: *iPtr => got %v, want %v\n", *iPtr, i)
+		pass, PASS = false, false
 	}
 
-	if i == 6 && *iPtr == 6 {
-		println("[OK] int")
-	} else {
-		fmt.Printf("[Error] The value of \"i\" is: %v\n", i)
-		fmt.Printf("\tThe value pointed to by \"iPtr\" is: %v\n", *iPtr)
-	}
-}
+	// * * *
 
-func access_2() {
 	x := 3
 	y := &x
 
 	*y++
-	// Checking
-	if x == 4 {
-		println("[OK]")
-	} else {
-		fmt.Println("[Error] x is:", x)
+	if x != 4 {
+		fmt.Printf("\tFAIL: x => got %v, want 4\n", x)
+		pass, PASS = false, false
 	}
-	//==
 
 	*y++
-	// Checking
-	if x == 5 {
-		println("[OK]")
-	} else {
-		fmt.Println("[Error] x is:", x)
+	if x != 5 {
+		fmt.Printf("\tFAIL: x => got %v, want 5\n", x)
+		pass, PASS = false, false
+	}
+
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
@@ -124,17 +126,16 @@ func allocation() {
 	doubleSum = new(int) // allocate memory for an int and make doubleSum point to it
 	*doubleSum = sum * 2 // use the allocated memory, by dereferencing doubleSum
 
-	// Checking
 	if sum == 45 && *doubleSum == 90 {
-		println("[OK]")
+		fmt.Println("\tpass")
 	} else {
-		fmt.Printf("[Error] The sum of numbers from 0 to 10 is: %v\n", sum)
-		fmt.Printf("\tThe double of this sum is: %v\n", *doubleSum)
+		fmt.Printf("\tFAIL: sum=%v, *doubleSum=%v\n", sum, *doubleSum)
+		PASS = false
 	}
 }
 
 func parameterByValue() {
-	// Returns 1 plus its input parameter
+	// Returns 1 plus its input parameter.
 	var add = func(v int) int {
 		v = v + 1
 		return v
@@ -143,67 +144,59 @@ func parameterByValue() {
 	x := 3
 	x1 := add(x)
 
-	// Checking
-	if x1 == 4 && x == 3 {
-		println("[OK]")
+	if x == 3 && x1 == 4 {
+		fmt.Println("\tpass")
 	} else {
-		fmt.Printf("[Error] x+1 = %v\n", x1)
-		fmt.Printf("\tx = %v\n", x)
+		fmt.Printf("\tFAIL: x=%v, x1=%v\n", x, x1)
+		PASS = false
 	}
 }
 
 func byReference_1() {
-	add := func(v *int) int { // notice that we give it a pointer to an int
+	add := func(v *int) int { // pointer to int
 		*v = *v + 1 // we dereference and change the value pointed by a
 		return *v
 	}
 
 	x := 3
+	x1 := add(&x) // by passing the adress of x to it
 
-	x1 := add(&x)             // by passing the adress of x to it
-	// Checking
 	if x1 == 4 && x == 4 {
-		println("[OK]")
+		fmt.Println("\tpass")
 	} else {
-		fmt.Printf("[Error] x+1 = %v\n", x1)
-		fmt.Printf("\tx = %v\n", x)
+		fmt.Printf("\tFAIL: x=%v, x1=%v\n", x, x1)
+		PASS = false
 	}
-	//==
 
 	x1 = add(&x)
-	// Checking
-	if x1 == 5 && x == 5 {
-		println("[OK]")
+	if x == 5 && x1 == 5 {
+		fmt.Println("\tpass")
 	} else {
-		fmt.Printf("[Error] x+1 = %v\n", x1)
-		fmt.Printf("\tx = %v\n", x)
+		fmt.Printf("\tFAIL: x=%v, x1=%v\n", x, x1)
+		PASS = false
 	}
-	//==
 }
 
 func byReference_2() {
 	add := func(v *int, i int) { *v += i }
-
 	value := 6
 	incr := 1
 
 	add(&value, incr)
-	// Checking
 	if value == 7 {
-		println("[OK]")
+		fmt.Println("\tpass")
 	} else {
-		fmt.Printf("[Error] value = %v\n", value)
+		fmt.Printf("\tFAIL: value=%v\n", value)
+		PASS = false
 	}
-	//==
 
 	add(&value, incr)
-	// Checking
 	if value == 8 {
-		println("[OK]")
+		fmt.Println("\tpass")
 	} else {
-		fmt.Printf("[Error] value = %v\n", value)
+		fmt.Printf("\tFAIL: value=%v\n", value)
+		PASS = false
 	}
-	//==
 }
 
 func byReference_3() {
@@ -215,47 +208,57 @@ func byReference_3() {
 
 	f()
 	if *y == 4 {
-		println("[OK]")
+		fmt.Println("\tpass")
 	} else {
-		fmt.Println("[Error] y = ", *y)
+		fmt.Printf("\tFAIL: 3. *y=%v\n", *y)
+		PASS = false
 	}
 }
 
 func main() {
-	println("\n== nilValue")
-	nilValue()
-	println("\n== declaration")
+	fmt.Print("\n\n== Pointers\n")
+
+	fmt.Print("\n=== RUN declaration\n")
 	declaration()
-	println("\n== showAddress")
+	fmt.Print("\n=== RUN showAddress\n")
 	showAddress()
-	println("\n== access_1")
-	access_1()
-	println("\n== access_2")
-	access_2()
-	println("\n== allocation")
+
+	fmt.Print("\n=== RUN nilValue\n")
+	nilValue()
+	fmt.Print("\n=== RUN access\n")
+	access()
+	fmt.Print("\n=== RUN allocation\n")
 	allocation()
-	println("\n== parameterByValue")
+
+	fmt.Print("\n=== RUN parameterByValue\n")
 	parameterByValue()
-	println("\n== byReference_1")
+	fmt.Print("\n=== RUN byReference_1\n")
 	byReference_1()
-	println("\n== byReference_2")
+	fmt.Print("\n=== RUN byReference_2\n")
 	byReference_2()
-	println("\n== byReference_3")
+	fmt.Print("\n=== RUN byReference_3\n")
 	byReference_3()
+
+	if PASS {
+		fmt.Print("\nPASS\n")
+	} else {
+		fmt.Print("\nFAIL\n")
+		print("Fail: Pointers")
+	}
 }
 
 /*
-helloPtr: 0x428038
+== init()
+helloPtr: 0x4e0220
 
-== declaration()
+== declaration
+p:	  0xf840039028
+helloPtr: 0xf840028240
 
-p:  0x7feaabc2af5c 
-helloPtr: 0x7feaabc2af68
-
-== showAddress()
-
-Hexadecimal address of 'i' is: 0x7feaabc2af68
-Hexadecimal address of 'hello' is: 0x7feaabc2af70
-Hexadecimal address of 'pi' is: 0x7feaabc2af6c
-Hexadecimal address of 'b' is: 0x7feaabc2af67
+== showAddress
+Hexadecimal address of:
+'i':	 0xf840039030
+'hello': 0xf840028280
+'pi':	 0xf840039038
+'b':	 0xf840039040
 */

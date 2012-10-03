@@ -23,8 +23,6 @@ var o = "OMDB";
 
 
 
-
-
 var a1 = g.MkArray([32], 0);
 var a2 = g.MkArray([2,4], 0);
 
@@ -63,6 +61,8 @@ var m4 = g.Map(undefined, {
 	2: 2,
 	3: 3
 });
+
+var found = m4.get(1)[1];
 
 
 

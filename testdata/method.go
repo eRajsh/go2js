@@ -6,25 +6,38 @@
 
 package main
 
-import ("fmt"; "math")
+import (
+	"fmt"
+	"math"
+)
+
+var PASS = true
 
 type Rectangle struct {
 	width, height float64
 }
 
 func noMethod() {
+	pass := true
+
 	area := func(r Rectangle) float64 {
 		return r.width * r.height
 	}
 
 	r1 := Rectangle{12, 2}
 
-	// Checking
-	if area(r1) == 24 && area(Rectangle{9, 4}) == 36 {
-		println("[OK]")
-	} else {
-		fmt.Println("[Error] Area of r1 is:", area(r1))
-		fmt.Println("\tArea of \"Rectangle{9, 4}\" is:", area(Rectangle{9, 4}))
+	if area(r1) != 24 {
+		fmt.Printf("\tFAIL: area r1 => got %v, want 24)\n", area(r1))
+		pass, PASS = false, false
+	}
+	if area(Rectangle{9, 4}) != 36 {
+		fmt.Printf("\tFAIL: area Rectangle{9,4} => got %v, want 36)\n",
+			area(Rectangle{9, 4}))
+		pass, PASS = false, false
+	}
+
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
@@ -43,33 +56,41 @@ func (c Circle) area() float64 {
 }
 
 func method() {
+	pass := true
+
 	r1 := Rectangle{12, 2}
 	r2 := Rectangle{9, 4}
 	c1 := Circle{10}
 	c2 := Circle{25}
 
-	// Checking
-	if r1.area() == 24 && r2.area() == 36 {
-		println("[OK] rectangle")
-	} else {
-		fmt.Println("[Error] Area of r1 is:", r1.area())
-		fmt.Println("\tArea of r2 is:", r2.area())
+	tests := []struct {
+		msg string
+		in  float64
+		out float64
+	}{
+		{"Rectangle{12,2}", r1.area(), 24},
+		{"Rectangle{9,4}", r2.area(), 36},
+		{"Circle{10}", c1.area(), 314.1592653589793},
+		{"Circle{25}", c2.area(), 1963.4954084936207},
 	}
 
-	if c1.area() == 314.1592653589793 && c2.area() == 1963.4954084936207 {
-		println("[OK] circle")
-	} else {
-		fmt.Println("[Error] Area of c1 is:", c1.area())
-		fmt.Println("\tArea of c2 is:", c2.area())
+	for _, t := range tests {
+		if t.in != t.out {
+			fmt.Printf("\tFAIL: %s => got %v, want %v\n", t.msg, t.in, t.out)
+			pass, PASS = false, false
+		}
+	}
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
 // * * *
 
-type SliceOfints []int
-type AgesByNames map[string]int
+type sliceOfints []int
+type agesByNames map[string]int
 
-func (s SliceOfints) sum() int {
+func (s sliceOfints) sum() int {
 	sum := 0
 	for _, value := range s {
 		sum += value
@@ -77,7 +98,7 @@ func (s SliceOfints) sum() int {
 	return sum
 }
 
-func (people AgesByNames) older() string {
+func (people agesByNames) older() string {
 	a := 0
 	n := ""
 	for key, value := range people {
@@ -90,35 +111,45 @@ func (people AgesByNames) older() string {
 }
 
 func withNamedType() {
-	s := SliceOfints{1, 2, 3, 4, 5}
-	folks := AgesByNames{
+	pass := true
+
+	s := sliceOfints{1, 2, 3, 4, 5}
+	folks := agesByNames{
 		"Bob":   36,
 		"Mike":  44,
 		"Jane":  30,
 		"Popey": 100,
 	}
 
-	// Checking
-	if s.sum() == 15 {
-		println("[OK] sum")
-	} else {
-		fmt.Println("[Error] The sum of ints in the slice s is:", s.sum())
+	if s.sum() != 15 {
+		fmt.Printf("\tFAIL: s.sum => got %v, want 15)\n", s.sum())
+		pass, PASS = false, false
+	}
+	if folks.older() != "Popey" {
+		fmt.Printf("\tFAIL: folks.older => got %s, want Popey)\n",
+			folks.older())
+		pass, PASS = false, false
 	}
 
-	if folks.older() == "Popey" {
-		println("[OK] older")
-	} else {
-		fmt.Println("[Error] The older in the map folks is:", folks.older())
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
-// * * *
-
 func main() {
-	println("\n== noMethod")
+	fmt.Print("\n\n== Methods\n")
+
+	fmt.Print("\n=== RUN noMethod\n")
 	noMethod()
-	println("\n== method")
+	fmt.Print("\n=== RUN method\n")
 	method()
-	println("\n== withNamedType")
+	fmt.Print("\n=== RUN withNamedType\n")
 	withNamedType()
+
+	if PASS {
+		fmt.Print("\nPASS\n")
+	} else {
+		fmt.Print("\nFAIL\n")
+		print("Fail: Methods")
+	}
 }
