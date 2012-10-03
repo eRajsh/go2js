@@ -53,7 +53,7 @@ By this reason, the integers of 64 bits are unsupported.
 The reserved words and keywords used in JavaScript are transformed adding "_" at
 the beginning and at the end of the name.
 
-See files "_test/decl_reserved.{go,js}"
+See files "testdata/decl_reserved.{go,js}"
 
 #### Initialization
 
@@ -128,11 +128,6 @@ its transformation would be:
 JavaScript has several built-in functions and constants which can be transformed
 from Go. They are defined in the maps "Constant", and "Function".
 
-Since Go functions "print" and "println" are used to debug then they are
-transformed to "console.log" (http://v0.joehewitt.com/software/firebug/docs.php),
-which only can be used if the JavaScript code is run in Webkit (Chrome, Safari),
-of Mozilla Firefox with the plugin FireBug.
-
 "panic" is transformed to "throw new Error()".
 
 #### Modularity
@@ -147,18 +142,21 @@ By example, for a package named "foo" with names exported "Add" and "Product":
 	var foo = {}; (function() {
 	// Code of your package
 
-	_export(foo, [Add, Product])
+	g.Export(foo, [Add, Product])
 	})();
 
 
 ## Contributing
 
 If you are going to change code related to the compiler then you should run
-`go test` after of each change in your forked repository. It will transform the
-Go files in the directory "test"; to see the differences use `git diff`,
-checking whether the change is what you were expecting.  
+"go test" after of each change in your forked repository. It will transform the
+Go files in the directory "testdata"; to see the differences use "git diff",
+checking whether the change in the JavaScript files is what you were expecting.  
 It is also expected to get some errors and warnings in some of them, which are
 validated using the test functions for examples. See file "goscript_test.go".
+
+Then, to checking the generated JavaScript files, use the browser with the
+address "file:///PATH_TO/goscript/testdata/test.html".
 
 Ideas:
 
@@ -176,41 +174,14 @@ Ideas:
 The great problem of the web developing is that there is one specification and
 multiple implementations with the result of that different browsers have
 different implementations for both DOM and JavaScript.  
-So the solution is obvious; one specification and one implementation. And here
+So the solution is obvious, one specification and one implementation; and here
 comes Go.
 
-Go is a fast, statically typed, compiled language that feels like a
-dynamically typed, interpreted language. Its concurrency mechanisms make it easy
-to get the most out of multicore. The Go compilers support three instruction
-sets (AMD64, 386, ARM) and can target the FreeBSD, Linux, OS X, and Windows
-operating systems; which means that it can be run in whatever system where is
-running your browser.  
-Ago time I had the idea (by my past in Python) of use Go like if were a script
-language; the result was GoPlay (https://github.com/kless/GoPlay) which compiles,
-caching the executable, to run it directly if the source code has not been
-changed. Now, to know if a web program has changed would not be so difficult if
-were used a convention in its name; i.e. with "foo-*12.21*.go" (12 for year, 21
-for month) can be got its date of releasing.
-
-Now, I hope that somebody motivated contributes to get that Go been the next
-web language. It would be necessary:
-
-+ A DOM library implemented in Go. References:
+References to develop a DOM library implemented:
 
 	https://developer.mozilla.org/en/Gecko_DOM_Reference  
 	http://api.dartlang.org/dom.html  
 	http://api.dartlang.org/html.html
-
-Then, if we want to use web technology to build user interfaces in desktop
-applications:
-
-+ A parser for HTML5
-+ Another one for CSS3
-+ Building of visual elements, using SVG (or CSS3?)
-
-Note that the great advantage of use HTML5/CSS3 is that (1) there are many
-designers that know how to use it, and (2) our work to get that it works in
-wathever platform (web, desktop, mobile) would be almost zero.
 
 
 ## Credits

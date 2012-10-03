@@ -13,6 +13,7 @@ import (
 	"go/token"
 	"strconv"
 	"strings"
+	"text/template"
 )
 
 type Kind uint8
@@ -156,6 +157,10 @@ func (e *expression) transform(expr ast.Expr) {
 	//  Kind     token.Token // token.INT, token.FLOAT, token.IMAG, token.CHAR, or token.STRING
 	//  Value    string      // literal string
 	case *ast.BasicLit:
+		if typ.Value[0] == '`' { // raw string literal
+			typ.Value = template.JSEscapeString(typ.Value)
+			typ.Value = `"` + typ.Value[1:len(typ.Value)-1] + `"`
+		}
 		e.WriteString(strings.Replace(typ.Value, "\\n", "<br>", -1)) // replace new lines
 		e.isBasicLit = true
 
