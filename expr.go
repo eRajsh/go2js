@@ -23,6 +23,7 @@ const (
 	//arrayKind TODO: remove
 	//ellipsisKind
 	sliceKind
+	structKind
 )
 
 // Represents an expression.
@@ -448,6 +449,11 @@ func (e *expression) transform(expr ast.Expr) {
 				e.tr.slices[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
 				e.kind = sliceKind
 			}
+			// Struct
+			if elt, ok := compoType.Elt.(*ast.StructType); ok {
+				e.tr.getStruct(elt, "", false)
+				e.kind = structKind
+			}
 			// For arrays with elements
 			if len(typ.Elts) != 0 {
 				if !e.arrayHasElts && compoType.Len != nil {
@@ -498,9 +504,15 @@ func (e *expression) transform(expr ast.Expr) {
 			e.WriteString("})")
 
 		case nil:
-			e.WriteString("[")
-			e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
-			e.WriteString("]")
+			if e.kind == structKind {
+				e.WriteString("_(")
+				e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
+				e.WriteString(")")
+			} else {
+				e.WriteString("[")
+				e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
+				e.WriteString("]")
+			}
 
 		default:
 			panic(fmt.Sprintf("'CompositeLit' unimplemented: %T", compoType))

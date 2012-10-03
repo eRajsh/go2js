@@ -51,7 +51,7 @@ By this reason, the integers of 64 bits are unsupported.
 #### Reserved words
 
 The reserved words and keywords used in JavaScript are transformed adding "_" at
-the beginning and at the end of the name.
+the end of the name.
 
 See files "testdata/decl_reserved.{go,js}"
 

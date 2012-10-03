@@ -170,122 +170,8 @@ func (tr *transform) getType(spec []ast.Spec, isGlobal bool) {
 		//  Obj     *Object   // denoted object; or nil
 		case *ast.Ident:
 
-		// godoc go/ast StructType
-		//  Struct     token.Pos  // position of "struct" keyword
-		//  Fields     *FieldList // list of field declarations
-		//  Incomplete bool       // true if (source) fields are missing in the Fields list
-		//
-		// godoc go/ast FieldList
-		//  Opening token.Pos // position of opening parenthesis/brace, if any
-		//  List    []*Field  // field list; or nil
-		//  Closing token.Pos // position of closing parenthesis/brace, if any
 		case *ast.StructType:
-			if typ.Incomplete {
-				panic("list of fields incomplete ???")
-			}
-
-			var fieldNames, fieldLines, fieldsInit string
-			//!anonField := make([]bool, 0) // anonymous field
-
-			firstPos := tr.getLine(typ.Fields.Opening)
-			posOldField := firstPos
-			posNewField := 0
-			isFirst := true
-
-			// godoc go/ast Field
-			//  Doc     *CommentGroup // associated documentation; or nil
-			//  Names   []*Ident      // field/method/parameter names; or nil if anonymous field
-			//  Type    Expr          // field/method/parameter type
-			//  Tag     *BasicLit     // field tag; or nil
-			//  Comment *CommentGroup // line comments; or nil
-			for _, field := range typ.Fields.List {
-				isPointer := false
-
-				if _, ok := field.Type.(*ast.FuncType); ok {
-					tr.addError("%s: function type in struct",
-						tr.fset.Position(field.Pos()))
-					continue
-				}
-				if field.Names == nil {
-					tr.addError("%s: anonymous field in struct",
-						tr.fset.Position(field.Pos()))
-					continue
-				}
-				// Type checking
-				if expr := tr.getExpression(field.Type); expr.hasError {
-					continue
-				} else if expr.isPointer {
-					isPointer = true
-				}
-
-				zero, _ := tr.zeroValue(true, field.Type)
-
-				for _, v := range field.Names {
-					name := v.Name
-					if name == "_" {
-						continue
-					}
-
-					if !isFirst {
-						fieldNames += "," + SP
-						fieldsInit += "," + SP
-					}
-					fieldNames += name
-					fieldsInit += zero
-					//!anonField = append(anonField, false)
-
-					// === Printing of fields
-					posNewField = tr.getLine(v.Pos())
-
-					if posNewField != posOldField {
-						fieldLines += strings.Repeat(NL, posNewField-posOldField)
-						fieldLines += strings.Repeat(TAB, tr.tabLevel+1)
-					} else {
-						fieldLines += SP
-					}
-
-					if !isPointer {
-						fieldLines += fmt.Sprintf("this.%s=%s;", name, name)
-					} else {
-						fieldLines += fmt.Sprintf("this.%s={p:%s};", name, name)
-					}
-
-					posOldField = posNewField
-					// ===
-
-					if isFirst {
-						isFirst = false
-					}
-				}
-			}
-
-			// The right brace
-			posNewField = tr.getLine(typ.Fields.Closing)
-
-			if posNewField != posOldField {
-				fieldLines += strings.Repeat(NL, posNewField-posOldField)
-				fieldLines += strings.Repeat(TAB, tr.tabLevel)
-			} else {
-				fieldLines += SP
-			}
-
-			// Empty structs
-			if fieldLines == SP {
-				fieldLines = ""
-			}
-
-			// Write
-			tr.addLine(tSpec.Pos())
-			tr.WriteString(fmt.Sprintf(
-				"function %s(%s)%s{%s}", tSpec.Name, fieldNames, SP, fieldLines))
-			//tr.WriteString(fmt.Sprintf("function %s(%s)%s{%sthis._z=%q;%s}",
-			//tSpec.Name, fieldNames, SP,
-			//SP, fieldsInit, fieldLines))
-
-			// Store the name of new type with its values initialized
-			tr.zeroType[tr.funcId][tr.blockId][tSpec.Name.Name] = fieldsInit
-
-			tr.line += posNewField - firstPos // update the global position
+			tr.getStruct(typ, tSpec.Name.Name, isGlobal)
 
 		default:
 			tr.addLine(tSpec.Pos())
@@ -300,6 +186,144 @@ func (tr *transform) getType(spec []ast.Spec, isGlobal bool) {
 			tr.addIfExported(tSpec.Name)
 		}
 	}
+}
+
+// Struct
+//
+func (tr *transform) getStruct(typ *ast.StructType, name string, isGlobal bool) {
+	// godoc go/ast StructType
+	//  Struct     token.Pos  // position of "struct" keyword
+	//  Fields     *FieldList // list of field declarations
+	//  Incomplete bool       // true if (source) fields are missing in the Fields list
+	//
+	// godoc go/ast FieldList
+	//  Opening token.Pos // position of opening parenthesis/brace, if any
+	//  List    []*Field  // field list; or nil
+	//  Closing token.Pos // position of closing parenthesis/brace, if any
+	if typ.Incomplete {
+		panic("list of fields incomplete ???")
+	}
+
+	var fieldNames, fieldLines, fieldsInit string
+	//!anonField := make([]bool, 0) // anonymous field
+
+	firstPos := tr.getLine(typ.Fields.Opening)
+	posOldField := firstPos
+	posNewField := 0
+	isFirst := true
+
+	// godoc go/ast Field
+	//  Doc     *CommentGroup // associated documentation; or nil
+	//  Names   []*Ident      // field/method/parameter names; or nil if anonymous field
+	//  Type    Expr          // field/method/parameter type
+	//  Tag     *BasicLit     // field tag; or nil
+	//  Comment *CommentGroup // line comments; or nil
+	for _, field := range typ.Fields.List {
+		isPointer := false
+
+		if _, ok := field.Type.(*ast.FuncType); ok {
+			tr.addError("%s: function type in struct", tr.fset.Position(field.Pos()))
+			continue
+		}
+		if field.Names == nil {
+			tr.addError("%s: anonymous field in struct", tr.fset.Position(field.Pos()))
+			continue
+		}
+		// Type checking
+		if expr := tr.getExpression(field.Type); expr.hasError {
+			continue
+		} else if expr.isPointer {
+			isPointer = true
+		}
+
+		zero, _ := tr.zeroValue(true, field.Type)
+
+		for _, v := range field.Names {
+			fieldName := v.Name
+			if fieldName == "_" {
+				continue
+			}
+
+			if !isFirst {
+				fieldNames += "," + SP
+				fieldsInit += "," + SP
+			}
+			fieldNames += fieldName
+			fieldsInit += zero
+			//!anonField = append(anonField, false)
+
+			// === Printing of fields
+			posNewField = tr.getLine(v.Pos())
+
+			if posNewField != posOldField {
+				fieldLines += strings.Repeat(NL, posNewField-posOldField)
+				fieldLines += strings.Repeat(TAB, tr.tabLevel+1)
+			} else {
+				fieldLines += SP
+			}
+
+			if name != "" {
+				fieldLines += fmt.Sprintf("this.%s=", fieldName)
+			} else {
+				fieldLines += fmt.Sprintf("%s:", fieldName)
+			}
+			if !isPointer {
+				fieldLines += fmt.Sprintf("%s", fieldName)
+			} else {
+				fieldLines += fmt.Sprintf("{p:%s}", fieldName)
+			}
+			if name != "" {
+				fieldLines += ";"
+			} else {
+				fieldLines += ","
+			}
+
+			posOldField = posNewField
+			// ===
+
+			if isFirst {
+				isFirst = false
+			}
+		}
+	}
+	// Remove the last character.
+	if fieldLines != "" {
+		fieldLines = fieldLines[:len(fieldLines)-1]
+	}
+
+	// The right brace
+	posNewField = tr.getLine(typ.Fields.Closing)
+
+	if posNewField != posOldField {
+		fieldLines += strings.Repeat(NL, posNewField-posOldField)
+		fieldLines += strings.Repeat(TAB, tr.tabLevel)
+	} else {
+		fieldLines += SP
+	}
+
+	// Empty structs
+	if fieldLines == SP {
+		fieldLines = ""
+	}
+
+	// == Write
+	tr.addLine(typ.Pos())
+
+	if name != "" {
+		tr.WriteString(fmt.Sprintf(
+			"function %s(%s)%s{%s}", name, fieldNames, SP, fieldLines))
+		//tr.WriteString(fmt.Sprintf("function %s(%s)%s{%sthis._z=%q;%s}",
+		//name, fieldNames, SP,
+		//SP, fieldsInit, fieldLines))
+
+		// Store the name of new type with its values initialized
+		tr.zeroType[tr.funcId][tr.blockId][name] = fieldsInit
+	} else {
+		tr.WriteString(fmt.Sprintf("_%s=%sfunction(%s)%s{%sreturn%s{%s};};%s",
+			SP, SP, fieldNames, SP, SP, SP, fieldLines, SP))
+	}
+
+	tr.line += posNewField - firstPos // update the global position
 }
 
 // === Utility
@@ -609,6 +633,7 @@ const (
 	mapType
 	pointerType
 	sliceType
+	structType
 )
 
 // Returns the zero value of the value type if "init", and a boolean indicating
@@ -619,9 +644,6 @@ func (tr *transform) zeroValue(init bool, typ interface{}) (value string, dt dat
 	switch t := typ.(type) {
 	case nil:
 		return
-
-	case *ast.MapType:
-		return "", mapType
 
 	case *ast.ArrayType:
 		if t.Len != nil {
@@ -634,6 +656,12 @@ func (tr *transform) zeroValue(init bool, typ interface{}) (value string, dt dat
 
 	case *ast.InterfaceType: // nil
 		return "undefined", otherType
+
+	case *ast.MapType:
+		return "", mapType
+
+	case *ast.StructType:
+		return "", structType
 
 	case *ast.Ident:
 		ident = t

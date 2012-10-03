@@ -36,7 +36,7 @@ function arrayType(f, len, cap) {
 	this.f=f;
 
 	this.len=len;
-	this.cap=cap;
+	this.cap=cap
 
 }
 
@@ -159,7 +159,7 @@ function sliceType(array, elem, low, high, len, cap, isNil) {
 	this.len=len;
 	this.cap=cap;
 
-	this.isNil=isNil;
+	this.isNil=isNil
 }
 
 
@@ -302,7 +302,7 @@ function mapType(f, zero, cap) {
 	this.f=f;
 	this.zero=zero;
 
-	this.cap=cap;
+	this.cap=cap
 }
 
 

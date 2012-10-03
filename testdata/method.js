@@ -9,7 +9,7 @@
 
 
 function Rectangle(width, height) {
-	this.width=width; this.height=height;
+	this.width=width; this.height=height
 }
 
 function noMethod() {
@@ -35,7 +35,7 @@ Rectangle.prototype.area = function() {
 }
 
 function Circle(radius) {
-	this.radius=radius;
+	this.radius=radius
 }
 
 Circle.prototype.area = function() {

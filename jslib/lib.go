@@ -257,7 +257,7 @@ func (s sliceType) get() []interface{} {
 	if len(s.elem) != 0 {
 		return s.elem
 	}
-//	a := s.array
+	//a := s.array
 	return s.array.slice(s.low, s.high)
 }
 
