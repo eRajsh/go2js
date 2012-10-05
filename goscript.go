@@ -37,6 +37,11 @@ const (
 	VERB = "<<%>>"
 )
 
+const (
+	POINTER_FIELD = ".p"
+	TYPE_FIELD    = ".f"
+)
+
 var void struct{} // A struct without any elements occupies no space at all.
 
 var (

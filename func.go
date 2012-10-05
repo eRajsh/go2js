@@ -101,7 +101,7 @@ func (tr *translate) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.Fu
 		tr.recvVar = field.Names[0].Name
 
 		fType := tr.getExpression(field.Type).String()
-		if strings.HasSuffix(fType, ".p") { // is it a pointer?
+		if strings.HasSuffix(fType, POINTER_FIELD) { // is it a pointer?
 			fType = fType[:len(fType)-2]
 		}
 
