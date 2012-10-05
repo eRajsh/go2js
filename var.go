@@ -183,8 +183,8 @@ func (tr *translate) getType(spec []ast.Spec, isGlobal bool) {
 
 		default:
 			tr.addLine(tSpec.Pos())
-			tr.WriteString(fmt.Sprintf("function %s(t)%s{%sthis.t=t;%s}",
-				tSpec.Name, SP, SP, SP)) // TODO: add validIdent()
+			tr.WriteString(fmt.Sprintf("function %s(t)%s{%sthis%s=arguments;%s}",
+				tSpec.Name, SP, SP, TYPE_FIELD, SP)) // TODO: add validIdent()
 		}
 
 		if tr.hasError {

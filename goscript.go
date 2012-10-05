@@ -39,7 +39,8 @@ const (
 
 const (
 	POINTER_FIELD = ".p"
-	TYPE_FIELD    = ".f"
+	TYPE_FIELD    = ".t"
+	VALUE_FIELD   = ".v"
 )
 
 var void struct{} // A struct without any elements occupies no space at all.

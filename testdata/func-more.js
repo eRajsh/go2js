@@ -53,29 +53,29 @@ function main() {
 	var tests = g.Slice("", ["Jim", "Sam", "Sam", "Karl"]);
 
 	older = getOlder(paul, jim)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests.f[0])) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim) => got " + older.name + ", want " + tests.f[0] + "<br>");
+	if (JSON.stringify(older.name) !== JSON.stringify(tests.v[0])) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim) => got " + older.name + ", want " + tests.v[0] + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	older = getOlder(paul, jim, sam)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests.f[1])) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim,sam) => got " + older.name + ", want " + tests.f[1] + "<br>");
+	if (JSON.stringify(older.name) !== JSON.stringify(tests.v[1])) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim,sam) => got " + older.name + ", want " + tests.v[1] + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	older = getOlder(paul, jim, sam, rob)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests.f[2])) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim,sam,rob) => got " + older.name + ", want " + tests.f[2] + "<br>");
+	if (JSON.stringify(older.name) !== JSON.stringify(tests.v[2])) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim,sam,rob) => got " + older.name + ", want " + tests.v[2] + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	older = getOlder(karl)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests.f[3])) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder karl) => got " + older.name + ", want " + tests.f[3] + "<br>");
+	if (JSON.stringify(older.name) !== JSON.stringify(tests.v[3])) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder karl) => got " + older.name + ", want " + tests.v[3] + "<br>");
 
 		pass = false, PASS = false;
 	}

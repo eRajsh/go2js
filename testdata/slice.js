@@ -33,7 +33,7 @@ function initialValue() {
 		_("cap s3", s3.cap === 0, true)
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -56,14 +56,14 @@ function shortHand() {
 	if (a_slice.toString() === "efgh" && a_slice.len === 4 && a_slice.cap === 6) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [4:8] => got " + a_slice.f + ", len=" + a_slice.len + ", cap=" + a_slice.cap + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [4:8] => got " + a_slice.v + ", len=" + a_slice.len + ", cap=" + a_slice.cap + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	a_slice.set(array, 6, 7);
 	if (a_slice.toString() !== "g") {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [6:7] => got " + a_slice.f + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [6:7] => got " + a_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
@@ -71,20 +71,20 @@ function shortHand() {
 	if (a_slice.toString() === "abc" && a_slice.len === 3 && a_slice.cap === 10) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [:3] => got " + a_slice.f + ", len=" + a_slice.len + ", cap=" + a_slice.cap + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [:3] => got " + a_slice.v + ", len=" + a_slice.len + ", cap=" + a_slice.cap + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	a_slice.set(array, 5);
 	if (a_slice.toString() !== "fghij") {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [5:] => got " + a_slice.f + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [5:] => got " + a_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
 	a_slice.set(array, 0);
 	if (a_slice.toString() !== "abcdefghij") {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [:] => got " + a_slice.f + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [:] => got " + a_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
@@ -92,7 +92,7 @@ function shortHand() {
 	if (a_slice.toString() === "defg" && a_slice.len === 4 && a_slice.cap === 7) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [3:7] => got " + a_slice.f + ", len=" + a_slice.len + ", cap=" + a_slice.cap + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [3:7] => got " + a_slice.v + ", len=" + a_slice.len + ", cap=" + a_slice.cap + "<br>");
 
 		pass = false, PASS = false;
 	}
@@ -103,20 +103,20 @@ function shortHand() {
 	if (b_slice.toString() === "ef" && b_slice.len === 2 && b_slice.cap === 6) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. [1:3] => got " + b_slice.f + ", len=" + b_slice.len + ", cap=" + b_slice.cap + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. [1:3] => got " + b_slice.v + ", len=" + b_slice.len + ", cap=" + b_slice.cap + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	b_slice.set(a_slice, 0, 3);
 	if (b_slice.toString() !== "def") {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. [:3] => got " + b_slice.f + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. [:3] => got " + b_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
 	b_slice.set(a_slice, 0);
 	if (b_slice.toString() !== "defg") {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. [:] => got " + b_slice.f + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. [:] => got " + b_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
@@ -148,20 +148,20 @@ function useFunc() {
 	var slice = g.NilSlice();
 
 	slice.set(A1, 0);
-	if (Max(slice.f) !== 9) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.f) + ", want 9<br>");
+	if (Max(slice.v) !== 9) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.v) + ", want 9<br>");
 		pass = false, PASS = false;
 	}
 
 	slice.set(A2, 0);
-	if (Max(slice.f) !== 4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.f) + ", want 4<br>");
+	if (Max(slice.v) !== 4) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.v) + ", want 4<br>");
 		pass = false, PASS = false;
 	}
 
 	slice.set(A3, 0);
-	if (Max(slice.f) !== 1) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.f) + ", want 1<br>");
+	if (Max(slice.v) !== 1) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.v) + ", want 1<br>");
 		pass = false, PASS = false;
 	}
 
@@ -176,9 +176,9 @@ function reference() {
 	var fmtSlice = function(slice) {
 		var s = "[";
 		for (var index = 0; index < slice.len - 1; index++) {
-			s += "" + slice.f[index] + ",";
+			s += "" + slice.v[index] + ",";
 		}
-		s += "" + slice.f[slice.len - 1] + "]";
+		s += "" + slice.v[slice.len - 1] + "]";
 
 		return s;
 	};
@@ -201,7 +201,7 @@ function reference() {
 		_("slice3", fmtSlice(slice3), "['d','e']")
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -222,7 +222,7 @@ function reference() {
 		_("slice3", fmtSlice(slice3), "['d','E']")
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -243,7 +243,7 @@ function reference() {
 		_("slice3", fmtSlice(slice3), "['d','E']")
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -265,31 +265,31 @@ function resize() {
 
 	slice = g.MkSlice(0, 4, 5);
 
-	if (slice.len === 4 && slice.cap === 5 && slice.f[0] === 0 && slice.f[1] === 0 && slice.f[2] === 0 && slice.f[3] === 0) {
+	if (slice.len === 4 && slice.cap === 5 && slice.v[0] === 0 && slice.v[1] === 0 && slice.v[2] === 0 && slice.v[3] === 0) {
 
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. got " + slice.f + ", want [0 0 0 0])<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. got " + slice.v + ", want [0 0 0 0])<br>");
 		pass = false, PASS = false;
 	}
 
 
-	slice.f[1] = 2, slice.f[3] = 3;
+	slice.v[1] = 2, slice.v[3] = 3;
 
-	if (slice.f[0] === 0 && slice.f[1] === 2 && slice.f[2] === 0 && slice.f[3] === 3) {
+	if (slice.v[0] === 0 && slice.v[1] === 2 && slice.v[2] === 0 && slice.v[3] === 3) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. got " + slice.f + ", want [0 2 0 3])<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. got " + slice.v + ", want [0 2 0 3])<br>");
 		pass = false, PASS = false;
 	}
 
 
 	slice = g.MkSlice(0, 2);
 
-	if (slice.len === 2 && slice.cap === 2 && slice.f[0] === 0 && slice.f[1] === 0) {
+	if (slice.len === 2 && slice.cap === 2 && slice.v[0] === 0 && slice.v[1] === 0) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. got " + slice.f + ", want [0 0])<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. got " + slice.v + ", want [0 0])<br>");
 		pass = false, PASS = false;
 	}
 

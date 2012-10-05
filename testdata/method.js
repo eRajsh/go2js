@@ -74,7 +74,7 @@ function method() {
 		_("Circle{25}", c2.area(), 1963.4954084936207)
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -87,12 +87,12 @@ function method() {
 
 
 
-function sliceOfints(t) { this.t=t; }
-function agesByNames(t) { this.t=t; }
+function sliceOfints(t) { this.t=arguments; }
+function agesByNames(t) { this.t=arguments; }
 
 sliceOfints.prototype.sum = function() {
 	var sum = 0;
-	var value; for (var _ in s) { value = s[_];
+	var value; for (var _ in this.t) { value = this.t[_];
 		sum += value;
 	}
 	return sum;
@@ -101,7 +101,7 @@ sliceOfints.prototype.sum = function() {
 agesByNames.prototype.older = function() {
 	var a = 0;
 	var n = "";
-	var value; for (var key in people) { value = people[key];
+	var value; for (var key in this.t) { value = this.t[key];
 		if (value > a) {
 			a = value;
 			n = key;

@@ -58,7 +58,7 @@ function zeroArray() {
 		_("cap a2", a2.cap === 4, true)
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -109,7 +109,7 @@ function initArray() {
 		_("equality", JSON.stringify(array1) === JSON.stringify(array2), true)
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -192,7 +192,7 @@ function testStruct() {
 		_("Bob,Paul", BP_older, paul, BP_diff, 18)
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.inPerson) !== JSON.stringify(t.outPerson)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => person got " + t.inPerson + ", want " + t.outPerson + "<br>");
 

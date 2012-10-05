@@ -374,7 +374,7 @@ func (e *expression) translate(expr ast.Expr) {
 			_arg := stripField(arg)
 
 			if e.tr.isType(sliceType, _arg) {
-				if strings.HasSuffix(arg, TYPE_FIELD) {
+				if strings.HasSuffix(arg, VALUE_FIELD) {
 					arg = _arg
 				}
 			}
@@ -595,11 +595,11 @@ func (e *expression) translate(expr ast.Expr) {
 					if e.tr.isType(sliceType, name) {
 						isSlice = true
 					}
-					/*if name == e.tr.recvVar {
-						name = "this"
-					}*/
+					if name == e.tr.recvVar {
+						name = "this" + TYPE_FIELD
+					}
 					if isSlice {
-						name += TYPE_FIELD // slice field
+						name += VALUE_FIELD // slice field
 					}
 
 					if _, ok := e.tr.vars[e.tr.funcId][e.tr.blockId][name]; ok {
@@ -648,12 +648,12 @@ func (e *expression) translate(expr ast.Expr) {
 			e.mapName = x
 
 			if e.tr.isVar && !e.isValue {
-				e.WriteString(x + TYPE_FIELD + index)
+				e.WriteString(x + VALUE_FIELD + index)
 			} else {
 				e.WriteString(x + ".get(" + indexArgs + ")[0]")
 			}
 		} else if e.tr.isType(sliceType, x) {
-			e.WriteString(x + TYPE_FIELD + index)
+			e.WriteString(x + VALUE_FIELD + index)
 		} else {
 			e.WriteString(x + index)
 		}
@@ -911,9 +911,9 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 
 // * * *
 
-// stripField strips the field name TYPE_FIELD.
+// stripField strips the field name VALUE_FIELD.
 func stripField(name string) string {
-	if strings.HasSuffix(name, TYPE_FIELD) {
+	if strings.HasSuffix(name, VALUE_FIELD) {
 		return name[:len(name)-2]
 	}
 	return name

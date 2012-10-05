@@ -31,7 +31,7 @@ function nilValue() {
 		_("len m3", m3.length === 0, true)
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -47,19 +47,19 @@ function declaration() {
 
 	var numbers;
 	numbers = g.Map(0, {});
-	numbers.f["one"] = 1;
-	numbers.f["ten"] = 10;
-	numbers.f["trois"] = 3;
+	numbers.v["one"] = 1;
+	numbers.v["ten"] = 10;
+	numbers.v["trois"] = 3;
 
 
 	var rating1 = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
 
 
 	var rating2 = g.Map(0, {});
-	rating2.f["C"] = 5;
-	rating2.f["Go"] = 4.5;
-	rating2.f["Python"] = 4.5;
-	rating2.f["C++"] = 2;
+	rating2.v["C"] = 5;
+	rating2.v["Go"] = 4.5;
+	rating2.v["Python"] = 4.5;
+	rating2.v["C++"] = 2;
 
 	var _ = function(msg, in_, out) { return {
 		msg:msg,
@@ -76,7 +76,7 @@ function declaration() {
 		_("rating[\"C++\"]", rating1.get("C++", "Python", "Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0], rating2.get("C++", "C++", "Python", "Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0])
 <<TAB[0];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -89,10 +89,10 @@ function declaration() {
 
 function reference() {
 	var m = g.Map("", {});
-	m.f["Hello"] = "Bonjour";
+	m.v["Hello"] = "Bonjour";
 
 	var m1 = m;
-	m1.f["Hello"] = "Salut";
+	m1.v["Hello"] = "Salut";
 
 	if (JSON.stringify(m.get("Hello")[0]) === JSON.stringify(m1.get("Hello")[0])) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
@@ -121,7 +121,7 @@ function keyNoExistent() {
 		_("k_multiDim", k_multiDim, 0)
 	];
 
-	var t; for (var _ in tests.f) { t = tests.f[_];
+	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -211,18 +211,18 @@ function blankIdInRange() {
 	var A3 = g.MkArray([1], 0, [1]);
 
 	slice.set(A1, 0);
-	if (Max(slice.f) !== 9) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.f) + ", want 9<br>");
+	if (Max(slice.v) !== 9) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.v) + ", want 9<br>");
 		pass = false, PASS = false;
 	}
 	slice.set(A2, 0);
-	if (Max(slice.f) !== 4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.f) + ", want 4<br>");
+	if (Max(slice.v) !== 4) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.v) + ", want 4<br>");
 		pass = false, PASS = false;
 	}
 	slice.set(A3, 0);
-	if (Max(slice.f) !== 1) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.f) + ", want 1<br>");
+	if (Max(slice.v) !== 1) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.v) + ", want 1<br>");
 		pass = false, PASS = false;
 	}
 
