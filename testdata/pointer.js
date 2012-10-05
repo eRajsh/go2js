@@ -20,7 +20,7 @@ var p = {p:undefined};
 	var helloPtr = hello;
 
 	document.write("== init()<br>");
-	document.write("helloPtr: " + helloPtr + "<br>");
+	document.write("&nbsp;&nbsp;&nbsp;&nbsp;\"helloPtr\": " + helloPtr);
 }());
 
 function declaration() {
@@ -30,7 +30,7 @@ function declaration() {
 
 	p = i;
 	var helloPtr = hello;
-	document.write("p:&nbsp;&nbsp;&nbsp;&nbsp;  " + p + "<br>helloPtr: " + helloPtr);
+	document.write("&nbsp;&nbsp;&nbsp;&nbsp;\"p\": " + p + " " + "<br>&nbsp;&nbsp;&nbsp;&nbsp;\"helloPtr\": " + helloPtr + "<br>");
 }
 
 function showAddress() {
@@ -41,12 +41,10 @@ function showAddress() {
 	var b = {p:true};
 
 
-	document.write("Hexadecimal address of:<br>");
-
-	document.write("'i':&nbsp;&nbsp;&nbsp;&nbsp; " + i + "<br>");
-	document.write("'hello': " + hello + "<br>");
-	document.write("'pi':&nbsp;&nbsp;&nbsp;&nbsp; " + pi + "<br>");
-	document.write("'b':&nbsp;&nbsp;&nbsp;&nbsp; " + b + "<br>");
+	document.write("&nbsp;&nbsp;&nbsp;&nbsp;\"i\": " + i + "<br>");
+	document.write("&nbsp;&nbsp;&nbsp;&nbsp;\"hello\": " + hello + "<br>");
+	document.write("&nbsp;&nbsp;&nbsp;&nbsp;\"pi\": " + pi + "<br>");
+	document.write("&nbsp;&nbsp;&nbsp;&nbsp;\"b\": " + b + "<br>");
 }
 
 function nilValue() {

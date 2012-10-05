@@ -19,8 +19,8 @@ func init() {
 	p = &i             // p points to i (p stores the address of i)
 	helloPtr := &hello // pointer variable of type *string which points to hello
 
-	fmt.Print("== init()\n")
-	fmt.Println("helloPtr:", helloPtr)
+	fmt.Println("== init()")
+	fmt.Print("\t\"helloPtr\": ", helloPtr)
 }
 
 func declaration() {
@@ -30,7 +30,7 @@ func declaration() {
 
 	p = &i
 	helloPtr := &hello
-	fmt.Print("p:\t  ", p, "\nhelloPtr: ", helloPtr)
+	fmt.Println("\t\"p\":", p, "\n\t\"helloPtr\":", helloPtr)
 }
 
 func showAddress() {
@@ -41,12 +41,10 @@ func showAddress() {
 		b     bool    = true
 	)
 
-	fmt.Println("Hexadecimal address of:")
-
-	fmt.Println("'i':\t", &i)
-	fmt.Println("'hello':", &hello)
-	fmt.Println("'pi':\t", &pi)
-	fmt.Println("'b':\t", &b)
+	fmt.Println("\t\"i\":", &i)
+	fmt.Println("\t\"hello\":", &hello)
+	fmt.Println("\t\"pi\":", &pi)
+	fmt.Println("\t\"b\":", &b)
 }
 
 func nilValue() {
@@ -249,16 +247,17 @@ func main() {
 
 /*
 == init()
-helloPtr: 0x4e0220
+	"helloPtr": 0x4e02b8
 
-== declaration
-p:	  0xf840039028
-helloPtr: 0xf840028240
+== Pointers
 
-== showAddress
-Hexadecimal address of:
-'i':	 0xf840039030
-'hello': 0xf840028280
-'pi':	 0xf840039038
-'b':	 0xf840039040
+=== RUN declaration
+	"p": 0xf840038018 
+	"helloPtr": 0xf840028070
+
+=== RUN showAddress
+	"i": 0xf840038020
+	"hello": 0xf840028030
+	"pi": 0xf840038028
+	"b": 0xf840038030
 */

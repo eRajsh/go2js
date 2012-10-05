@@ -26,9 +26,9 @@ const (
 	structKind
 )
 
-// Represents an expression.
+// expression represents a Go expression.
 type expression struct {
-	tr            *transform
+	tr            *translate
 	*bytes.Buffer // sintaxis translated
 
 	varName  string
@@ -61,8 +61,8 @@ type expression struct {
 	index    []string
 }
 
-// Initializes a new type of "expression".
-func (tr *transform) newExpression(iVar interface{}) *expression {
+// newExpression initializes a new expression.
+func (tr *translate) newExpression(iVar interface{}) *expression {
 	var id string
 
 	if iVar != nil {
@@ -100,16 +100,16 @@ func (tr *transform) newExpression(iVar interface{}) *expression {
 	}
 }
 
-// Returns the Go expression transformed to JavaScript.
-func (tr *transform) getExpression(expr ast.Expr) *expression {
+// getExpression returns the Go expression translated to JavaScript.
+func (tr *translate) getExpression(expr ast.Expr) *expression {
 	e := tr.newExpression(nil)
 
-	e.transform(expr)
+	e.translate(expr)
 	return e
 }
 
-// Transforms the Go expression.
-func (e *expression) transform(expr ast.Expr) {
+// translate translates the Go expression.
+func (e *expression) translate(expr ast.Expr) {
 	switch typ := expr.(type) {
 
 	// godoc go/ast ArrayType
@@ -144,14 +144,14 @@ func (e *expression) transform(expr ast.Expr) {
 		switch t := typ.Elt.(type) {
 		case *ast.ArrayType: // multi-dimensional array
 			e.isMultiDim = true
-			e.transform(typ.Elt)
+			e.translate(typ.Elt)
 		case *ast.Ident, *ast.StarExpr: // the type is initialized
 			e.zero, _ = e.tr.zeroValue(true, typ.Elt)
 
 			e.WriteString(fmt.Sprintf("],%s", SP+e.zero))
 
 		default:
-			panic(fmt.Sprintf("*expression.transform: type unimplemented: %T", t))
+			panic(fmt.Sprintf("*expression.translate: type unimplemented: %T", t))
 		}
 
 	// godoc go/ast BasicLit
@@ -197,9 +197,9 @@ func (e *expression) transform(expr ast.Expr) {
 		}
 
 		if e.tr.isConst {
-			e.transform(typ.X)
+			e.translate(typ.X)
 			e.WriteString(SP + op + SP)
-			e.transform(typ.Y)
+			e.translate(typ.Y)
 			break
 		}
 
@@ -260,9 +260,9 @@ func (e *expression) transform(expr ast.Expr) {
 	//  Fun      Expr      // function expression
 	//  Args     []Expr    // function arguments; or nil
 	case *ast.CallExpr:
-		// === Library
+		// == Library
 		if call, ok := typ.Fun.(*ast.SelectorExpr); ok {
-			e.transform(call)
+			e.translate(call)
 
 			str := fmt.Sprintf("%s", e.tr.GetArgs(e.funcName, typ.Args))
 			if e.funcName != "fmt.Sprintf" && e.funcName != "fmt.Sprint" {
@@ -273,17 +273,17 @@ func (e *expression) transform(expr ast.Expr) {
 			break
 		}
 
-		// === Conversion: []byte()
+		// == Conversion: []byte()
 		if call, ok := typ.Fun.(*ast.ArrayType); ok {
 			if call.Elt.(*ast.Ident).Name == "byte" {
-				e.transform(typ.Args[0])
+				e.translate(typ.Args[0])
 			} else {
 				panic(fmt.Sprintf("call of conversion unimplemented: []%T()", call))
 			}
 			break
 		}
 
-		// === Built-in functions - golang.org/pkg/builtin/
+		// == Built-in functions - golang.org/pkg/builtin/
 		call := typ.Fun.(*ast.Ident).Name
 
 		switch call {
@@ -314,7 +314,7 @@ func (e *expression) transform(expr ast.Expr) {
 				e.WriteString(fmt.Sprintf("g.Map(%s,%s{})", e.tr.zeroOfMap(argType), SP))
 
 			case *ast.ChanType:
-				e.transform(typ.Fun)
+				e.translate(typ.Fun)
 
 			default:
 				panic(fmt.Sprintf("call of 'make' unimplemented: %T", argType))
@@ -324,7 +324,7 @@ func (e *expression) transform(expr ast.Expr) {
 			switch argType := typ.Args[0].(type) {
 			case *ast.ArrayType:
 				for _, arg := range typ.Args {
-					e.transform(arg)
+					e.translate(arg)
 				}
 
 			case *ast.Ident:
@@ -350,7 +350,7 @@ func (e *expression) transform(expr ast.Expr) {
 		case "uint", "uint8", "uint16", "uint32",
 			"int", "int8", "int16", "int32",
 			"float32", "float64", "byte", "rune":
-			e.transform(typ.Args[0])
+			e.translate(typ.Args[0])
 			e.returnBasicLit = true
 		// ==
 
@@ -391,7 +391,7 @@ func (e *expression) transform(expr ast.Expr) {
 			e.WriteString(fmt.Sprintf("throw new Error(%s)",
 				e.tr.getExpression(typ.Args[0])))
 
-		// === Not supported
+		// == Not supported
 		case "recover", "complex":
 			e.tr.addError("%s: built-in function %s()",
 				e.tr.fset.Position(typ.Fun.Pos()), call)
@@ -403,7 +403,7 @@ func (e *expression) transform(expr ast.Expr) {
 			e.tr.hasError = true
 			return
 
-		// === Not implemented
+		// == Not implemented
 		case "append", "close", "copy", "uintptr":
 			panic(fmt.Sprintf("built-in call unimplemented: %s", call))
 
@@ -439,7 +439,7 @@ func (e *expression) transform(expr ast.Expr) {
 		switch compoType := typ.Type.(type) {
 		case *ast.ArrayType:
 			if !e.arrayHasElts {
-				e.transform(typ.Type)
+				e.translate(typ.Type)
 			}
 
 			if e.isEllipsis {
@@ -540,7 +540,7 @@ func (e *expression) transform(expr ast.Expr) {
 	//  Type *FuncType  // function type
 	//  Body *BlockStmt // function body
 	case *ast.FuncLit:
-		e.transform(typ.Type)
+		e.translate(typ.Type)
 		e.tr.getStatement(typ.Body)
 
 	// godoc go/ast FuncType
@@ -625,7 +625,7 @@ func (e *expression) transform(expr ast.Expr) {
 
 		// Could be multi-dimensional
 		if _, ok := typ.X.(*ast.IndexExpr); ok {
-			e.transform(typ.X)
+			e.translate(typ.X)
 			return
 		}
 		// ==
@@ -697,7 +697,7 @@ func (e *expression) transform(expr ast.Expr) {
 	//  X      Expr      // parenthesized expression
 	//  Rparen token.Pos // position of ")"
 	case *ast.ParenExpr:
-		e.transform(typ.X)
+		e.translate(typ.X)
 
 	// godoc go/ast SelectorExpr
 	//   X   Expr   // expression
@@ -708,11 +708,11 @@ func (e *expression) transform(expr ast.Expr) {
 
 		switch t := typ.X.(type) {
 		case *ast.SelectorExpr:
-			e.transform(typ.X)
+			e.translate(typ.X)
 		case *ast.Ident:
 			x = t.Name
 		case *ast.IndexExpr:
-			e.transform(t)
+			e.translate(t)
 			e.WriteString("." + typ.Sel.Name) // TODO: validIdent?
 			return
 		default:
@@ -732,7 +732,7 @@ func (e *expression) transform(expr ast.Expr) {
 			}
 		}
 
-		// Check if it can be transformed to its equivalent in JavaScript.
+		// Check if it can be translated to its equivalent in JavaScript.
 		if isPkg {
 			jsName, ok := Function[goName]
 			if !ok {
@@ -786,7 +786,7 @@ func (e *expression) transform(expr ast.Expr) {
 	//  X    Expr      // operand
 	case *ast.StarExpr:
 		e.isPointer = true
-		e.transform(typ.X)
+		e.translate(typ.X)
 
 	// godoc go/ast StructType
 	//  Struct     token.Pos  // position of "struct" keyword
@@ -817,7 +817,7 @@ func (e *expression) transform(expr ast.Expr) {
 		if writeOp {
 			e.WriteString(op)
 		}
-		e.transform(typ.X)
+		e.translate(typ.X)
 
 	// The type has not been indicated
 	case nil:
@@ -827,10 +827,10 @@ func (e *expression) transform(expr ast.Expr) {
 	}
 }
 
+// == Utility
 //
-// === Utility
 
-// Writes the list of composite elements.
+// writeElts writes the list of composite elements.
 func (e *expression) writeElts(elts []ast.Expr, Lbrace, Rbrace token.Pos) {
 	firstPos := e.tr.getLine(Lbrace)
 	posOldElt := firstPos
@@ -849,7 +849,7 @@ func (e *expression) writeElts(elts []ast.Expr, Lbrace, Rbrace token.Pos) {
 			e.WriteString(SP)
 		}
 
-		e.transform(el)
+		e.translate(el)
 		posOldElt = posNewElt
 	}
 
@@ -863,7 +863,7 @@ func (e *expression) writeElts(elts []ast.Expr, Lbrace, Rbrace token.Pos) {
 	e.tr.line += posNewElt - firstPos // update the global position
 }
 
-// Writes the list of elements for a custom type.
+// writeTypeElts writes the list of elements for a custom type.
 func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 	firstPos := e.tr.getLine(Lbrace)
 	posOldElt := firstPos
@@ -911,7 +911,7 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 
 // * * *
 
-// Strips the field name ".f".
+// stripField strips the field name ".f".
 func stripField(name string) string {
 	if strings.HasSuffix(name, ".f") {
 		return name[:len(name)-2]

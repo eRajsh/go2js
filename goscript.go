@@ -34,6 +34,7 @@ const (
 	ADDR = "<<&>>" // to mark assignments to addresses
 	IOTA = "<<iota>>"
 	NIL  = "<<nil>>"
+	VERB = "<<%>>"
 )
 
 var void struct{} // A struct without any elements occupies no space at all.
@@ -43,8 +44,8 @@ var (
 	MaxMessage = 10 // maximum number of errors and warnings to show.
 )
 
-// Represents information about code being transformed to JavaScript.
-type transform struct {
+// translate represents information about code being translated to JavaScript.
+type translate struct {
 	line     int // actual line
 	hasError bool
 
@@ -70,8 +71,8 @@ type transform struct {
 	zeroType map[int]map[int]map[string]string
 }
 
-func newTransform() *transform {
-	tr := &transform{
+func newTransform() *translate {
+	tr := &translate{
 		0,
 		false,
 
@@ -95,8 +96,8 @@ func newTransform() *transform {
 
 	// == Global variables
 	// Ones related to local variables are set in:
-	// file func: *transform.getFunc()
-	// file stmt: *transform.getStatement() (case: *ast.BlockStmt)
+	// file func: *translate.getFunc()
+	// file stmt: *translate.getStatement() (case: *ast.BlockStmt)
 
 	// funcId = 0
 	tr.vars[0] = make(map[int]map[string]bool)
@@ -115,15 +116,15 @@ func newTransform() *transform {
 	return tr
 }
 
-// Returns the line number.
-func (tr *transform) getLine(pos token.Pos) int {
+// getLine returns the line number.
+func (tr *translate) getLine(pos token.Pos) int {
 	// -1 because it was inserted a line (the header)
 	return tr.fset.Position(pos).Line - 1
 }
 
-// Appends new lines according to the position.
+// addLine appends new lines according to the position.
 // Returns a boolean to indicate if have been added.
-func (tr *transform) addLine(pos token.Pos) bool {
+func (tr *translate) addLine(pos token.Pos) bool {
 	var s string
 
 	new := tr.getLine(pos)
@@ -142,8 +143,8 @@ func (tr *transform) addLine(pos token.Pos) bool {
 	return true
 }
 
-// Appends an error.
-func (tr *transform) addError(value interface{}, a ...interface{}) {
+// addError appends an error.
+func (tr *translate) addError(value interface{}, a ...interface{}) {
 	if len(tr.err) == MaxMessage {
 		return
 	}
@@ -162,16 +163,16 @@ func (tr *transform) addError(value interface{}, a ...interface{}) {
 	}
 }
 
-// Appends a warning message.
-func (tr *transform) addWarning(format string, a ...interface{}) {
+// addWarning appends a warning message.
+func (tr *translate) addWarning(format string, a ...interface{}) {
 	if len(tr.warn) == MaxMessage {
 		return
 	}
 	tr.warn = append(tr.warn, fmt.Sprintf(format, a...))
 }
 
-// Appends the declaration name if it is exported.
-func (tr *transform) addIfExported(iName interface{}) {
+// addIfExported appends the declaration name if it is exported.
+func (tr *translate) addIfExported(iName interface{}) {
 	var name = ""
 
 	switch typ := iName.(type) {
@@ -188,7 +189,7 @@ func (tr *transform) addIfExported(iName interface{}) {
 
 // * * *
 
-// Compiles a Go source file into JavaScript.
+// Compile compiles a Go source file into JavaScript.
 // Writes the output in "filename" but with extension ".js".
 func Compile(filename string) error {
 	trans := newTransform()
@@ -297,7 +298,7 @@ func Compile(filename string) error {
 	}
 	trans.WriteString(NL)
 
-	// === Write
+	// == Write
 	baseFilename := strings.Replace(filename, path.Ext(filename), "", 1)
 	str := trans.String()
 

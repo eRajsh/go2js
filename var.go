@@ -18,7 +18,9 @@ import (
 //
 // http://golang.org/doc/go_spec.html#Constant_declarations
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/const
-func (tr *transform) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
+
+// getConst translates a constant.
+func (tr *translate) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
 	iotaExpr := make([]string, 0) // iota expressions
 	isMultipleLine := false
 	tr.isConst = true
@@ -80,7 +82,7 @@ func (tr *transform) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
 				tr.addIfExported(ident)
 			}
 
-			// === Write
+			// == Write
 			name := validIdent(ident.Name)
 
 			if isFirst {
@@ -122,7 +124,9 @@ func (tr *transform) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
 // http://golang.org/doc/go_spec.html#Variable_declarations
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/var
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/let
-func (tr *transform) getVar(spec []ast.Spec, isGlobal bool) {
+
+// getVar translates a variable.
+func (tr *translate) getVar(spec []ast.Spec, isGlobal bool) {
 	isMultipleLine := false
 
 	if len(spec) > 1 {
@@ -151,7 +155,9 @@ func (tr *transform) getVar(spec []ast.Spec, isGlobal bool) {
 // Types
 //
 // http://golang.org/doc/go_spec.html#Type_declarations
-func (tr *transform) getType(spec []ast.Spec, isGlobal bool) {
+
+// getType translates a custom type.
+func (tr *translate) getType(spec []ast.Spec, isGlobal bool) {
 	// godoc go/ast TypeSpec
 	//  Doc     *CommentGroup // associated documentation; or nil
 	//  Name    *Ident        // type name
@@ -192,7 +198,9 @@ func (tr *transform) getType(spec []ast.Spec, isGlobal bool) {
 
 // Struct
 //
-func (tr *transform) getStruct(typ *ast.StructType, name string, isGlobal bool) {
+
+// getStruct translates a custom struct.
+func (tr *translate) getStruct(typ *ast.StructType, name string, isGlobal bool) {
 	// godoc go/ast StructType
 	//  Struct     token.Pos  // position of "struct" keyword
 	//  Fields     *FieldList // list of field declarations
@@ -254,7 +262,7 @@ func (tr *transform) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 			fieldsInit += zero
 			//!anonField = append(anonField, false)
 
-			// === Printing of fields
+			// == Printing of fields
 			posNewField = tr.getLine(v.Pos())
 
 			if posNewField != posOldField {
@@ -281,7 +289,7 @@ func (tr *transform) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 			}
 
 			posOldField = posNewField
-			// ===
+			// ==
 
 			if isFirst {
 				isFirst = false
@@ -328,11 +336,11 @@ func (tr *transform) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 	tr.line += posNewField - firstPos // update the global position
 }
 
-// === Utility
+// == Utility
 //
 
-// Writes variables for both declarations and assignments.
-func (tr *transform) writeVar(names interface{}, values []ast.Expr, type_ interface{}, operator token.Token, isGlobal, isMultipleLine bool) {
+// writeVar translates variables for both declarations and assignments.
+func (tr *translate) writeVar(names interface{}, values []ast.Expr, type_ interface{}, operator token.Token, isGlobal, isMultipleLine bool) {
 	var sign string
 	var isNewVar, isBitClear bool
 
@@ -343,7 +351,7 @@ func (tr *transform) writeVar(names interface{}, values []ast.Expr, type_ interf
 		tr.WriteString(strings.Repeat(TAB, tr.tabLevel))
 	}
 
-	// === Operator
+	// == Operator
 	switch operator {
 	case token.DEFINE:
 		isNewVar = true
@@ -364,7 +372,7 @@ func (tr *transform) writeVar(names interface{}, values []ast.Expr, type_ interf
 		panic(fmt.Sprintf("operator unimplemented: %s", operator.String()))
 	}
 
-	// === Names
+	// == Names
 	var _names []string
 	var idxValidNames []int // index of variables which are not in blank
 	var nameIsPointer []bool
@@ -409,7 +417,7 @@ func (tr *transform) writeVar(names interface{}, values []ast.Expr, type_ interf
 	}
 
 	if values != nil {
-		// === Function
+		// == Function
 		if call, ok := values[0].(*ast.CallExpr); ok {
 
 			// Function literal
@@ -423,7 +431,7 @@ func (tr *transform) writeVar(names interface{}, values []ast.Expr, type_ interf
 				goto _noFunc
 			}
 
-			// === Assign variable to the output of a function
+			// == Assign variable to the output of a function
 			fun = tr.getExpression(call).String()
 
 			if len(_names) == 1 {
@@ -467,7 +475,7 @@ _noFunc:
 
 		tr.lastVarName = name
 
-		// === Name
+		// == Name
 		if isFirst {
 			nameExpr += name
 			isFirst = false
@@ -479,7 +487,7 @@ _noFunc:
 			nameExpr += tagPointer(false, 'P', tr.funcId, tr.blockId, name)
 		}
 
-		// === Value
+		// == Value
 		if isZeroValue {
 			if typeIs == sliceType {
 				tr.slices[tr.funcId][tr.blockId][name] = void
@@ -494,13 +502,13 @@ _noFunc:
 				valueOfValidName = values[i]
 			}
 
-			// If the expression is an anonymous function, then, at transforming,
+			// If the expression is an anonymous function, then, at translating,
 			// it is written in the main buffer.
 			expr = tr.newExpression(name)
 			expr.isValue = true
 
 			if _, ok := valueOfValidName.(*ast.FuncLit); !ok {
-				expr.transform(valueOfValidName)
+				expr.translate(valueOfValidName)
 				exprStr := expr.String()
 
 				if isBitClear {
@@ -542,7 +550,7 @@ _noFunc:
 				isFuncLit = true
 
 				tr.WriteString(nameExpr)
-				expr.transform(valueOfValidName)
+				expr.translate(valueOfValidName)
 			}
 
 			// Check if new variables assigned to another ones are slices or maps.
@@ -610,8 +618,8 @@ _noFunc:
 	}
 }
 
-// Returns the fields of a custom type.
-func (tr *transform) getTypeFields(fields []string) (args, allFields string) {
+// getTypeFields returns the fields of a custom type.
+func (tr *translate) getTypeFields(fields []string) (args, allFields string) {
 	for i, f := range fields {
 		if i == 0 {
 			args = f
@@ -625,7 +633,7 @@ func (tr *transform) getTypeFields(fields []string) (args, allFields string) {
 	return
 }
 
-// === Zero value
+// == Zero value
 //
 
 type dataType uint8
@@ -638,9 +646,9 @@ const (
 	structType
 )
 
-// Returns the zero value of the value type if "init", and a boolean indicating
-// if it is a pointer.
-func (tr *transform) zeroValue(init bool, typ interface{}) (value string, dt dataType) {
+// zeroValue returns the zero value of the value type if "init", and a boolean
+// indicating if it is a pointer.
+func (tr *translate) zeroValue(init bool, typ interface{}) (value string, dt dataType) {
 	var ident *ast.Ident
 
 	switch t := typ.(type) {
@@ -706,8 +714,8 @@ func (tr *transform) zeroValue(init bool, typ interface{}) (value string, dt dat
 	return
 }
 
-// Returns the zero value of a map.
-func (tr *transform) zeroOfMap(m *ast.MapType) string {
+// zeroOfMap returns the zero value of a map.
+func (tr *translate) zeroOfMap(m *ast.MapType) string {
 	if mapT, ok := m.Value.(*ast.MapType); ok { // nested map
 		return tr.zeroOfMap(mapT)
 	}
@@ -715,8 +723,8 @@ func (tr *transform) zeroOfMap(m *ast.MapType) string {
 	return v
 }
 
-// Returns the zero value of a custom type.
-func (tr *transform) zeroOfType(name string) string {
+// zeroOfType returns the zero value of a custom type.
+func (tr *translate) zeroOfType(name string) string {
 	// In the actual function
 	if tr.funcId != 0 {
 		for block := tr.blockId; block >= 1; block-- {
@@ -736,11 +744,11 @@ func (tr *transform) zeroOfType(name string) string {
 	panic("zeroOfType: type not found: " + name)
 }
 
-// === Checking
+// == Checking
 //
 
-// Checks if a variable name is of a specific data type.
-func (tr *transform) isType(t dataType, name string) bool {
+// isType checks if a variable name is of a specific data type.
+func (tr *translate) isType(t dataType, name string) bool {
 	if name == "" {
 		return false
 	}

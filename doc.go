@@ -31,7 +31,7 @@ Go sintaxis not supported:
 
 + Complex numbers, integers of 64 bits.
 + Function type, interface type excepting the empty interface.
-+ Channels, goroutines (could be transformed to Web Workers (http://www.html5rocks.com/en/tutorials/workers/basics/).
++ Channels, goroutines (could be translated to Web Workers (http://www.html5rocks.com/en/tutorials/workers/basics/).
 + Built-in function recover.
 + Defer statement.
 + Goto, labels. (1) In JavaScript, the labels are restricted to "for" and
@@ -50,10 +50,14 @@ By this reason, the integers of 64 bits are unsupported.
 
 #### Reserved words
 
-The reserved words and keywords used in JavaScript are transformed adding "_" at
+The reserved words and keywords used in JavaScript are translated adding "_" at
 the end of the name.
 
 See files "testdata/decl_reserved.{go,js}"
+
+#### Characters
+
+"\n" is translated to "<br>" while "\t" to four strings "&nbsp;".
 
 #### Initialization
 
@@ -119,19 +123,19 @@ By example, for a Go function like this:
 
 	sum, product := sumAndProduct(x, y)
 
-its transformation would be:
+its translation would be:
 
 	var _ = SumAndProduct(x, y), sum = _[0], product = _[1];
 
 #### Library
 
-JavaScript has several built-in functions and constants which can be transformed
+JavaScript has several built-in functions and constants which can be translated
 from Go. They are defined in the maps "Constant", and "Function".
 
 Since the Go functions "print" and "println" are used to debug, they are
-transformed to "alert".
+translated to "alert".
 
-"panic" is transformed to "throw new Error()".
+"panic" is translated to "throw new Error()".
 
 #### Modularity
 
@@ -152,7 +156,7 @@ By example, for a package named "foo" with names exported "Add" and "Product":
 ## Contributing
 
 If you are going to change code related to the compiler then you should run
-"go test" after of each change in your forked repository. It will transform the
+"go test" after of each change in your forked repository. It will translate the
 Go files in the directory "testdata"; to see the differences use "git diff",
 checking whether the change in the JavaScript files is what you were expecting.  
 It is also expected to get some errors and warnings in some of them, which are
@@ -163,13 +167,13 @@ address "file:///PATH_TO/goscript/testdata/test.html".
 
 Ideas:
 
-+ Implement the new JS API for HTML5, transforming it from Go functions. See
++ Implement the new JS API for HTML5, translating it from Go functions. See
  both maps *Constant* and *Function* in file "library.go". But you must be sure
  that the API is already implemented in both browsers Firefox and Chrome.
 + The Dart library (http://api.dartlang.org/) could be used like inspiration to
  write web libraries, especially "dom" and "html".
 + JavaScript library to handle integers of 64 bits. Build it in Go since it
- can be transformed to JS ;)
+ can be translated to JS ;)
 
 
 ## Vision

@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-// Represents data for the statements.
+// dataStmt represents data for the statements.
 type dataStmt struct {
 	funcTotal int // number total of functions
 	funcId    int // number of function
@@ -37,8 +37,8 @@ type dataStmt struct {
 	recvVar     string // receiver variable (in methods)
 }
 
-// Transforms the Go statement.
-func (tr *transform) getStatement(stmt ast.Stmt) {
+// getStatement translates the Go statement.
+func (tr *translate) getStatement(stmt ast.Stmt) {
 	switch typ := stmt.(type) {
 
 	// http://golang.org/doc/go_spec.html#Arithmetic_operators
@@ -133,7 +133,7 @@ func (tr *transform) getStatement(stmt ast.Stmt) {
 		// http://golang.org/doc/go_spec.html#Fallthrough_statements
 		case token.FALLTHROUGH:
 			tr.wasFallthrough = true
-		case token.GOTO: // not used since "label" is not transformed
+		case token.GOTO: // not used since "label" is not translated
 			tr.addError("%s: goto directive", tr.fset.Position(typ.TokPos))
 		}
 
@@ -382,7 +382,7 @@ func (tr *transform) getStatement(stmt ast.Stmt) {
 		tr.WriteString(fmt.Sprintf("switch%s(%s)%s", SP, tag, SP))
 		tr.getStatement(typ.Body)
 
-	// === Not supported
+	// == Not supported
 
 	// http://golang.org/doc/go_spec.html#Defer_statements
 	//

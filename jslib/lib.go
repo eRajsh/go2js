@@ -88,7 +88,7 @@ func mergeArray(dst, src []interface{}) {
 	}
 }
 
-// TODO: could be done during transformation, if it isn't possible TODO 1
+// TODO: could be done during translation, if it isn't possible TODO 1
 // equalDim reports whether d1 and d2 are equal.
 func equalDim(d1, d2 []uint) bool {
 	if len(d1) != len(d2) {
@@ -102,7 +102,7 @@ func equalDim(d1, d2 []uint) bool {
 	return true
 }
 
-// TODO: could be done during transformation, if it isn't possible TODO 1
+// TODO: could be done during translation, if it isn't possible TODO 1
 // getDimArray returns the dimension of an array.
 func getDimArray(a []interface{}) (dim []uint) {
 	for {

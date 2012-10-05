@@ -165,11 +165,6 @@ func testReturn() {
 	}
 }
 
-func testPanic() {
-	panic("unreachable")
-	panic(fmt.Sprintf("not implemented: %s", "foo"))
-}
-
 func main() {
 	fmt.Print("\n\n== Functions\n")
 
@@ -185,8 +180,6 @@ func main() {
 	resultVariable()
 	fmt.Print("\n=== RUN testReturn\n")
 	testReturn()
-	fmt.Print("\n=== RUN testPanic\n")
-	testPanic()
 
 	if PASS {
 		fmt.Print("\nPASS\n")
@@ -194,4 +187,7 @@ func main() {
 		fmt.Print("\nFAIL\n")
 		print("Fail: Functions")
 	}
+
+	panic("unreachable")
+	panic(fmt.Sprintf("not implemented: %s", "foo"))
 }

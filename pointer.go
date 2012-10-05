@@ -35,7 +35,7 @@ name, and `<<&>>` after of it when the assignment is an address.
 // To remove tags related to pointers
 var reTagPointer = regexp.MustCompile(`<<z?[LRP]:\d+:\d+:[^>]+>>`)
 
-// Returns a tag to identify pointers.
+// tagPointer returns a tag to identify pointers.
 // The argument field indicates if the variable is zero.
 func tagPointer(zero bool, typ rune, funcId, blockId int, name string) string {
 	/*if typ != 'L' && typ != 'R' && typ != 'P' {
@@ -50,8 +50,8 @@ func tagPointer(zero bool, typ rune, funcId, blockId int, name string) string {
 	return fmt.Sprintf("<<%s:%d:%d:%s>>", zeroStr+string(typ), funcId, blockId, name)
 }
 
-// Search the point where the variable was declared for tag it as pointer.
-func (tr *transform) addPointer(name string) {
+// addPointer searches the point where the variable was declared for tag it as pointer.
+func (tr *translate) addPointer(name string) {
 	// In the actual function
 	if tr.funcId != 0 {
 		for block := tr.blockId; block >= 1; block-- {
@@ -73,8 +73,8 @@ func (tr *transform) addPointer(name string) {
 	panic("addPointer: unreachable")
 }
 
-// Replaces tags related to variables addressed.
-func (tr *transform) replacePointers(str *string) {
+// replacePointers replaces tags related to variables addressed.
+func (tr *translate) replacePointers(str *string) {
 	// Replaces tags in variables that access to pointers.
 	replaceLocal := func(funcId, startBlock, endBlock int, varName string) {
 		for block := startBlock; block <= endBlock; block++ {
@@ -125,7 +125,7 @@ func (tr *transform) replacePointers(str *string) {
 		}
 	}
 
-	// === Global pointers
+	// == Global pointers
 	globalScope := 0
 
 	replaceGlobal := func(globVarName string) {

@@ -73,7 +73,7 @@ var reserved = map[string]struct{}{
 
 var validImport = []string{"fmt", "math", "rand"}
 
-// Constants to transform.
+// Constants to translate.
 var Constant = map[string]string{
 	"math.E":      "Math.E",
 	"math.Ln2":    "Math.LN2",
@@ -84,7 +84,7 @@ var Constant = map[string]string{
 	"math.Sqrt2":  "Math.SQRT2",
 }
 
-// Functions that can be transformed since JavaScript has an equivalent one.
+// Functions that can be translated since JavaScript has an equivalent one.
 var Function = map[string]string{
 	"fmt.Print":   "document.write",
 	"fmt.Println": "document.write",
@@ -119,7 +119,9 @@ var Function = map[string]string{
 //
 // http://golang.org/doc/go_spec.html#Import_declarations
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/import
-func (tr *transform) getImport(spec []ast.Spec) {
+
+// getImport translates an import sentence.
+func (tr *translate) getImport(spec []ast.Spec) {
 
 	// godoc go/ast ImportSpec
 	//  Doc     *CommentGroup // associated documentation; or nil
@@ -152,8 +154,8 @@ func (tr *transform) getImport(spec []ast.Spec) {
 	}
 }
 
-// Returns the arguments of a Go function, formatted for JS.
-func (tr *transform) GetArgs(funcName string, args []ast.Expr) string {
+// GetArgs returns the arguments of a Go function, formatted for JS.
+func (tr *translate) GetArgs(funcName string, args []ast.Expr) string {
 	var jsArgs string
 
 	switch funcName {
@@ -175,8 +177,8 @@ func (tr *transform) GetArgs(funcName string, args []ast.Expr) string {
 	return jsArgs
 }
 
+// == Utility
 //
-// === Utility
 
 // validIdent checks if the name is a reserved word in JavaScript, returning a
 // safe name adding "_" at the end of the name.
@@ -193,8 +195,8 @@ func validIdent(name interface{}) string {
 	return name_
 }
 
-// Returns arguments of Print, Println.
-func (tr *transform) joinArgsPrint(args []ast.Expr, addLine bool) string {
+// joinArgsPrint returns arguments of Print, Println.
+func (tr *translate) joinArgsPrint(args []ast.Expr, addLine bool) string {
 	var jsArgs string
 	lenArgs := len(args) - 1
 
@@ -236,13 +238,11 @@ var (
 	reVerbWidth = regexp.MustCompile(`%[0-9]+[.]?[0-9]*[bcdefgoqxEGUXsqxX]`)
 )
 
-const VERB = "<<V>>"
-
-// Returns arguments of Printf.
-func (tr *transform) joinArgsPrintf(args []ast.Expr) string {
+// joinArgsPrintf returns arguments of Printf.
+func (tr *translate) joinArgsPrintf(args []ast.Expr) string {
 	result := ""
 
-	// === Format
+	// == Format
 	format := tr.getExpression(args[0]).String()
 
 	format = strings.Replace(format, "%%", "%", -1) // literal percent sign
@@ -251,7 +251,7 @@ func (tr *transform) joinArgsPrintf(args []ast.Expr) string {
 	if reVerbWidth.MatchString(format) {
 		format = reVerbWidth.ReplaceAllString(format, VERB)
 	}
-	// ===
+	// ==
 
 	values := strings.Split(format, VERB)
 

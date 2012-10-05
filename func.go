@@ -16,7 +16,9 @@ import (
 //
 // http://golang.org/doc/go_spec.html#Function_declarations
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/function
-func (tr *transform) getFunc(decl *ast.FuncDecl) {
+
+// getFunc translates a function.
+func (tr *translate) getFunc(decl *ast.FuncDecl) {
 	// godoc go/ast FuncDecl
 	//  Doc  *CommentGroup // associated documentation; or nil
 	//  Recv *FieldList    // receiver (methods); or nil (functions)
@@ -92,8 +94,8 @@ func (tr *transform) getFunc(decl *ast.FuncDecl) {
 //  Tag     *BasicLit     // field tag; or nil
 //  Comment *CommentGroup // line comments; or nil
 
-// Writes the function declaration.
-func (tr *transform) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.FuncType) {
+// writeFunc writes the function declaration.
+func (tr *translate) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.FuncType) {
 	if recv != nil { // method
 		field := recv.List[0]
 		tr.recvVar = field.Names[0].Name
@@ -125,7 +127,7 @@ func (tr *transform) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.Fu
 	}
 }
 
-// Gets the parameters.
+// joinParams gets the parameters.
 func joinParams(f *ast.FuncType) string {
 	isFirst := true
 	s := ""
@@ -150,8 +152,8 @@ func joinParams(f *ast.FuncType) string {
 	return s
 }
 
-// Gets the results to use both in the declaration and in its return.
-func (tr *transform) joinResults(f *ast.FuncType) (decl, ret string) {
+// joinResults gets the results to use both in the declaration and in its return.
+func (tr *translate) joinResults(f *ast.FuncType) (decl, ret string) {
 	isFirst := true
 	isMultiple := false
 

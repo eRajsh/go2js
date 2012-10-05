@@ -165,11 +165,6 @@ function testReturn() {
 	}
 }
 
-function testPanic() {
-	throw new Error("unreachable");
-	throw new Error("not implemented: " + "foo" + "");
-}
-
 function main() {
 	document.write("<br><br>== Functions<br>");
 
@@ -185,8 +180,6 @@ function main() {
 	resultVariable();
 	document.write("<br>=== RUN testReturn<br>");
 	testReturn();
-	document.write("<br>=== RUN testPanic<br>");
-	testPanic();
 
 	if (PASS) {
 		document.write("<br>PASS<br>");
@@ -194,4 +187,7 @@ function main() {
 		document.write("<br>FAIL<br>");
 		alert("Fail: Functions");
 	}
+
+	throw new Error("unreachable");
+	throw new Error("not implemented: " + "foo" + "");
 } main();
