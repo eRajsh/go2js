@@ -33,7 +33,7 @@ func TestFuncMore(t *testing.T) { compile('t', "func-more.go", t) }
 func TestMethod(t *testing.T)   { compile('t', "method.go", t) }
 
 func ExampleControl() {
-	Compile(DIR_TEST + "control.go")
+	Compile(DIR_TEST+"control.go", true)
 
 	// Output:
 	// == Warnings
@@ -42,7 +42,7 @@ func ExampleControl() {
 }
 
 func ExampleDecl() {
-	Compile(DIR_TEST + "error_decl.go")
+	Compile(DIR_TEST+"error_decl.go", true)
 
 	// Output:
 	// == Errors
@@ -72,7 +72,7 @@ func ExampleDecl() {
 }
 
 func ExampleStmt() {
-	Compile(DIR_TEST + "error_stmt.go")
+	Compile(DIR_TEST+"error_stmt.go", true)
 
 	// Output:
 	// == Errors
@@ -105,7 +105,7 @@ func compile(kind rune, filename string, t *testing.T) {
 		panic("Wrong kind")
 	}
 
-	if err := Compile(dir + filename); err != nil {
+	if err := Compile(dir+filename, true); err != nil {
 		t.Fatalf("expected parse file: %s", err)
 	}
 }

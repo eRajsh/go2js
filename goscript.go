@@ -9,11 +9,13 @@ package main
 import (
 	"bytes"
 	"errors"
+	"flag"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"strings"
@@ -196,8 +198,8 @@ func (tr *translate) addIfExported(iName interface{}) {
 // * * *
 
 // Compile compiles a Go source file into JavaScript.
-// Writes the output in "filename" but with extension ".js".
-func Compile(filename string) error {
+// If write is true, writes the output in "filename" but with extension ".js".
+func Compile(filename string, write bool) error {
 	trans := newTransform()
 	pkgName := ""
 
@@ -263,7 +265,7 @@ func Compile(filename string) error {
 	if trans.hasError {
 		fmt.Fprint(os.Stderr, " == Errors\n\n")
 
-		for _, err := range trans.err {
+		for _, err = range trans.err {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
 		}
 		if len(trans.err) == MaxMessage {
@@ -311,23 +313,33 @@ func Compile(filename string) error {
 	// Variables addressed
 	trans.replacePointers(&str)
 
-	// Version to debug
-	deb := strings.Replace(str, NL, "\n", -1)
-	deb = strings.Replace(deb, TAB, "\t", -1)
-	deb = strings.Replace(deb, SP, " ", -1)
+	// Regular code
+	code := strings.Replace(str, NL, "\n", -1)
+	code = strings.Replace(code, TAB, "\t", -1)
+	code = strings.Replace(code, SP, " ", -1)
 
-	if err := ioutil.WriteFile(baseFilename+".js", []byte(deb), 0664); err != nil {
-		return err
+	if write {
+		if err = ioutil.WriteFile(baseFilename+".js", []byte(code), 0664); err != nil {
+			return err
+		}
+	} else {
+		os.Stdout.WriteString(code)
 	}
 
-	/*// Minimized version
-	min := strings.Replace(str, NL, "", -1)
-	min = strings.Replace(min, TAB, "", -1)
-	min = strings.Replace(min, SP, "", -1)
+	// Minimized code
+	if *fMin {
+		min := strings.Replace(str, NL, "", -1)
+		min = strings.Replace(min, TAB, "", -1)
+		min = strings.Replace(min, SP, "", -1)
 
-	if err := ioutil.WriteFile(baseFilename + ".min.js", []byte(min), 0664); err != nil {
-		return err
-	}*/
+		if write {
+			if err = ioutil.WriteFile(baseFilename+".min.js", []byte(min), 0664); err != nil {
+				return err
+			}
+		} else {
+			os.Stdout.WriteString(min)
+		}
+	}
 
 	// Print warnings
 	if len(trans.warn) != 0 {
@@ -345,4 +357,37 @@ func Compile(filename string) error {
 		fmt.Println(k, v)
 	}*/
 	return nil
+}
+
+// Flags
+var (
+	fMin   = flag.Bool("min", false, "also create code minimized")
+	fWrite = flag.Bool("w", false, "write output to file")
+)
+
+func usage() {
+	fmt.Fprintf(os.Stderr, `Usage: goscript [-min -w] file...
+Compile translating Go to JavaScript.
+
+`)
+	flag.PrintDefaults()
+	os.Exit(2)
+}
+
+func main() {
+	flag.Usage = usage
+	flag.Parse()
+
+	if len(os.Args) == 1 {
+		usage()
+	}
+
+	log.SetFlags(0)
+	log.SetPrefix("FAIL! ")
+
+	for _, filename := range flag.Args() {
+		if err := Compile(filename, *fWrite); err != nil {
+			log.Printf("%s: %s\n", filename, err)
+		}
+	}
 }
