@@ -137,19 +137,19 @@ func withNamedType() {
 }
 
 func main() {
-	fmt.Print("\n\n== Methods\n")
+	fmt.Print("\n\n== Methods\n\n")
 
-	fmt.Print("\n=== RUN noMethod\n")
+	fmt.Println("=== RUN noMethod")
 	noMethod()
-	fmt.Print("\n=== RUN method\n")
+	fmt.Println("=== RUN method")
 	method()
-	fmt.Print("\n=== RUN withNamedType\n")
+	fmt.Println("=== RUN withNamedType")
 	withNamedType()
 
 	if PASS {
-		fmt.Print("\nPASS\n")
+		fmt.Println("PASS")
 	} else {
-		fmt.Print("\nFAIL\n")
+		fmt.Println("FAIL")
 		print("Fail: Methods")
 	}
 }

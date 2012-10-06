@@ -248,21 +248,21 @@ func testRange() {
 }
 
 func main() {
-	fmt.Print("\n\n== Control statements\n")
+	fmt.Print("\n\n== Control statements\n\n")
 
-	fmt.Print("\n=== RUN testIf\n")
+	fmt.Println("=== RUN testIf")
 	testIf()
-	fmt.Print("\n=== RUN testSwitch\n")
+	fmt.Println("=== RUN testSwitch")
 	testSwitch()
-	fmt.Print("\n=== RUN testFor\n")
+	fmt.Println("=== RUN testFor")
 	testFor()
-	fmt.Print("\n=== RUN testRange\n")
+	fmt.Println("=== RUN testRange")
 	testRange()
 
 	if PASS {
-		fmt.Print("\nPASS\n")
+		fmt.Println("PASS")
 	} else {
-		fmt.Print("\nFAIL\n")
+		fmt.Println("FAIL")
 		print("Fail: Control statements")
 	}
 }

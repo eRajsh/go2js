@@ -314,7 +314,7 @@ func Map(zero interface{}, m map[interface{}]interface{}, cap uint) *mapType {
 	return m
 }
 
-// Gets the value for the key "k".
+// get returns the value for the key "k" if it exists and a boolean indicating it.
 // If looking some key up in M's map gets you "nil" ("undefined" in JS),
 // then return a copy of the zero value.
 func (m mapType) get(k interface{}) (interface{}, bool) {

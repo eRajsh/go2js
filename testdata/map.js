@@ -232,27 +232,27 @@ function blankIdInRange() {
 }
 
 function main() {
-	document.write("<br><br>== Maps<br>");
+	document.write("<br><br>== Maps<br><br>");
 
-	document.write("<br>=== RUN nilValue<br>");
+	document.write("=== RUN nilValue<br>");
 	nilValue();
-	document.write("<br>=== RUN declaration<br>");
+	document.write("=== RUN declaration<br>");
 	declaration();
-	document.write("<br>=== RUN reference<br>");
+	document.write("=== RUN reference<br>");
 	reference();
-	document.write("<br>=== RUN keyNoExistent<br>");
+	document.write("=== RUN keyNoExistent<br>");
 	keyNoExistent();
-	document.write("<br>=== RUN deleteKey<br>");
+	document.write("=== RUN deleteKey<br>");
 	deleteKey();
-	document.write("<br>=== RUN testRange<br>");
+	document.write("=== RUN testRange<br>");
 	testRange();
-	document.write("<br>=== RUN blankIdInRange<br>");
+	document.write("=== RUN blankIdInRange<br>");
 	blankIdInRange();
 
 	if (PASS) {
-		document.write("<br>PASS<br>");
+		document.write("PASS<br>");
 	} else {
-		document.write("<br>FAIL<br>");
+		document.write("FAIL<br>");
 		alert("Fail: Maps");
 	}
 } main();

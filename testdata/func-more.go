@@ -92,9 +92,9 @@ func main() {
 	}
 
 	if PASS {
-		fmt.Print("\nPASS\n")
+		fmt.Println("PASS")
 	} else {
-		fmt.Print("\nFAIL\n")
+		fmt.Println("FAIL")
 		print("Fail: More functions")
 	}
 }

@@ -166,25 +166,25 @@ function testReturn() {
 }
 
 function main() {
-	document.write("<br><br>== Functions<br>");
+	document.write("<br><br>== Functions<br><br>");
 
-	document.write("<br>=== RUN testInit<br>");
+	document.write("=== RUN testInit<br>");
 	testInit();
-	document.write("<br>=== RUN singleLine<br>");
+	document.write("=== RUN singleLine<br>");
 	singleLine();
-	document.write("<br>=== RUN simpleFunc<br>");
+	document.write("=== RUN simpleFunc<br>");
 	simpleFunc();
-	document.write("<br>=== RUN twoOuputValues<br>");
+	document.write("=== RUN twoOuputValues<br>");
 	twoOuputValues();
-	document.write("<br>=== RUN resultVariable<br>");
+	document.write("=== RUN resultVariable<br>");
 	resultVariable();
-	document.write("<br>=== RUN testReturn<br>");
+	document.write("=== RUN testReturn<br>");
 	testReturn();
 
 	if (PASS) {
-		document.write("<br>PASS<br>");
+		document.write("PASS<br>");
 	} else {
-		document.write("<br>FAIL<br>");
+		document.write("FAIL<br>");
 		alert("Fail: Functions");
 	}
 

@@ -166,25 +166,25 @@ func testReturn() {
 }
 
 func main() {
-	fmt.Print("\n\n== Functions\n")
+	fmt.Print("\n\n== Functions\n\n")
 
-	fmt.Print("\n=== RUN testInit\n")
+	fmt.Println("=== RUN testInit")
 	testInit()
-	fmt.Print("\n=== RUN singleLine\n")
+	fmt.Println("=== RUN singleLine")
 	singleLine()
-	fmt.Print("\n=== RUN simpleFunc\n")
+	fmt.Println("=== RUN simpleFunc")
 	simpleFunc()
-	fmt.Print("\n=== RUN twoOuputValues\n")
+	fmt.Println("=== RUN twoOuputValues")
 	twoOuputValues()
-	fmt.Print("\n=== RUN resultVariable\n")
+	fmt.Println("=== RUN resultVariable")
 	resultVariable()
-	fmt.Print("\n=== RUN testReturn\n")
+	fmt.Println("=== RUN testReturn")
 	testReturn()
 
 	if PASS {
-		fmt.Print("\nPASS\n")
+		fmt.Println("PASS")
 	} else {
-		fmt.Print("\nFAIL\n")
+		fmt.Println("FAIL")
 		print("Fail: Functions")
 	}
 

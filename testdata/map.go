@@ -232,27 +232,27 @@ func blankIdInRange() {
 }
 
 func main() {
-	fmt.Print("\n\n== Maps\n")
+	fmt.Print("\n\n== Maps\n\n")
 
-	fmt.Print("\n=== RUN nilValue\n")
+	fmt.Println("=== RUN nilValue")
 	nilValue()
-	fmt.Print("\n=== RUN declaration\n")
+	fmt.Println("=== RUN declaration")
 	declaration()
-	fmt.Print("\n=== RUN reference\n")
+	fmt.Println("=== RUN reference")
 	reference()
-	fmt.Print("\n=== RUN keyNoExistent\n")
+	fmt.Println("=== RUN keyNoExistent")
 	keyNoExistent()
-	fmt.Print("\n=== RUN deleteKey\n")
+	fmt.Println("=== RUN deleteKey")
 	deleteKey()
-	fmt.Print("\n=== RUN testRange\n")
+	fmt.Println("=== RUN testRange")
 	testRange()
-	fmt.Print("\n=== RUN blankIdInRange\n")
+	fmt.Println("=== RUN blankIdInRange")
 	blankIdInRange()
 
 	if PASS {
-		fmt.Print("\nPASS\n")
+		fmt.Println("PASS")
 	} else {
-		fmt.Print("\nFAIL\n")
+		fmt.Println("FAIL")
 		print("Fail: Maps")
 	}
 }

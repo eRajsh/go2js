@@ -248,21 +248,21 @@ function testRange() {
 }
 
 function main() {
-	document.write("<br><br>== Control statements<br>");
+	document.write("<br><br>== Control statements<br><br>");
 
-	document.write("<br>=== RUN testIf<br>");
+	document.write("=== RUN testIf<br>");
 	testIf();
-	document.write("<br>=== RUN testSwitch<br>");
+	document.write("=== RUN testSwitch<br>");
 	testSwitch();
-	document.write("<br>=== RUN testFor<br>");
+	document.write("=== RUN testFor<br>");
 	testFor();
-	document.write("<br>=== RUN testRange<br>");
+	document.write("=== RUN testRange<br>");
 	testRange();
 
 	if (PASS) {
-		document.write("<br>PASS<br>");
+		document.write("PASS<br>");
 	} else {
-		document.write("<br>FAIL<br>");
+		document.write("FAIL<br>");
 		alert("Fail: Control statements");
 	}
 } main();

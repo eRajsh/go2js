@@ -300,23 +300,23 @@ function resize() {
 }
 
 function main() {
-	document.write("<br><br>== Slices<br>");
+	document.write("<br><br>== Slices<br><br>");
 
-	document.write("<br>=== RUN initialValue<br>");
+	document.write("=== RUN initialValue<br>");
 	initialValue();
-	document.write("<br>=== RUN shortHand<br>");
+	document.write("=== RUN shortHand<br>");
 	shortHand();
-	document.write("<br>=== RUN useFunc<br>");
+	document.write("=== RUN useFunc<br>");
 	useFunc();
-	document.write("<br>=== RUN reference<br>");
+	document.write("=== RUN reference<br>");
 	reference();
-	document.write("<br>=== RUN resize<br>");
+	document.write("=== RUN resize<br>");
 	resize();
 
 	if (PASS) {
-		document.write("<br>PASS<br>");
+		document.write("PASS<br>");
 	} else {
-		document.write("<br>FAIL<br>");
+		document.write("FAIL<br>");
 		alert("Fail: Slices");
 	}
 } main();

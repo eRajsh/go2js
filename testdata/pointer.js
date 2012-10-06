@@ -214,33 +214,33 @@ function byReference_3() {
 }
 
 function main() {
-	document.write("<br><br>== Pointers<br>");
+	document.write("<br><br>== Pointers<br><br>");
 
-	document.write("<br>=== RUN declaration<br>");
+	document.write("=== RUN declaration<br>");
 	declaration();
-	document.write("<br>=== RUN showAddress<br>");
+	document.write("=== RUN showAddress<br>");
 	showAddress();
 
-	document.write("<br>=== RUN nilValue<br>");
+	document.write("=== RUN nilValue<br>");
 	nilValue();
-	document.write("<br>=== RUN access<br>");
+	document.write("=== RUN access<br>");
 	access();
-	document.write("<br>=== RUN allocation<br>");
+	document.write("=== RUN allocation<br>");
 	allocation();
 
-	document.write("<br>=== RUN parameterByValue<br>");
+	document.write("=== RUN parameterByValue<br>");
 	parameterByValue();
-	document.write("<br>=== RUN byReference_1<br>");
+	document.write("=== RUN byReference_1<br>");
 	byReference_1();
-	document.write("<br>=== RUN byReference_2<br>");
+	document.write("=== RUN byReference_2<br>");
 	byReference_2();
-	document.write("<br>=== RUN byReference_3<br>");
+	document.write("=== RUN byReference_3<br>");
 	byReference_3();
 
 	if (PASS) {
-		document.write("<br>PASS<br>");
+		document.write("PASS<br>");
 	} else {
-		document.write("<br>FAIL<br>");
+		document.write("FAIL<br>");
 		alert("Fail: Pointers");
 	}
 } main();

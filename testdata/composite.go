@@ -210,24 +210,24 @@ func testStruct() {
 }
 
 func main() {
-	fmt.Print("\n\n== Composite types\n")
+	fmt.Print("\n\n== Composite types\n\n")
 
-	fmt.Print("\n=== RUN zeroArray\n")
+	fmt.Println("=== RUN zeroArray")
 	zeroArray()
-	fmt.Print("\n=== RUN initArray\n")
+	fmt.Println("=== RUN initArray")
 	initArray()
-	fmt.Print("\n=== RUN testArray\n")
+	fmt.Println("=== RUN testArray")
 	testArray()
-	fmt.Print("\n=== RUN multiArray\n")
+	fmt.Println("=== RUN multiArray")
 	multiArray()
 
-	fmt.Print("\n=== RUN testStruct\n")
+	fmt.Println("=== RUN testStruct")
 	testStruct()
 
 	if PASS {
-		fmt.Print("\nPASS\n")
+		fmt.Println("PASS")
 	} else {
-		fmt.Print("\nFAIL\n")
+		fmt.Println("FAIL")
 		print("Fail: Composite types")
 	}
 }

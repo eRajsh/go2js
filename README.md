@@ -11,7 +11,7 @@ Translation compiler from Go to JavaScript.
 ## QUESTIONS
 
 + Type "nil" is translated to "void 0", should be translated to "undefined"?
-+ New lines "\n" are translated to "<br>", any problem?
++ New lines "\n" are translated to `<br>`, any problem?
 + print/println are translated to "document.write", but since they are used to
   debug, would be better to translate them to "alert"?
 

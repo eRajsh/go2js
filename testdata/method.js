@@ -137,19 +137,19 @@ function withNamedType() {
 }
 
 function main() {
-	document.write("<br><br>== Methods<br>");
+	document.write("<br><br>== Methods<br><br>");
 
-	document.write("<br>=== RUN noMethod<br>");
+	document.write("=== RUN noMethod<br>");
 	noMethod();
-	document.write("<br>=== RUN method<br>");
+	document.write("=== RUN method<br>");
 	method();
-	document.write("<br>=== RUN withNamedType<br>");
+	document.write("=== RUN withNamedType<br>");
 	withNamedType();
 
 	if (PASS) {
-		document.write("<br>PASS<br>");
+		document.write("PASS<br>");
 	} else {
-		document.write("<br>FAIL<br>");
+		document.write("FAIL<br>");
 		alert("Fail: Methods");
 	}
 } main();

@@ -214,33 +214,33 @@ func byReference_3() {
 }
 
 func main() {
-	fmt.Print("\n\n== Pointers\n")
+	fmt.Print("\n\n== Pointers\n\n")
 
-	fmt.Print("\n=== RUN declaration\n")
+	fmt.Println("=== RUN declaration")
 	declaration()
-	fmt.Print("\n=== RUN showAddress\n")
+	fmt.Println("=== RUN showAddress")
 	showAddress()
 
-	fmt.Print("\n=== RUN nilValue\n")
+	fmt.Println("=== RUN nilValue")
 	nilValue()
-	fmt.Print("\n=== RUN access\n")
+	fmt.Println("=== RUN access")
 	access()
-	fmt.Print("\n=== RUN allocation\n")
+	fmt.Println("=== RUN allocation")
 	allocation()
 
-	fmt.Print("\n=== RUN parameterByValue\n")
+	fmt.Println("=== RUN parameterByValue")
 	parameterByValue()
-	fmt.Print("\n=== RUN byReference_1\n")
+	fmt.Println("=== RUN byReference_1")
 	byReference_1()
-	fmt.Print("\n=== RUN byReference_2\n")
+	fmt.Println("=== RUN byReference_2")
 	byReference_2()
-	fmt.Print("\n=== RUN byReference_3\n")
+	fmt.Println("=== RUN byReference_3")
 	byReference_3()
 
 	if PASS {
-		fmt.Print("\nPASS\n")
+		fmt.Println("PASS")
 	} else {
-		fmt.Print("\nFAIL\n")
+		fmt.Println("FAIL")
 		print("Fail: Pointers")
 	}
 }

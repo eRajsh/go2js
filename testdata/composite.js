@@ -210,24 +210,24 @@ function testStruct() {
 }
 
 function main() {
-	document.write("<br><br>== Composite types<br>");
+	document.write("<br><br>== Composite types<br><br>");
 
-	document.write("<br>=== RUN zeroArray<br>");
+	document.write("=== RUN zeroArray<br>");
 	zeroArray();
-	document.write("<br>=== RUN initArray<br>");
+	document.write("=== RUN initArray<br>");
 	initArray();
-	document.write("<br>=== RUN testArray<br>");
+	document.write("=== RUN testArray<br>");
 	testArray();
-	document.write("<br>=== RUN multiArray<br>");
+	document.write("=== RUN multiArray<br>");
 	multiArray();
 
-	document.write("<br>=== RUN testStruct<br>");
+	document.write("=== RUN testStruct<br>");
 	testStruct();
 
 	if (PASS) {
-		document.write("<br>PASS<br>");
+		document.write("PASS<br>");
 	} else {
-		document.write("<br>FAIL<br>");
+		document.write("FAIL<br>");
 		alert("Fail: Composite types");
 	}
 } main();

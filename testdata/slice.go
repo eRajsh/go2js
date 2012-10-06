@@ -300,23 +300,23 @@ func resize() {
 }
 
 func main() {
-	fmt.Print("\n\n== Slices\n")
+	fmt.Print("\n\n== Slices\n\n")
 
-	fmt.Print("\n=== RUN initialValue\n")
+	fmt.Println("=== RUN initialValue")
 	initialValue()
-	fmt.Print("\n=== RUN shortHand\n")
+	fmt.Println("=== RUN shortHand")
 	shortHand()
-	fmt.Print("\n=== RUN useFunc\n")
+	fmt.Println("=== RUN useFunc")
 	useFunc()
-	fmt.Print("\n=== RUN reference\n")
+	fmt.Println("=== RUN reference")
 	reference()
-	fmt.Print("\n=== RUN resize\n")
+	fmt.Println("=== RUN resize")
 	resize()
 
 	if PASS {
-		fmt.Print("\nPASS\n")
+		fmt.Println("PASS")
 	} else {
-		fmt.Print("\nFAIL\n")
+		fmt.Println("FAIL")
 		print("Fail: Slices")
 	}
 }
