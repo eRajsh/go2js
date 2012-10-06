@@ -67,14 +67,14 @@ function declaration() {
 		out:out
 	};}; tests = [
 		_("numbers[\"one\"]", numbers.get("one")[0], 1),
-		_("numbers[\"ten\"]", numbers.get("ten", "one")[0], 10),
-		_("numbers[\"trois\"]", numbers.get("trois", "ten", "one")[0], 3),
+		_("numbers[\"ten\"]", numbers.get("ten")[0], 10),
+		_("numbers[\"trois\"]", numbers.get("trois")[0], 3),
 
-		_("rating[\"C\"]", rating1.get("C", "trois", "ten", "one")[0], rating2.get("C", "C", "trois", "ten", "one")[0]),
-		_("rating[\"Go\"]", rating1.get("Go", "C", "C", "trois", "ten", "one")[0], rating2.get("Go", "Go", "C", "C", "trois", "ten", "one")[0]),
-		_("rating[\"Python\"]", rating1.get("Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0], rating2.get("Python", "Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0]),
-		_("rating[\"C++\"]", rating1.get("C++", "Python", "Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0], rating2.get("C++", "C++", "Python", "Python", "Go", "Go", "C", "C", "trois", "ten", "one")[0])
-<<TAB[0];
+		_("rating[\"C\"]", rating1.get("C")[0], rating2.get("C")[0]),
+		_("rating[\"Go\"]", rating1.get("Go")[0], rating2.get("Go")[0]),
+		_("rating[\"Python\"]", rating1.get("Python")[0], rating2.get("Python")[0]),
+		_("rating[\"C++\"]", rating1.get("C++")[0], rating2.get("C++")[0])
+	];
 
 	var t; for (var _ in tests.v) { t = tests.v[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {

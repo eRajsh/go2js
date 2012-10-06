@@ -38,6 +38,7 @@ type expression struct {
 
 	kind Kind
 
+	// TODO: change all booleans by kind
 	hasError bool
 	useIota  bool
 
@@ -849,7 +850,21 @@ func (e *expression) writeElts(elts []ast.Expr, Lbrace, Rbrace token.Pos) {
 			e.WriteString(SP)
 		}
 
-		e.translate(el)
+		// It is necessary to create a new expression for each element, to avoid
+		// add indexes in case that there are expressiones with them.
+		exprElt := e.tr.newExpression(nil)
+
+		exprElt.kind = e.kind
+		exprElt.hasError = e.hasError
+		exprElt.useIota = e.useIota
+		exprElt.arrayHasElts = e.arrayHasElts
+		exprElt.isEllipsis = e.isEllipsis
+		exprElt.isMultiDim = e.isMultiDim
+		exprElt.isValue = e.isValue
+
+		exprElt.translate(el)
+		e.WriteString(exprElt.String())
+
 		posOldElt = posNewElt
 	}
 
