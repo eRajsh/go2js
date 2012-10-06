@@ -667,7 +667,7 @@ func (tr *translate) zeroValue(init bool, typ interface{}) (value string, dt dat
 		return "undefined", otherType
 
 	case *ast.MapType:
-		return "", mapType
+		return fmt.Sprintf("g.Map(%s,%s{})", tr.zeroOfMap(t), SP), mapType
 
 	case *ast.StructType:
 		return "", structType

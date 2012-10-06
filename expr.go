@@ -384,8 +384,9 @@ func (e *expression) translate(expr ast.Expr) {
 			e.returnBasicLit = true
 
 		case "delete":
-			e.WriteString(fmt.Sprintf("delete %s.f[%s]",
+			e.WriteString(fmt.Sprintf("delete %s%s[%s]",
 				e.tr.getExpression(typ.Args[0]).String(),
+				VALUE_FIELD,
 				e.tr.getExpression(typ.Args[1]).String()))
 
 		case "panic":

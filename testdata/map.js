@@ -14,7 +14,7 @@ var rating = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
 function nilValue() {
 	var pass = true;
 
-	var m1;
+	var m1 = g.Map(0, {});
 	var m2 = g.Map(0, {});
 	var m3 = g.Map(0, {});
 
@@ -45,7 +45,7 @@ function nilValue() {
 function declaration() {
 	var pass = true;
 
-	var numbers;
+	var numbers = g.Map(0, {});
 	numbers = g.Map(0, {});
 	numbers.v["one"] = 1;
 	numbers.v["ten"] = 10;
@@ -139,7 +139,7 @@ function keyNoExistent() {
 function deleteKey() {
 	var pass = true;
 
-	delete rating.f["C++"];
+	delete rating.v["C++"];
 	var found = rating.get("C++")[1];
 
 	if (found) {
