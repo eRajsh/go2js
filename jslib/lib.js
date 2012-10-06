@@ -32,8 +32,8 @@ sliceKind = 3;
 
 
 
-function arrayType(f, len, cap) {
-	this.f=f;
+function arrayType(v, len, cap) {
+	this.v=v;
 
 	this.len=len;
 	this.cap=cap
@@ -47,13 +47,13 @@ function MkArray(dim, zero, elem) {
 
 	if (elem !== undefined) {
 		if (!equalDim(dim, getDimArray(elem))) {
-			a.f = initArray(dim, zero);
-			mergeArray(a.f, elem);
+			a.v = initArray(dim, zero);
+			mergeArray(a.v, elem);
 		} else {
-			a.f = elem;
+			a.v = elem;
 		}
 	} else {
-		a.f = initArray(dim, zero);
+		a.v = initArray(dim, zero);
 	}
 
 	a.len = dim[0];
@@ -298,8 +298,8 @@ sliceType.prototype.kind = function() { return sliceKind; }
 
 
 
-function mapType(f, zero, cap) {
-	this.f=f;
+function mapType(v, zero, cap) {
+	this.v=v;
 	this.zero=zero;
 
 	this.cap=cap
@@ -318,7 +318,7 @@ function Map(zero, m, cap) {
 
 
 mapType.prototype.get = function(k) {
-	var v = this.f;
+	var v = this.v;
 
 
 	for (var i = 0; i < arguments.length; i++) {

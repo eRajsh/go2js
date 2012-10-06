@@ -246,8 +246,8 @@ func main() {
 	deleteKey()
 	fmt.Print("\n=== RUN testRange\n")
 	testRange()
-	fmt.Print("\n=== RUN blankIdentifierInRange\n")
-	blankIdentifierInRange()
+	fmt.Print("\n=== RUN blankIdInRange\n")
+	blankIdInRange()
 
 	if PASS {
 		fmt.Print("\nPASS\n")

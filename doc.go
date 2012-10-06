@@ -46,18 +46,16 @@ the spec) up to 32 bits.
 By this reason, the integers of 64 bits are unsupported.
 
 
-## Transformation
+## Translation
+
+The characters "\n" are translated to "<br>" while "\t" to four strings "&nbsp;".
 
 #### Reserved words
 
 The reserved words and keywords used in JavaScript are translated adding "_" at
 the end of the name.
 
-See files "testdata/decl_reserved.{go,js}"
-
-#### Characters
-
-"\n" is translated to "<br>" while "\t" to four strings "&nbsp;".
+See files "testdata/decl_reserved.{go,js}".
 
 #### Initialization
 

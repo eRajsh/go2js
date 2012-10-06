@@ -320,11 +320,10 @@ func (tr *translate) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 	tr.addLine(typ.Pos())
 
 	if name != "" {
-		tr.WriteString(fmt.Sprintf(
-			"function %s(%s)%s{%s}", validIdent(name), fieldNames, SP, fieldLines))
+		tr.WriteString(fmt.Sprintf("function %s(%s)%s{%s}",
+			validIdent(name), fieldNames, SP, fieldLines))
 		//tr.WriteString(fmt.Sprintf("function %s(%s)%s{%sthis._z=%q;%s}",
-		//validIdent(name), fieldNames, SP,
-		//SP, fieldsInit, fieldLines))
+		//validIdent(name), fieldNames, SP, SP, fieldsInit, fieldLines))
 
 		// Store the name of new type with its values initialized
 		tr.zeroType[tr.funcId][tr.blockId][name] = fieldsInit

@@ -246,8 +246,8 @@ function main() {
 	deleteKey();
 	document.write("<br>=== RUN testRange<br>");
 	testRange();
-	document.write("<br>=== RUN blankIdentifierInRange<br>");
-	blankIdentifierInRange();
+	document.write("<br>=== RUN blankIdInRange<br>");
+	blankIdInRange();
 
 	if (PASS) {
 		document.write("<br>PASS<br>");

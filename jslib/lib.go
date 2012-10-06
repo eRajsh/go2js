@@ -33,7 +33,7 @@ func init() {
 
 // arrayType represents a fixed array type.
 type arrayType struct {
-	f []interface{} // array's field
+	v []interface{} // array's value
 
 	len uint
 	cap uint
@@ -47,13 +47,13 @@ func MkArray(dim []uint, zero interface{}, elem []interface{}) *arrayType {
 
 	if elem != nil {
 		if !equalDim(dim, getDimArray(elem)) {
-			a.f = initArray(dim, zero)
-			mergeArray(a.f, elem)
+			a.v = initArray(dim, zero)
+			mergeArray(a.v, elem)
 		} else {
-			a.f = elem
+			a.v = elem
 		}
 	} else {
-		a.f = initArray(dim, zero)
+		a.v = initArray(dim, zero)
 	}
 
 	a.len = dim[0]
@@ -299,7 +299,7 @@ func (s sliceType) append(elt interface{}) {
 // The compiler adds the appropriate zero value for the map (which it is work out
 // from the map type).
 type mapType struct {
-	f    map[interface{}]interface{} // map's field
+	v    map[interface{}]interface{} // map's value
 	zero interface{}                 // zero value for the map's value
 
 	cap uint
@@ -318,7 +318,7 @@ func Map(zero interface{}, m map[interface{}]interface{}, cap uint) *mapType {
 // If looking some key up in M's map gets you "nil" ("undefined" in JS),
 // then return a copy of the zero value.
 func (m mapType) get(k interface{}) (interface{}, bool) {
-	v := m.f
+	v := m.v
 
 	// Allow multi-dimensional index (separated by commas)
 	for i := 0; i < len(arguments); i++ {
