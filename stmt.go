@@ -66,6 +66,7 @@ func (tr *translate) getStatement(stmt ast.Stmt) {
 		tr.addr[tr.funcId][tr.blockId] = make(map[string]bool)
 		tr.maps[tr.funcId][tr.blockId] = make(map[string]struct{})
 		tr.slices[tr.funcId][tr.blockId] = make(map[string]struct{})
+		tr.structs[tr.funcId][tr.blockId] = make(map[string]struct{})
 		tr.zeroType[tr.funcId][tr.blockId] = make(map[string]string)
 
 		if !tr.skipLbrace {
@@ -298,18 +299,22 @@ func (tr *translate) getStatement(stmt ast.Stmt) {
 		value := ""
 		isMap := false
 
+		if tr.isType(structType, stripField(expr)) {
+			expr = stripField(expr)
+		} else if tr.isType(mapType, expr) {
+			isMap = true
+		}
+
 		if typ.Value != nil {
 			value = tr.getExpression(typ.Value).String()
-
 			if typ.Tok == token.DEFINE {
 				tr.WriteString(fmt.Sprintf("var %s;%s", value, SP))
 			}
 		}
 
 		tr.WriteString(fmt.Sprintf("for%s(var %s in %s", SP, key, expr))
-		if tr.isType(mapType, expr) {
-			tr.WriteString(".m")
-			isMap = true
+		if isMap {
+			tr.WriteString(".v")
 		}
 		tr.WriteString(")" + SP)
 

@@ -38,7 +38,7 @@ function initialValue() {
 		_("len rating", rating.len() === 4, true)
 	];
 
-	var t; for (var _ in tests.v) { t = tests.v[_];
+	var t; for (var _ in tests) { t = tests[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -83,7 +83,7 @@ function declaration() {
 		_("rating[\"C++\"]", rating1.get("C++")[0], rating2.get("C++")[0])
 	];
 
-	var t; for (var _ in tests.v) { t = tests.v[_];
+	var t; for (var _ in tests) { t = tests[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -128,7 +128,7 @@ function keyNoExistent() {
 		_("k_multiDim", k_multiDim, 0)
 	];
 
-	var t; for (var _ in tests.v) { t = tests.v[_];
+	var t; for (var _ in tests) { t = tests[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -161,7 +161,7 @@ function deleteKey() {
 function testRange() {
 	var pass = true;
 
-	var value; for (var key in rating.m) { value = rating.get(key)[0];
+	var value; for (var key in rating.v) { value = rating.get(key)[0];
 		switch (key) {
 		case "C":
 			if (value !== 5) {
@@ -185,7 +185,7 @@ function testRange() {
 	}
 
 
-	for (var key in rating.m) {
+	for (var key in rating.v) {
 		if (key !== "C" && key !== "Go" && key !== "Python") {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: key " + key + " no expected<br>");
 			pass = false, PASS = false;

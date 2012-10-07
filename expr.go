@@ -19,7 +19,7 @@ import (
 type Kind uint8
 
 const (
-	invalidKind Kind = iota
+	unknownKind Kind = iota
 	//arrayKind TODO: remove
 	//ellipsisKind
 	sliceKind
@@ -82,7 +82,7 @@ func (tr *translate) newExpression(iVar interface{}) *expression {
 		"",
 		"",
 		"",
-		invalidKind,
+		unknownKind,
 		false,
 		false,
 		false,
@@ -482,6 +482,15 @@ func (e *expression) translate(expr ast.Expr) {
 			if elt, ok := compoType.Elt.(*ast.StructType); ok {
 				e.tr.getStruct(elt, "", false)
 				e.kind = structKind
+
+				// Is it an anonymous struct?
+				if typ.Elts != nil {
+					if t, ok := typ.Elts[0].(*ast.CompositeLit); ok {
+						if t.Type == nil {
+							e.tr.structs[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
+						}
+					}
+				}
 			}
 			// For arrays with elements
 			if len(typ.Elts) != 0 {

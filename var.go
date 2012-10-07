@@ -759,12 +759,16 @@ func (tr *translate) isType(t dataType, name string) bool {
 		for blockId := tr.blockId; blockId >= 0; blockId-- {
 			if _, ok := tr.vars[funcId][blockId][name]; ok { // variable found
 				switch t {
-				case sliceType:
-					if _, ok := tr.slices[funcId][blockId][name]; ok {
+				case mapType:
+					if _, ok = tr.maps[funcId][blockId][name]; ok {
 						return true
 					}
-				case mapType:
-					if _, ok := tr.maps[funcId][blockId][name]; ok {
+				case sliceType:
+					if _, ok = tr.slices[funcId][blockId][name]; ok {
+						return true
+					}
+				case structType:
+					if _, ok = tr.structs[funcId][blockId][name]; ok {
 						return true
 					}
 				}

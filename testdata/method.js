@@ -74,7 +74,7 @@ function method() {
 		_("Circle{25}", c2.area(), 1963.4954084936207)
 	];
 
-	var t; for (var _ in tests.v) { t = tests.v[_];
+	var t; for (var _ in tests) { t = tests[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;

@@ -33,7 +33,7 @@ function initialValue() {
 		_("cap s3", s3.cap === 0, true)
 	];
 
-	var t; for (var _ in tests.v) { t = tests.v[_];
+	var t; for (var _ in tests) { t = tests[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -201,7 +201,7 @@ function reference() {
 		_("slice3", fmtSlice(slice3), "['d','e']")
 	];
 
-	var t; for (var _ in tests.v) { t = tests.v[_];
+	var t; for (var _ in tests) { t = tests[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -222,7 +222,7 @@ function reference() {
 		_("slice3", fmtSlice(slice3), "['d','E']")
 	];
 
-	var t; for (var _ in tests.v) { t = tests.v[_];
+	var t; for (var _ in tests) { t = tests[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
@@ -243,7 +243,7 @@ function reference() {
 		_("slice3", fmtSlice(slice3), "['d','E']")
 	];
 
-	var t; for (var _ in tests.v) { t = tests.v[_];
+	var t; for (var _ in tests) { t = tests[_];
 		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
