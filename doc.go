@@ -10,7 +10,7 @@ clean and concise sintaxis.
 
 Really, it is used a subset of Go since JavaScript has not native way to
 represent some types neither Go's statements, although some of them could be
-emulated (but that is not my goal).
+emulated.
 
 Advantages:
 
@@ -22,7 +22,7 @@ static typing. (ToDo: compile to checking errors at time of compiling)
 + The mathematical expressions in the constants are calculated at the
 translation stage. (ToDo)
 
-+ The lines numbers in the unminified generated JavaScript match up with the
++ The lines numbers in the un-minified generated JavaScript match up with the
 lines numbers in the original source file.
 
 + Generates minimized JavaScript.
@@ -38,7 +38,6 @@ Go sintaxis not supported:
 "while" loops when they are called from "continue" and "break" directives so
 its use is very limited, and (2) it is advised to avoid its use
 (https://developer.mozilla.org/en/JavaScript/Reference/Statements/label#Avoid_using_labels).
-
 
 Note: JavaScript can not actually do meaningful integer arithmetic on anything
 bigger than 2^53. Also bitwise logical operations only have defined results (per
@@ -155,7 +154,7 @@ By example, for a package named "foo" with names exported "Add" and "Product":
 
 If you are going to change code related to the compiler then you should run
 "go test" after of each change in your forked repository. It will translate the
-Go files in the directory "testdata"; to see the differences use "git diff",
+Go files in the directory "testdata". To see the differences use "git diff",
 checking whether the change in the JavaScript files is what you were expecting.  
 It is also expected to get some errors and warnings in some of them, which are
 validated using the test functions for examples. See file "goscript_test.go".
@@ -171,7 +170,7 @@ Ideas:
 + The Dart library (http://api.dartlang.org/) could be used like inspiration to
  write web libraries, especially "dom" and "html".
 + JavaScript library to handle integers of 64 bits. Build it in Go since it
- can be translated to JS ;)
+ can be translated to JS; see "jslib/lib.go".
 
 
 ## Vision

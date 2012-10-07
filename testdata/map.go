@@ -34,7 +34,7 @@ func initialValue() {
 		{"len m3", len(m3) == 0, true},
 		{"len m4", len(m4) == 0, true},
 
-		{"nil rating", rating == nil, false},
+		{"nil rating", rating != nil, true},
 		{"len rating", len(rating) == 4, true},
 	}
 

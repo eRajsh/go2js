@@ -34,7 +34,7 @@ function initialValue() {
 		_("len m3", m3.len() === 0, true),
 		_("len m4", m4.len() === 0, true),
 
-		_("nil rating", rating.v === undefined, false),
+		_("nil rating", rating.v !== undefined, true),
 		_("len rating", rating.len() === 4, true)
 	];
 
