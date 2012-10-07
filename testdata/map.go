@@ -11,12 +11,13 @@ import "fmt"
 var PASS = true
 var rating = map[string]float32{"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}
 
-func nilValue() {
+func initialValue() {
 	pass := true
 
 	var m1 map[string]int
 	m2 := map[string]int{}
 	m3 := make(map[string]int)
+	m4 := make(map[string]int, 10)
 
 	tests := []struct {
 		msg string
@@ -26,9 +27,15 @@ func nilValue() {
 		{"nil m1", m1 == nil, true},
 		{"nil m2", m2 == nil, false},
 		{"nil m3", m3 == nil, false},
+		{"nil m4", m4 == nil, false},
+
 		{"len m1", len(m1) == 0, true},
 		{"len m2", len(m2) == 0, true},
 		{"len m3", len(m3) == 0, true},
+		{"len m4", len(m4) == 0, true},
+
+		{"nil rating", rating == nil, false},
+		{"len rating", len(rating) == 4, true},
 	}
 
 	for _, t := range tests {
@@ -234,8 +241,8 @@ func blankIdInRange() {
 func main() {
 	fmt.Print("\n\n== Maps\n\n")
 
-	fmt.Println("=== RUN nilValue")
-	nilValue()
+	fmt.Println("=== RUN initialValue")
+	initialValue()
 	fmt.Println("=== RUN declaration")
 	declaration()
 	fmt.Println("=== RUN reference")

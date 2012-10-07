@@ -295,6 +295,11 @@ func (s sliceType) append(elt interface{}) {
 // == Map
 //
 
+// The length into a map is rarely used so, in JavaScript, I prefer to calculate
+// the length instead of use a field.
+//
+// A map has not built-in function "cap".
+
 // mapType represents a map type.
 // The compiler adds the appropriate zero value for the map (which it is work out
 // from the map type).
@@ -302,15 +307,19 @@ type mapType struct {
 	v    map[interface{}]interface{} // map's value
 	zero interface{}                 // zero value for the map's value
 
-	cap uint
+	//len   uint
 }
 
 // Map creates a map storing its zero value.
-func Map(zero interface{}, m map[interface{}]interface{}, cap uint) *mapType {
-	m := &mapType{m, zero}
-	if cap != nil {
-		m.cap = cap
-	}
+func Map(zero interface{}, v map[interface{}]interface{}) *mapType {
+	m := &mapType{v, zero}
+
+	/*m := &mapType{v, zero, 0}
+	for key, _ := range v {
+		if v.hasOwnProperty(key) {
+			m.len++
+		}
+	}*/
 	return m
 }
 
@@ -330,6 +339,28 @@ func (m mapType) get(k interface{}) (interface{}, bool) {
 	}
 	return v, true
 }
+
+// len returns the number of elements.
+func (m mapType) len() int {
+	len := 0
+	for key, _ := range m.v {
+		if m.v.hasOwnProperty(key) {
+			len++
+		}
+	}
+	return len
+}
+
+// If it were using the field length.
+/*func (m mapType) set(k, v interface{}) {
+	m.v[k] = v
+	m.len++
+}
+
+func (m mapType) del(k interface{}) {
+	delete(m, k)
+	m.len--
+}*/
 
 // == Utility
 //

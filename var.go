@@ -667,7 +667,8 @@ func (tr *translate) zeroValue(init bool, typ interface{}) (value string, dt dat
 		return "undefined", otherType
 
 	case *ast.MapType:
-		return fmt.Sprintf("g.Map(%s,%s{})", tr.zeroOfMap(t), SP), mapType
+		tr.maps[tr.funcId][tr.blockId][tr.lastVarName] = void
+		return fmt.Sprintf("g.Map(%s)", tr.zeroOfMap(t)), mapType
 
 	case *ast.StructType:
 		return "", structType

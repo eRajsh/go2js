@@ -11,24 +11,31 @@
 var PASS = true;
 var rating = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
 
-function nilValue() {
+function initialValue() {
 	var pass = true;
 
-	var m1 = g.Map(0, {});
+	var m1 = g.Map(0);
 	var m2 = g.Map(0, {});
 	var m3 = g.Map(0, {});
+	var m4 = g.Map(0, {});
 
 	var _ = function(msg, in_, out) { return {
 		msg:msg,
 		in_:in_,
 		out:out
 	};}; tests = [
-		_("nil m1", m1 === undefined, true),
-		_("nil m2", m2 === undefined, false),
-		_("nil m3", m3 === undefined, false),
-		_("len m1", m1.length === 0, true),
-		_("len m2", m2.length === 0, true),
-		_("len m3", m3.length === 0, true)
+		_("nil m1", m1.v === undefined, true),
+		_("nil m2", m2.v === undefined, false),
+		_("nil m3", m3.v === undefined, false),
+		_("nil m4", m4.v === undefined, false),
+
+		_("len m1", m1.len() === 0, true),
+		_("len m2", m2.len() === 0, true),
+		_("len m3", m3.len() === 0, true),
+		_("len m4", m4.len() === 0, true),
+
+		_("nil rating", rating.v === undefined, false),
+		_("len rating", rating.len() === 4, true)
 	];
 
 	var t; for (var _ in tests.v) { t = tests.v[_];
@@ -45,7 +52,7 @@ function nilValue() {
 function declaration() {
 	var pass = true;
 
-	var numbers = g.Map(0, {});
+	var numbers = g.Map(0);
 	numbers = g.Map(0, {});
 	numbers.v["one"] = 1;
 	numbers.v["ten"] = 10;
@@ -234,8 +241,8 @@ function blankIdInRange() {
 function main() {
 	document.write("<br><br>== Maps<br><br>");
 
-	document.write("=== RUN nilValue<br>");
-	nilValue();
+	document.write("=== RUN initialValue<br>");
+	initialValue();
 	document.write("=== RUN declaration<br>");
 	declaration();
 	document.write("=== RUN reference<br>");

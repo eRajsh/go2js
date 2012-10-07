@@ -212,6 +212,7 @@ func (e *expression) translate(expr ast.Expr) {
 			xStr := stripField(x.String())
 			yStr := stripField(y.String())
 
+			// Slice
 			if y.isNil && e.tr.isType(sliceType, xStr) {
 				if isOpNot {
 					e.WriteString("!")
@@ -224,6 +225,16 @@ func (e *expression) translate(expr ast.Expr) {
 					e.WriteString("!")
 				}
 				e.WriteString(yStr + ".isNil()")
+				break
+			}
+
+			// Map
+			if y.isNil && e.tr.isType(mapType, xStr) {
+				e.WriteString(fmt.Sprintf("%s.v%s%s%sundefined", xStr, SP, op, SP))
+				break
+			}
+			if x.isNil && e.tr.isType(mapType, yStr) {
+				e.WriteString(fmt.Sprintf("%s.v%s%s%sundefined", yStr, SP, op, SP))
 				break
 			}
 		}
@@ -312,7 +323,11 @@ func (e *expression) translate(expr ast.Expr) {
 
 			case *ast.MapType:
 				e.tr.maps[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
-				e.WriteString(fmt.Sprintf("g.Map(%s,%s{})", e.tr.zeroOfMap(argType), SP))
+				if !Bootstrap {
+					e.WriteString(fmt.Sprintf("g.Map(%s,%s{})", e.tr.zeroOfMap(argType), SP))
+				} else {
+					e.WriteString("{}")
+				}
 
 			case *ast.ChanType:
 				e.translate(typ.Fun)
@@ -364,6 +379,8 @@ func (e *expression) translate(expr ast.Expr) {
 
 			if e.tr.isType(sliceType, _arg) {
 				e.WriteString(_arg + ".len")
+			} else if e.tr.isType(mapType, arg) {
+				e.WriteString(arg + ".len()")
 			} else {
 				e.WriteString(arg + ".length")
 			}

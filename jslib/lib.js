@@ -298,19 +298,28 @@ sliceType.prototype.kind = function() { return sliceKind; }
 
 
 
-function mapType(v, zero, cap) {
-	this.v=v;
-	this.zero=zero;
 
-	this.cap=cap
+
+
+
+
+function mapType(v, zero) {
+	this.v=v;
+	this.zero=zero
+
+
 }
 
 
-function Map(zero, m, cap) {
-	var m = new mapType(m, zero);
-	if (cap !== undefined) {
-		m.cap = cap;
-	}
+function Map(zero, v) {
+	var m = new mapType(v, zero);
+
+
+
+
+
+
+
 	return m;
 }
 
@@ -330,6 +339,28 @@ mapType.prototype.get = function(k) {
 	}
 	return [v, true];
 }
+
+
+mapType.prototype.len = function() {
+	var len = 0;
+	var _; for (var key in this.v) { _ = this.v[key];
+		if (this.v.hasOwnProperty(key)) {
+			len++;
+		}
+	}
+	return len;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
