@@ -641,6 +641,7 @@ const (
 	otherType dataType = iota
 	mapType
 	pointerType
+	arrayType
 	sliceType
 	structType
 )
@@ -655,9 +656,12 @@ func (tr *translate) zeroValue(init bool, typ interface{}) (value string, dt dat
 		return
 
 	case *ast.ArrayType:
-		if t.Len != nil {
-			return tr.getExpression(t).String(), otherType
+		if t.Len != nil { // array
+			return tr.getExpression(t).String(), arrayType
 		}
+
+		// slice
+
 		if !Bootstrap {
 			return "g.NilSlice()", sliceType
 		}
@@ -752,13 +756,16 @@ func (tr *translate) isType(t dataType, name string) bool {
 	if name == "" {
 		return false
 	}
-
 	name = strings.SplitN(name, "<<", 2)[0] // could have a tag
 
 	for funcId := tr.funcId; funcId >= 0; funcId-- {
 		for blockId := tr.blockId; blockId >= 0; blockId-- {
 			if _, ok := tr.vars[funcId][blockId][name]; ok { // variable found
 				switch t {
+				case arrayType:
+					if _, ok = tr.arrays[funcId][blockId][name]; ok {
+						return true
+					}
 				case mapType:
 					if _, ok = tr.maps[funcId][blockId][name]; ok {
 						return true
@@ -772,7 +779,6 @@ func (tr *translate) isType(t dataType, name string) bool {
 						return true
 					}
 				}
-
 				return false
 			}
 		}

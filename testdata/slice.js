@@ -10,7 +10,7 @@
 
 var PASS = true;
 
-function initialValue() {
+function builtIn() {
 	var pass = true;
 
 	var s1 = g.NilSlice();
@@ -302,8 +302,8 @@ function resize() {
 function main() {
 	document.write("<br><br>== Slices<br><br>");
 
-	document.write("=== RUN initialValue<br>");
-	initialValue();
+	document.write("=== RUN builtIn<br>");
+	builtIn();
 	document.write("=== RUN shortHand<br>");
 	shortHand();
 	document.write("=== RUN useFunc<br>");

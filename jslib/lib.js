@@ -34,17 +34,33 @@ sliceKind = 3;
 
 
 
-function arrayType(v, len, cap) {
+
+function arrayType(v, len_) {
 	this.v=v;
 
-	this.len=len;
-	this.cap=cap
+	this.len_=len_
+}
+
+
+arrayType.prototype.len = function(dim) {
+	if (dim === undefined) {
+		return this.len_[0];
+	}
+	return this.len_[arguments.length];
+}
+
+
+arrayType.prototype.cap = function(dim) {
+	if (dim === undefined) {
+		return this.len_[0];
+	}
+	return this.len_[arguments.length];
 }
 
 
 
 function MkArray(dim, zero, elem) {
-	var a = new arrayType([], 0, 0);
+	var a = new arrayType([], g.Map(0));
 
 	if (elem !== undefined) {
 		if (!equalDim(dim, getDimArray(elem))) {
@@ -57,8 +73,12 @@ function MkArray(dim, zero, elem) {
 		a.v = initArray(dim, zero);
 	}
 
-	a.len = dim[0];
-	a.cap = a.len;
+	var v; for (var i in dim) { v = dim[i];
+		a.len_[i] = v;
+	}
+
+
+
 	return a;
 }
 

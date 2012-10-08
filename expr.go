@@ -20,7 +20,7 @@ type Kind uint8
 
 const (
 	unknownKind Kind = iota
-	//arrayKind TODO: remove
+	arrayKind
 	//ellipsisKind
 	sliceKind
 	structKind
@@ -127,6 +127,7 @@ func (e *expression) translate(expr ast.Expr) {
 		if typ.Len == nil { // slice
 			break
 		}
+		e.tr.arrays[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
 
 		if _, ok := typ.Len.(*ast.Ellipsis); ok {
 			e.zero, _ = e.tr.zeroValue(true, typ.Elt)
@@ -306,15 +307,13 @@ func (e *expression) translate(expr ast.Expr) {
 			}
 
 			switch argType := typ.Args[0].(type) {
-			// For slice
-			case *ast.ArrayType:
+			case *ast.ArrayType: // For slice
 				zero, _ := e.tr.zeroValue(true, argType.Elt)
 
 				e.WriteString(fmt.Sprintf("%s,%s%s", zero, SP,
 					e.tr.getExpression(typ.Args[1]))) // length
 
-				// capacity
-				if len(typ.Args) == 3 {
+				if len(typ.Args) == 3 { // capacity
 					e.WriteString("," + SP + e.tr.getExpression(typ.Args[2]).String())
 				}
 
@@ -339,6 +338,7 @@ func (e *expression) translate(expr ast.Expr) {
 		case "new":
 			switch argType := typ.Args[0].(type) {
 			case *ast.ArrayType:
+				e.tr.arrays[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
 				for _, arg := range typ.Args {
 					e.translate(arg)
 				}
@@ -354,10 +354,10 @@ func (e *expression) translate(expr ast.Expr) {
 		// == Conversion
 		case "string":
 			arg := e.tr.getExpression(typ.Args[0]).String()
-			_arg := stripField(arg)
+			argNoField := stripField(arg)
 
-			if e.tr.isType(sliceType, _arg) {
-				e.WriteString(_arg + ".toString()")
+			if e.tr.isType(sliceType, argNoField) {
+				e.WriteString(argNoField + ".toString()")
 			} else {
 				e.WriteString(arg)
 				e.returnBasicLit = true
@@ -374,31 +374,42 @@ func (e *expression) translate(expr ast.Expr) {
 			e.WriteString(fmt.Sprintf("alert(%s)", e.tr.GetArgs(call, typ.Args)))
 
 		case "len":
+			e.returnBasicLit = true
 			arg := e.tr.getExpression(typ.Args[0]).String()
-			_arg := stripField(arg)
+			argNoField := stripField(arg)
+			argNoIndex, index := splitIndex(arg)
 
-			if e.tr.isType(sliceType, _arg) {
-				e.WriteString(_arg + ".len")
-			} else if e.tr.isType(mapType, arg) {
-				e.WriteString(arg + ".len()")
+			if e.tr.isType(sliceType, argNoField) {
+				e.WriteString(argNoField + ".len")
+
+			} else if e.tr.isType(arrayType, argNoField) || e.tr.isType(mapType, argNoField) {
+				e.WriteString(argNoField + ".len()")
+			} else if argNoIndex != arg &&
+				(e.tr.isType(arrayType, argNoIndex) || e.tr.isType(mapType, argNoIndex)) {
+				e.WriteString(argNoIndex + ".len(" + index + ")")
+
 			} else {
 				e.WriteString(arg + ".length")
 			}
 
-			e.returnBasicLit = true
-
 		case "cap":
-			arg := e.tr.getExpression(typ.Args[0]).String()
-			_arg := stripField(arg)
-
-			if e.tr.isType(sliceType, _arg) {
-				if strings.HasSuffix(arg, VALUE_FIELD) {
-					arg = _arg
-				}
-			}
-
-			e.WriteString(arg + ".cap")
 			e.returnBasicLit = true
+			arg := e.tr.getExpression(typ.Args[0]).String()
+			argNoField := stripField(arg)
+			argNoIndex, index := splitIndex(arg)
+
+			if e.tr.isType(sliceType, argNoField) {
+				if strings.HasSuffix(arg, VALUE_FIELD) {
+					e.WriteString(argNoField + ".cap")
+				} else {
+					e.WriteString(arg + ".cap")
+				}
+
+			} else if e.tr.isType(arrayType, arg) {
+				e.WriteString(arg + ".cap()")
+			} else if argNoIndex != arg && e.tr.isType(arrayType, argNoIndex) {
+				e.WriteString(argNoIndex + ".cap(" + index + ")")
+			}
 
 		case "delete":
 			e.WriteString(fmt.Sprintf("delete %s%s[%s]",
@@ -471,12 +482,13 @@ func (e *expression) translate(expr ast.Expr) {
 				break
 			}
 
-			//e.kind = arrayKind TODO: remove
-
 			// Slice
 			if compoType.Len == nil {
 				e.tr.slices[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
 				e.kind = sliceKind
+			} else { // Array
+				e.tr.arrays[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
+				e.kind = arrayKind
 			}
 			// Struct
 			if elt, ok := compoType.Elt.(*ast.StructType); ok {
@@ -953,10 +965,20 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 
 // * * *
 
-// stripField strips the field name VALUE_FIELD.
+// stripField strips the field name VALUE_FIELD, if any.
 func stripField(name string) string {
 	if strings.HasSuffix(name, VALUE_FIELD) {
 		return name[:len(name)-2]
 	}
 	return name
+}
+
+// splitIndex splits name and index, if any.
+func splitIndex(name string) (string, string) {
+	if strings.Contains(name, "[") {
+		name = strings.Replace(name, "][", ",", -1)
+		split := strings.SplitN(name[:len(name)-1], "[", 2)
+		return split[0], split[1]
+	}
+	return name, ""
 }

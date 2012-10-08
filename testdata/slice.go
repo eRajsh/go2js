@@ -10,7 +10,7 @@ import "fmt"
 
 var PASS = true
 
-func initialValue() {
+func builtIn() {
 	pass := true
 
 	var s1 []byte
@@ -302,8 +302,8 @@ func resize() {
 func main() {
 	fmt.Print("\n\n== Slices\n\n")
 
-	fmt.Println("=== RUN initialValue")
-	initialValue()
+	fmt.Println("=== RUN builtIn")
+	builtIn()
 	fmt.Println("=== RUN shortHand")
 	shortHand()
 	fmt.Println("=== RUN useFunc")

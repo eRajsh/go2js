@@ -42,6 +42,7 @@ func (tr *translate) getFunc(decl *ast.FuncDecl) {
 		tr.vars[tr.funcId] = make(map[int]map[string]bool)
 		tr.addr[tr.funcId] = make(map[int]map[string]bool)
 		tr.maps[tr.funcId] = make(map[int]map[string]struct{})
+		tr.arrays[tr.funcId] = make(map[int]map[string]struct{})
 		tr.slices[tr.funcId] = make(map[int]map[string]struct{})
 		tr.structSlices[tr.funcId] = make(map[int]map[string]struct{})
 		tr.zeroType[tr.funcId] = make(map[int]map[string]string)

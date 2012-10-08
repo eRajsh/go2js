@@ -11,7 +11,7 @@ import "fmt"
 var PASS = true
 var rating = map[string]float32{"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2}
 
-func initialValue() {
+func builtIn() {
 	pass := true
 
 	var m1 map[string]int
@@ -241,8 +241,8 @@ func blankIdInRange() {
 func main() {
 	fmt.Print("\n\n== Maps\n\n")
 
-	fmt.Println("=== RUN initialValue")
-	initialValue()
+	fmt.Println("=== RUN builtIn")
+	builtIn()
 	fmt.Println("=== RUN declaration")
 	declaration()
 	fmt.Println("=== RUN reference")

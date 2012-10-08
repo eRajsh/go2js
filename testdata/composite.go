@@ -39,11 +39,20 @@ func older10(people [10]person) person {
 // == Array
 //
 
-func zeroArray() {
+func builtIn() {
 	pass := true
 
-	var a1 [4]byte
-	a2 := [4]byte{}
+	// TODO
+	//var pa1 *[4]int
+	//pa2 := new([4]int) // *[4]int
+
+	var a1 [5]int
+	a2 := [5]int{}
+	a3 := [5]int{2}
+	a4 := [5]int{2, 4}
+
+	a5 := [3][4]int{}
+	a6 := [3][4][2]int{}
 
 	tests := []struct {
 		msg string
@@ -52,10 +61,31 @@ func zeroArray() {
 	}{
 		//{"nil a1", a1 == nil, true},
 		//{"nil a2", a2 == nil, false},
-		{"len a1", len(a1) == 40, true},
-		{"len a2", len(a2) == 4, true},
-		{"cap a1", cap(a1) == 4, true},
-		{"cap a2", cap(a2) == 4, true},
+		{"len a1", len(a1) == 5, true},
+		{"len a2", len(a2) == 5, true},
+		{"len a3", len(a3) == 5, true},
+		{"len a4", len(a4) == 5, true},
+
+		{"cap a1", cap(a1) == 5, true},
+		{"cap a2", cap(a2) == 5, true},
+		{"cap a3", cap(a3) == 5, true},
+		{"cap a4", cap(a4) == 5, true},
+
+		{"len a5", len(a5) == 3, true},
+		{"cap a5", cap(a5) == 3, true},
+		{"len a5[0]", len(a5[0]) == 4, true},
+		{"cap a5[0]", cap(a5[0]) == 4, true},
+		{"len a5[1000]", len(a5[1000]) == 4, true},
+		{"cap a5[1000]", cap(a5[1000]) == 4, true},
+
+		{"len a6", len(a6) == 3, true},
+		{"cap a6", cap(a6) == 3, true},
+		{"len a6[0]", len(a6[0]) == 4, true},
+		{"cap a6[0]", cap(a6[0]) == 4, true},
+		{"len a6[0][0]", len(a6[0][0]) == 2, true},
+		{"cap a6[0][0]", cap(a6[0][0]) == 2, true},
+		{"len a6[0][1000]", len(a6[0][1000]) == 2, true},
+		{"cap a6[0][1000]", cap(a6[0][1000]) == 2, true},
 	}
 
 	for _, t := range tests {
@@ -212,8 +242,8 @@ func testStruct() {
 func main() {
 	fmt.Print("\n\n== Composite types\n\n")
 
-	fmt.Println("=== RUN zeroArray")
-	zeroArray()
+	fmt.Println("=== RUN builtIn")
+	builtIn()
 	fmt.Println("=== RUN initArray")
 	initArray()
 	fmt.Println("=== RUN testArray")

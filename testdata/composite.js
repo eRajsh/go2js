@@ -39,11 +39,20 @@ function older10(people) {
 
 
 
-function zeroArray() {
+function builtIn() {
 	var pass = true;
 
-	var a1 = g.MkArray([4], 0);
-	var a2 = g.MkArray([4], 0);
+
+
+
+
+	var a1 = g.MkArray([5], 0);
+	var a2 = g.MkArray([5], 0);
+	var a3 = g.MkArray([5], 0, [2]);
+	var a4 = g.MkArray([5], 0, [2, 4]);
+
+	var a5 = g.MkArray([3,4], 0);
+	var a6 = g.MkArray([3,4,2], 0);
 
 	var _ = function(msg, in_, out) { return {
 		msg:msg,
@@ -52,10 +61,31 @@ function zeroArray() {
 	};}; tests = [
 
 
-		_("len a1", a1.length === 40, true),
-		_("len a2", a2.length === 4, true),
-		_("cap a1", a1.cap === 4, true),
-		_("cap a2", a2.cap === 4, true)
+		_("len a1", a1.len() === 5, true),
+		_("len a2", a2.len() === 5, true),
+		_("len a3", a3.len() === 5, true),
+		_("len a4", a4.len() === 5, true),
+
+		_("cap a1", a1.cap() === 5, true),
+		_("cap a2", a2.cap() === 5, true),
+		_("cap a3", a3.cap() === 5, true),
+		_("cap a4", a4.cap() === 5, true),
+
+		_("len a5", a5.len() === 3, true),
+		_("cap a5", a5.cap() === 3, true),
+		_("len a5[0]", a5.len(0) === 4, true),
+		_("cap a5[0]", a5.cap(0) === 4, true),
+		_("len a5[1000]", a5.len(1000) === 4, true),
+		_("cap a5[1000]", a5.cap(1000) === 4, true),
+
+		_("len a6", a6.len() === 3, true),
+		_("cap a6", a6.cap() === 3, true),
+		_("len a6[0]", a6.len(0) === 4, true),
+		_("cap a6[0]", a6.cap(0) === 4, true),
+		_("len a6[0][0]", a6.len(0,0) === 2, true),
+		_("cap a6[0][0]", a6.cap(0,0) === 2, true),
+		_("len a6[0][1000]", a6.len(0,1000) === 2, true),
+		_("cap a6[0][1000]", a6.cap(0,1000) === 2, true)
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
@@ -104,8 +134,8 @@ function initArray() {
 		in_:in_,
 		out:out
 	};}; tests = [
-		_("len", array1.length === array2.length, true),
-		_("cap", array1.cap === array2.cap, true),
+		_("len", array1.len() === array2.len(), true),
+		_("cap", array1.cap() === array2.cap(), true),
 		_("equality", JSON.stringify(array1) === JSON.stringify(array2), true)
 	];
 
@@ -212,8 +242,8 @@ function testStruct() {
 function main() {
 	document.write("<br><br>== Composite types<br><br>");
 
-	document.write("=== RUN zeroArray<br>");
-	zeroArray();
+	document.write("=== RUN builtIn<br>");
+	builtIn();
 	document.write("=== RUN initArray<br>");
 	initArray();
 	document.write("=== RUN testArray<br>");

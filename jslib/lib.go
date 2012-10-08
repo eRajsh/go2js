@@ -30,6 +30,7 @@ func init() {
 }
 
 // The array can not be compared with nil.
+// The capacity is the same than length.
 
 // TODO 1: mergeArray could be integrated in initArray ?
 
@@ -37,8 +38,23 @@ func init() {
 type arrayType struct {
 	v []interface{} // array's value
 
-	len uint
-	cap uint
+	len_ map[uint]uint
+}
+
+// len returns the length for the given dimension.
+func (a arrayType) len(dim uint) uint {
+	if dim == nil {
+		return a.len_[0]
+	}
+	return a.len_[len(arguments)]
+}
+
+// cap returns the capacity for the given dimension.
+func (a arrayType) cap(dim uint) uint {
+	if dim == nil {
+		return a.len_[0]
+	}
+	return a.len_[len(arguments)]
 }
 
 // MkArray initializes an array of dimension "dim" to value "zero",
@@ -57,8 +73,12 @@ func MkArray(dim []uint, zero interface{}, elem []interface{}) *arrayType {
 		a.v = initArray(dim, zero)
 	}
 
-	a.len = dim[0]
-	a.cap = a.len
+	for i, v := range dim {
+		a.len_[i] = v
+	}
+
+	//a.len = dim[0]
+	//a.cap = a.len
 	return a
 }
 

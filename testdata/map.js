@@ -11,7 +11,7 @@
 var PASS = true;
 var rating = g.Map(0, {"C": 5, "Go": 4.5, "Python": 4.5, "C++": 2});
 
-function initialValue() {
+function builtIn() {
 	var pass = true;
 
 	var m1 = g.Map(0);
@@ -241,8 +241,8 @@ function blankIdInRange() {
 function main() {
 	document.write("<br><br>== Maps<br><br>");
 
-	document.write("=== RUN initialValue<br>");
-	initialValue();
+	document.write("=== RUN builtIn<br>");
+	builtIn();
 	document.write("=== RUN declaration<br>");
 	declaration();
 	document.write("=== RUN reference<br>");
