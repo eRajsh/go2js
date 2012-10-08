@@ -768,7 +768,7 @@ func (tr *translate) isType(t dataType, name string) bool {
 						return true
 					}
 				case structType:
-					if _, ok = tr.structs[funcId][blockId][name]; ok {
+					if _, ok = tr.structSlices[funcId][blockId][name]; ok {
 						return true
 					}
 				}

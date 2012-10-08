@@ -16,6 +16,9 @@ mapKind = 2,
 sliceKind = 3;
 
 
+
+
+
 (function() {
 
 
@@ -31,13 +34,11 @@ sliceKind = 3;
 
 
 
-
 function arrayType(v, len, cap) {
 	this.v=v;
 
 	this.len=len;
 	this.cap=cap
-
 }
 
 

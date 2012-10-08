@@ -70,11 +70,12 @@ type translate struct {
 
 	// == Variables defined in each block, for each function.
 	// {Function Id: {Block id: {Name:
-	vars    map[int]map[int]map[string]bool // is pointer?
-	addr    map[int]map[int]map[string]bool // variable was assigned to an address?
-	maps    map[int]map[int]map[string]struct{}
-	slices  map[int]map[int]map[string]struct{}
-	structs map[int]map[int]map[string]struct{}
+	vars map[int]map[int]map[string]bool // is pointer?
+	addr map[int]map[int]map[string]bool // variable was assigned to an address?
+
+	maps         map[int]map[int]map[string]struct{}
+	slices       map[int]map[int]map[string]struct{}
+	structSlices map[int]map[int]map[string]struct{} // slices of anonymous structs
 
 	// Zero value for custom types.
 	zeroType map[int]map[int]map[string]string
@@ -114,7 +115,7 @@ func newTransform() *translate {
 	tr.addr[0] = make(map[int]map[string]bool)
 	tr.maps[0] = make(map[int]map[string]struct{})
 	tr.slices[0] = make(map[int]map[string]struct{})
-	tr.structs[0] = make(map[int]map[string]struct{})
+	tr.structSlices[0] = make(map[int]map[string]struct{})
 	tr.zeroType[0] = make(map[int]map[string]string)
 
 	// blockId = 0
@@ -122,7 +123,7 @@ func newTransform() *translate {
 	tr.addr[0][0] = make(map[string]bool)
 	tr.maps[0][0] = make(map[string]struct{})
 	tr.slices[0][0] = make(map[string]struct{})
-	tr.structs[0][0] = make(map[string]struct{})
+	tr.structSlices[0][0] = make(map[string]struct{})
 	tr.zeroType[0][0] = make(map[string]string)
 
 	return tr

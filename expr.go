@@ -487,7 +487,7 @@ func (e *expression) translate(expr ast.Expr) {
 				if typ.Elts != nil {
 					if t, ok := typ.Elts[0].(*ast.CompositeLit); ok {
 						if t.Type == nil {
-							e.tr.structs[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
+							e.tr.structSlices[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
 						}
 					}
 				}

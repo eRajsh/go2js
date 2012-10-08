@@ -66,7 +66,7 @@ func (tr *translate) getStatement(stmt ast.Stmt) {
 		tr.addr[tr.funcId][tr.blockId] = make(map[string]bool)
 		tr.maps[tr.funcId][tr.blockId] = make(map[string]struct{})
 		tr.slices[tr.funcId][tr.blockId] = make(map[string]struct{})
-		tr.structs[tr.funcId][tr.blockId] = make(map[string]struct{})
+		tr.structSlices[tr.funcId][tr.blockId] = make(map[string]struct{})
 		tr.zeroType[tr.funcId][tr.blockId] = make(map[string]string)
 
 		if !tr.skipLbrace {

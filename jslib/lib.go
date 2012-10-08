@@ -16,6 +16,9 @@ const (
 	sliceKind
 )
 
+// == Array
+//
+
 func init() {
 	// Use the toString() method when Array.isArray isn't implemented:
 	// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray#Compatibility
@@ -26,8 +29,7 @@ func init() {
 	}
 }
 
-// == Array
-//
+// The array can not be compared with nil.
 
 // TODO 1: mergeArray could be integrated in initArray ?
 
@@ -37,7 +39,6 @@ type arrayType struct {
 
 	len uint
 	cap uint
-	// Note: the array in Go can not be compared with nil
 }
 
 // MkArray initializes an array of dimension "dim" to value "zero",
