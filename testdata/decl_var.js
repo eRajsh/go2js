@@ -44,7 +44,7 @@ var s2 = g.MkSlice(0, 10, 20);
 
 var s3 = g.Slice(0, [2, 4, 6]);
 var s4 = g.Slice(0, [1, {2:3}]);
-var s5 = g.Slice();
+var s5 = g.MkSlice(0, 0);
 
 
 

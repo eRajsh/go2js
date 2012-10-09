@@ -593,7 +593,11 @@ _noFunc:
 
 			if expr.kind == sliceKind {
 				if isNewVar {
-					tr.WriteString(fmt.Sprintf("%sg.Slice(%s)", SP+sign+SP, value))
+					if value == "" {
+						tr.WriteString(fmt.Sprintf("%sg.MkSlice(0,%s0)", SP+sign+SP, SP))
+					} else {
+						tr.WriteString(fmt.Sprintf("%sg.Slice(%s)", SP+sign+SP, value))
+					}
 				} else {
 					tr.WriteString(".set(" + value + ")")
 				}
@@ -663,7 +667,7 @@ func (tr *translate) zeroValue(init bool, typ interface{}) (value string, dt dat
 		// slice
 
 		if !Bootstrap {
-			return "g.NilSlice()", sliceType
+			return "g.MkSlice()", sliceType
 		}
 		return "[]", sliceType
 

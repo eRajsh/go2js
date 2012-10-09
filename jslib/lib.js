@@ -166,29 +166,24 @@ function sliceType(array, elem, low, high, len, cap, isNil) {
 sliceType.prototype.typ = function() { return sliceT; }
 
 
-
-function NilSlice() {
-	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
-	s.isNil = true;
-	s.len = 0, s.cap = 0;
-	return s;
-}
-
-
 function MkSlice(zero, len, cap) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
+
+	if (zero === undefined) {
+		s.isNil = true;
+		return s;
+	}
+
 	s.len = len;
 
 	for (var i = 0; i < len; i++) {
 		s.elem[i] = zero;
 	}
-
 	if (cap !== undefined) {
 		s.cap = cap;
 	} else {
 		s.cap = len;
 	}
-
 	return s;
 }
 
@@ -357,7 +352,6 @@ function Export(pkg, exported) {
 }
 
 g.MkArray = MkArray;
-g.NilSlice = NilSlice;
 g.MkSlice = MkSlice;
 g.Slice = Slice;
 g.SliceFrom = SliceFrom;

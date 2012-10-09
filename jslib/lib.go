@@ -165,30 +165,25 @@ type sliceType struct {
 // typ returns the type.
 func (s sliceType) typ() int { return sliceT }
 
-// NilSlice creates a null slice.
-// For variables declared like slices.
-func NilSlice() *sliceType {
-	s := new(sliceType)
-	s.isNil = true
-	s.len, s.cap = 0, 0
-	return s
-}
-
 // MkSlice initializes a slice with the zero value.
 func MkSlice(zero interface{}, len, cap int) *sliceType {
 	s := new(sliceType)
+
+	if zero == nil {
+		s.isNil = true
+		return s
+	}
+
 	s.len = len
 
 	for i := 0; i < len; i++ {
 		s.elem[i] = zero
 	}
-
 	if cap != nil {
 		s.cap = cap
 	} else {
 		s.cap = len
 	}
-
 	return s
 }
 

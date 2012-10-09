@@ -13,9 +13,11 @@ var PASS = true;
 function builtIn() {
 	var pass = true;
 
-	var s1 = g.NilSlice();
-	var s2 = g.Slice();
+	var s1 = g.MkSlice();
+	var s2 = g.MkSlice(0, 0);
 	var s3 = g.MkSlice(0, 0);
+	var s4 = g.MkSlice(0, 0, 10);
+	var s5 = g.Slice(0, [1, 3, 5]);
 
 	var _ = function(msg, in_, out) { return {
 		msg:msg,
@@ -25,12 +27,20 @@ function builtIn() {
 		_("nil s1", s1.isNil, true),
 		_("nil s2", s2.isNil, false),
 		_("nil s3", s3.isNil, false),
+		_("nil s4", s4.isNil, false),
+		_("nil s5", s5.isNil, false),
+
 		_("len s1", s1.len === 0, true),
 		_("len s2", s2.len === 0, true),
 		_("len s3", s3.len === 0, true),
+		_("len s4", s4.len === 0, true),
+		_("len s5", s5.len === 3, true),
+
 		_("cap s1", s1.cap === 0, true),
 		_("cap s2", s2.cap === 0, true),
-		_("cap s3", s3.cap === 0, true)
+		_("cap s3", s3.cap === 0, true),
+		_("cap s4", s4.cap === 10, true),
+		_("cap s5", s5.cap === 3, true)
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
@@ -48,7 +58,7 @@ function shortHand() {
 	var pass = true;
 
 	var array = g.MkArray([10], 0, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
-	var a_slice = g.NilSlice(), b_slice = g.NilSlice();
+	var a_slice = g.MkSlice(), b_slice = g.MkSlice();
 
 
 
@@ -145,7 +155,7 @@ function useFunc() {
 	var A2 = g.MkArray([4], 0, [1, 2, 3, 4]);
 	var A3 = g.MkArray([1], 0, [1]);
 
-	var slice = g.NilSlice();
+	var slice = g.MkSlice();
 
 	slice.set(A1, 0);
 	if (Max(slice.v) !== 9) {
@@ -260,7 +270,7 @@ function reference() {
 function resize() {
 	var pass = true;
 
-	var slice = g.NilSlice();
+	var slice = g.MkSlice();
 
 
 	slice = g.MkSlice(0, 4, 5);

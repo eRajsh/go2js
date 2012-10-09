@@ -16,6 +16,8 @@ func builtIn() {
 	var s1 []byte
 	s2 := []byte{}
 	s3 := make([]byte, 0)
+	s4 := make([]byte, 0, 10)
+	s5 := []int{1, 3, 5}
 
 	tests := []struct {
 		msg string
@@ -25,12 +27,20 @@ func builtIn() {
 		{"nil s1", s1 == nil, true},
 		{"nil s2", s2 == nil, false},
 		{"nil s3", s3 == nil, false},
+		{"nil s4", s4 == nil, false},
+		{"nil s5", s5 == nil, false},
+
 		{"len s1", len(s1) == 0, true},
 		{"len s2", len(s2) == 0, true},
 		{"len s3", len(s3) == 0, true},
+		{"len s4", len(s4) == 0, true},
+		{"len s5", len(s5) == 3, true},
+
 		{"cap s1", cap(s1) == 0, true},
 		{"cap s2", cap(s2) == 0, true},
 		{"cap s3", cap(s3) == 0, true},
+		{"cap s4", cap(s4) == 10, true},
+		{"cap s5", cap(s5) == 3, true},
 	}
 
 	for _, t := range tests {

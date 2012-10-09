@@ -211,7 +211,7 @@ function blankIdInRange() {
 		return max;
 	};
 
-	var slice = g.NilSlice();
+	var slice = g.MkSlice();
 
 	var A1 = g.MkArray([10], 0, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
 	var A2 = g.MkArray([4], 0, [1, 2, 3, 4]);
