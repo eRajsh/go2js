@@ -10,10 +10,10 @@ var g = {}; (function() {
 
 
 const 
-invalid = 0,
-arrayKind = 1,
-mapKind = 2,
-sliceKind = 3;
+invalidT = 0,
+arrayT = 1,
+mapT = 2,
+sliceT = 3;
 
 
 
@@ -28,8 +28,6 @@ sliceKind = 3;
 		};
 	}
 }());
-
-
 
 
 
@@ -58,6 +56,9 @@ arrayType.prototype.cap = function(dim) {
 }
 
 
+arrayType.prototype.typ = function() { return arrayT; }
+
+
 
 function MkArray(dim, zero, elem) {
 	var a = new arrayType([], g.Map(0));
@@ -77,38 +78,8 @@ function MkArray(dim, zero, elem) {
 		a.len_[i] = v;
 	}
 
-
-
 	return a;
 }
-
-arrayType.prototype.kind = function() { return arrayKind; }
-
-
-function mergeArray(dst, src) {
-	var srcVal; for (var i in src) { srcVal = src[i];
-		if (Array.isArray(srcVal)) {
-			mergeArray(dst[i], srcVal);
-		} else {
-			var isHashMap = false;
-
-
-			if (typeof(srcVal) === "object") {
-				var v; for (var k in srcVal) { v = srcVal[k];
-					if (srcVal.hasOwnProperty(k)) {
-						isHashMap = true;
-						i = k;
-						dst[i] = v;
-					}
-				}
-			}
-			if (!isHashMap) {
-				dst[i] = srcVal;
-			}
-		}
-	}
-}
-
 
 
 function equalDim(d1, d2) {
@@ -122,7 +93,6 @@ function equalDim(d1, d2) {
 	}
 	return true;
 }
-
 
 
 function getDimArray(a) { var dim = [];
@@ -152,20 +122,29 @@ function initArray(dim, zero) { var a = [];
 }
 
 
+function mergeArray(dst, src) {
+	var srcVal; for (var i in src) { srcVal = src[i];
+		if (Array.isArray(srcVal)) {
+			mergeArray(dst[i], srcVal);
+		} else {
+			var isHashMap = false;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+			if (typeof(srcVal) === "object") {
+				var v; for (var k in srcVal) { v = srcVal[k];
+					if (srcVal.hasOwnProperty(k)) {
+						isHashMap = true;
+						i = k;
+						dst[i] = v;
+					}
+				}
+			}
+			if (!isHashMap) {
+				dst[i] = srcVal;
+			}
+		}
+	}
+}
 
 
 
@@ -182,6 +161,9 @@ function sliceType(array, elem, low, high, len, cap, isNil) {
 
 	this.isNil=isNil
 }
+
+
+sliceType.prototype.typ = function() { return sliceT; }
 
 
 
@@ -288,8 +270,6 @@ sliceType.prototype.str = function() {
 	return _s.join("");
 }
 
-sliceType.prototype.kind = function() { return sliceKind; }
-
 
 
 
@@ -327,20 +307,25 @@ sliceType.prototype.kind = function() { return sliceKind; }
 function mapType(v, zero) {
 	this.v=v;
 	this.zero=zero
-
-
 }
+
+
+mapType.prototype.len = function() {
+	var len = 0;
+	var _; for (var key in this.v) { _ = this.v[key];
+		if (this.v.hasOwnProperty(key)) {
+			len++;
+		}
+	}
+	return len;
+}
+
+
+mapType.prototype.typ = function() { return mapT; }
 
 
 function Map(zero, v) {
 	var m = new mapType(v, zero);
-
-
-
-
-
-
-
 	return m;
 }
 
@@ -360,28 +345,6 @@ mapType.prototype.get = function(k) {
 	}
 	return [v, true];
 }
-
-
-mapType.prototype.len = function() {
-	var len = 0;
-	var _; for (var key in this.v) { _ = this.v[key];
-		if (this.v.hasOwnProperty(key)) {
-			len++;
-		}
-	}
-	return len;
-}
-
-
-
-
-
-
-
-
-
-
-
 
 
 

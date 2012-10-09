@@ -8,12 +8,12 @@
 
 package g
 
-// The specific kind of type that it represents.
+// The specific type that it represents.
 const (
-	invalid uint = iota
-	arrayKind
-	mapKind
-	sliceKind
+	invalidT int = iota
+	arrayT
+	mapT
+	sliceT
 )
 
 // == Array
@@ -32,17 +32,15 @@ func init() {
 // The array can not be compared with nil.
 // The capacity is the same than length.
 
-// TODO 1: mergeArray could be integrated in initArray ?
-
 // arrayType represents a fixed array type.
 type arrayType struct {
 	v []interface{} // array's value
 
-	len_ map[uint]uint
+	len_ map[int]int
 }
 
 // len returns the length for the given dimension.
-func (a arrayType) len(dim uint) uint {
+func (a arrayType) len(dim int) int {
 	if dim == nil {
 		return a.len_[0]
 	}
@@ -50,16 +48,19 @@ func (a arrayType) len(dim uint) uint {
 }
 
 // cap returns the capacity for the given dimension.
-func (a arrayType) cap(dim uint) uint {
+func (a arrayType) cap(dim int) int {
 	if dim == nil {
 		return a.len_[0]
 	}
 	return a.len_[len(arguments)]
 }
 
+// typ returns the type.
+func (a arrayType) typ() int { return arrayT }
+
 // MkArray initializes an array of dimension "dim" to value "zero",
 // merging the elements of "elem" if any.
-func MkArray(dim []uint, zero interface{}, elem []interface{}) *arrayType {
+func MkArray(dim []int, zero interface{}, elem []interface{}) *arrayType {
 	a := new(arrayType)
 
 	if elem != nil {
@@ -77,12 +78,48 @@ func MkArray(dim []uint, zero interface{}, elem []interface{}) *arrayType {
 		a.len_[i] = v
 	}
 
-	//a.len = dim[0]
-	//a.cap = a.len
 	return a
 }
 
-func (a arrayType) kind() uint { return arrayKind }
+// equalDim reports whether d1 and d2 are equal.
+func equalDim(d1, d2 []int) bool {
+	if len(d1) != len(d2) {
+		return false
+	}
+	for i, v := range d1 {
+		if v != d2[i] {
+			return false
+		}
+	}
+	return true
+}
+
+// getDimArray returns the dimension of an array.
+func getDimArray(a []interface{}) (dim []int) {
+	for {
+		dim.push(len(a))
+
+		if Array.isArray(a[0]) {
+			a = a[0]
+		} else {
+			break
+		}
+	}
+	return
+}
+
+// initArray returns an array of dimension given in "dim" initialized to "zero".
+func initArray(dim []int, zero interface{}) (a []interface{}) {
+	if len(dim) == 0 {
+		return zero
+	}
+	nextArray := initArray(dim.slice(1), zero)
+
+	for i := 0; i < dim[0]; i++ {
+		a[i] = nextArray
+	}
+	return
+}
 
 // mergeArray merges src in array dst.
 func mergeArray(dst, src []interface{}) {
@@ -109,64 +146,6 @@ func mergeArray(dst, src []interface{}) {
 	}
 }
 
-// TODO: could be done during translation, if it isn't possible TODO 1
-// equalDim reports whether d1 and d2 are equal.
-func equalDim(d1, d2 []uint) bool {
-	if len(d1) != len(d2) {
-		return false
-	}
-	for i, v := range d1 {
-		if v != d2[i] {
-			return false
-		}
-	}
-	return true
-}
-
-// TODO: could be done during translation, if it isn't possible TODO 1
-// getDimArray returns the dimension of an array.
-func getDimArray(a []interface{}) (dim []uint) {
-	for {
-		dim.push(len(a))
-
-		if Array.isArray(a[0]) {
-			a = a[0]
-		} else {
-			break
-		}
-	}
-	return
-}
-
-// initArray returns an array of dimension given in "dim" initialized to "zero".
-func initArray(dim []uint, zero interface{}) (a []interface{}) {
-	if len(dim) == 0 {
-		return zero
-	}
-	nextArray := initArray(dim.slice(1), zero)
-
-	for i := 0; i < dim[0]; i++ {
-		a[i] = nextArray
-	}
-	return
-}
-
-/*
-func initArray(dim []uint, zero interface{}) (a []interface{}) {
-	if len(dim) > 1 {
-		nextArray := initArray(dim.slice(1), zero)
-
-		for i := 0; i < dim[0]; i++ {
-			a[i] = nextArray
-		}
-	} else {
-		for i := 0; i < dim[0]; i++ {
-			a[i] = zero
-		}
-	}
-	return
-}*/
-
 // == Slice
 //
 
@@ -175,13 +154,16 @@ type sliceType struct {
 	array interface{}   // the array where this slice is got, if any
 	elem  []interface{} // elements from scratch (make) or appended to the array
 
-	low  uint // indexes for the array
-	high uint
-	len  uint // total of elements
-	cap  uint
+	low  int // indexes for the array
+	high int
+	len  int // total of elements
+	cap  int
 
 	isNil bool // for variables declared like slices
 }
+
+// typ returns the type.
+func (s sliceType) typ() int { return sliceT }
 
 // NilSlice creates a null slice.
 // For variables declared like slices.
@@ -193,7 +175,7 @@ func NilSlice() *sliceType {
 }
 
 // MkSlice initializes a slice with the zero value.
-func MkSlice(zero interface{}, len, cap uint) *sliceType {
+func MkSlice(zero interface{}, len, cap int) *sliceType {
 	s := new(sliceType)
 	s.len = len
 
@@ -246,7 +228,7 @@ func Slice(zero interface{}, elem []interface{}) *sliceType {
 }
 
 // SliceFrom creates a new slice from an array using the indexes low and high.
-func SliceFrom(a interface{}, low, high uint) *sliceType {
+func SliceFrom(a interface{}, low, high int) *sliceType {
 	s := new(sliceType)
 
 	s.array = a
@@ -258,7 +240,7 @@ func SliceFrom(a interface{}, low, high uint) *sliceType {
 }
 
 // set sets the elements of a slice.
-func (s sliceType) set(i interface{}, low, high uint) {
+func (s sliceType) set(i interface{}, low, high int) {
 	s.low, s.high = low, high
 
 	if i.elem != nil { // from make
@@ -288,10 +270,8 @@ func (s sliceType) str() string {
 	return _s.join("")
 }
 
-func (s sliceType) kind() uint { return sliceKind }
-
 /*
-func (s sliceType) setSlice(i interface{}, low, high uint) {
+func (s sliceType) setSlice(i interface{}, low, high int) {
 	s.low, s.high = low, high
 	s.len = high - low
 
@@ -327,20 +307,25 @@ func (s sliceType) append(elt interface{}) {
 type mapType struct {
 	v    map[interface{}]interface{} // map's value
 	zero interface{}                 // zero value for the map's value
-
-	//len   uint
 }
+
+// len returns the number of elements.
+func (m mapType) len() int {
+	len := 0
+	for key, _ := range m.v {
+		if m.v.hasOwnProperty(key) {
+			len++
+		}
+	}
+	return len
+}
+
+// typ returns the type.
+func (m mapType) typ() int { return mapT }
 
 // Map creates a map storing its zero value.
 func Map(zero interface{}, v map[interface{}]interface{}) *mapType {
 	m := &mapType{v, zero}
-
-	/*m := &mapType{v, zero, 0}
-	for key, _ := range v {
-		if v.hasOwnProperty(key) {
-			m.len++
-		}
-	}*/
 	return m
 }
 
@@ -360,28 +345,6 @@ func (m mapType) get(k interface{}) (interface{}, bool) {
 	}
 	return v, true
 }
-
-// len returns the number of elements.
-func (m mapType) len() int {
-	len := 0
-	for key, _ := range m.v {
-		if m.v.hasOwnProperty(key) {
-			len++
-		}
-	}
-	return len
-}
-
-// If it were using the field length.
-/*func (m mapType) set(k, v interface{}) {
-	m.v[k] = v
-	m.len++
-}
-
-func (m mapType) del(k interface{}) {
-	delete(m, k)
-	m.len--
-}*/
 
 // == Utility
 //

@@ -20,7 +20,7 @@ type Kind uint8
 
 const (
 	unknownKind Kind = iota
-	arrayKind
+	//arrayKind // TODO: remove
 	//ellipsisKind
 	sliceKind
 	structKind
@@ -488,7 +488,7 @@ func (e *expression) translate(expr ast.Expr) {
 				e.kind = sliceKind
 			} else { // Array
 				e.tr.arrays[e.tr.funcId][e.tr.blockId][e.tr.lastVarName] = void
-				e.kind = arrayKind
+				//e.kind = arrayKind //TODO: remove
 			}
 			// Struct
 			if elt, ok := compoType.Elt.(*ast.StructType); ok {
