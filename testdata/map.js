@@ -28,6 +28,7 @@ function builtIn() {
 		_("nil m2", m2.v === undefined, false),
 		_("nil m3", m3.v === undefined, false),
 		_("nil m4", m4.v === undefined, false),
+		_("nil m4", m4.v !== undefined, true),
 
 		_("len m1", m1.len() === 0, true),
 		_("len m2", m2.len() === 0, true),

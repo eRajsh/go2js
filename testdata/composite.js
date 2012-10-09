@@ -65,6 +65,7 @@ function builtInArray() {
 		_("len a2", a2.len() === 5, true),
 		_("len a3", a3.len() === 5, true),
 		_("len a4", a4.len() === 5, true),
+		_("len a4", a4.len() !== 5, false),
 
 		_("cap a1", a1.cap() === 5, true),
 		_("cap a2", a2.cap() === 5, true),

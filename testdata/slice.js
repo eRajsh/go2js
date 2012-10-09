@@ -29,6 +29,7 @@ function builtIn() {
 		_("nil s3", s3.isNil, false),
 		_("nil s4", s4.isNil, false),
 		_("nil s5", s5.isNil, false),
+		_("nil s5", !s5.isNil, true),
 
 		_("len s1", s1.len === 0, true),
 		_("len s2", s2.len === 0, true),

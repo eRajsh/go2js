@@ -65,6 +65,7 @@ func builtInArray() {
 		{"len a2", len(a2) == 5, true},
 		{"len a3", len(a3) == 5, true},
 		{"len a4", len(a4) == 5, true},
+		{"len a4", len(a4) != 5, false},
 
 		{"cap a1", cap(a1) == 5, true},
 		{"cap a2", cap(a2) == 5, true},

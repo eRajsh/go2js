@@ -28,6 +28,7 @@ func builtIn() {
 		{"nil m2", m2 == nil, false},
 		{"nil m3", m3 == nil, false},
 		{"nil m4", m4 == nil, false},
+		{"nil m4", m4 != nil, true},
 
 		{"len m1", len(m1) == 0, true},
 		{"len m2", len(m2) == 0, true},
