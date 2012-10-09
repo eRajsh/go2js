@@ -39,7 +39,7 @@ function older10(people) {
 
 
 
-function builtIn() {
+function builtInArray() {
 	var pass = true;
 
 
@@ -136,7 +136,7 @@ function initArray() {
 	};}; tests = [
 		_("len", array1.len() === array2.len(), true),
 		_("cap", array1.cap() === array2.cap(), true),
-		_("equality", JSON.stringify(array1) === JSON.stringify(array2), true)
+		_("equality", JSON.stringify(array1.v) === JSON.stringify(array2.v), true)
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
@@ -156,13 +156,13 @@ function testArray() {
 
 
 
-	array[1] = new person("Paul", 23);
-	array[2] = new person("Jim", 24);
-	array[3] = new person("Sam", 84);
-	array[4] = new person("Rob", 54);
-	array[8] = new person("Karl", 19);
+	array.v[1] = new person("Paul", 23);
+	array.v[2] = new person("Jim", 24);
+	array.v[3] = new person("Sam", 84);
+	array.v[4] = new person("Rob", 54);
+	array.v[8] = new person("Karl", 19);
 
-	var older = older10(array);
+	var older = older10(array.v);
 
 	if (older.name === "Sam") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
@@ -242,8 +242,8 @@ function testStruct() {
 function main() {
 	document.write("<br><br>== Composite types<br><br>");
 
-	document.write("=== RUN builtIn<br>");
-	builtIn();
+	document.write("=== RUN builtInArray<br>");
+	builtInArray();
 	document.write("=== RUN initArray<br>");
 	initArray();
 	document.write("=== RUN testArray<br>");

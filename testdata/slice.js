@@ -209,7 +209,7 @@ function reference() {
 	}
 
 
-	A[4] = 'E';
+	A.v[4] = 'E';
 
 	_ = function(msg, in_, out) { return {
 		msg:msg,

@@ -23,14 +23,15 @@ type dataStmt struct {
 	lenCase int // number of "case" statements
 	iCase   int // index in "case" statements
 
+	initIsPointer  bool // the value initialized is a pointer?
 	isArray        bool // to close the parenthesis
 	isConst        bool
 	isVar          bool
-	initIsPointer  bool // the value initialized is a pointer?
-	wasFallthrough bool // the last statement was "fallthrough"?
-	wasReturn      bool // the last statement was "return"?
+	returnBasicLit bool
 	skipLbrace     bool // left brace
 	skipSemicolon  bool
+	wasFallthrough bool // the last statement was "fallthrough"?
+	wasReturn      bool // the last statement was "return"?
 
 	lastVarName string // for composite types
 	results     string // variables names that return must use

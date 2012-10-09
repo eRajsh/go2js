@@ -375,6 +375,7 @@ func (e *expression) translate(expr ast.Expr) {
 
 		case "len":
 			e.returnBasicLit = true
+			e.tr.returnBasicLit = true
 			arg := e.tr.getExpression(typ.Args[0]).String()
 			argNoField := stripField(arg)
 			argNoIndex, index := splitIndex(arg)
@@ -391,9 +392,11 @@ func (e *expression) translate(expr ast.Expr) {
 			} else {
 				e.WriteString(arg + ".length")
 			}
+			e.tr.returnBasicLit = false
 
 		case "cap":
 			e.returnBasicLit = true
+			e.tr.returnBasicLit = true
 			arg := e.tr.getExpression(typ.Args[0]).String()
 			argNoField := stripField(arg)
 			argNoIndex, index := splitIndex(arg)
@@ -410,6 +413,7 @@ func (e *expression) translate(expr ast.Expr) {
 			} else if argNoIndex != arg && e.tr.isType(arrayType, argNoIndex) {
 				e.WriteString(argNoIndex + ".cap(" + index + ")")
 			}
+			e.tr.returnBasicLit = false
 
 		case "delete":
 			e.WriteString(fmt.Sprintf("delete %s%s[%s]",
@@ -630,15 +634,11 @@ func (e *expression) translate(expr ast.Expr) {
 				e.tr.addPointer(name)
 			} else {
 				if !e.tr.isVar {
-					isSlice := false
 
-					if e.tr.isType(sliceType, name) {
-						isSlice = true
-					}
 					if name == e.tr.recvVar {
 						name = "this" + TYPE_FIELD
 					}
-					if isSlice {
+					if e.tr.isType(sliceType, name) {
 						name += VALUE_FIELD // slice field
 					}
 
@@ -647,6 +647,10 @@ func (e *expression) translate(expr ast.Expr) {
 					}
 				} else {
 					e.isIdent = true
+
+					if !e.tr.returnBasicLit && e.tr.isType(arrayType, name) {
+						name += VALUE_FIELD
+					}
 				}
 			}
 

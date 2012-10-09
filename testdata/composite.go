@@ -39,7 +39,7 @@ func older10(people [10]person) person {
 // == Array
 //
 
-func builtIn() {
+func builtInArray() {
 	pass := true
 
 	// TODO
@@ -242,8 +242,8 @@ func testStruct() {
 func main() {
 	fmt.Print("\n\n== Composite types\n\n")
 
-	fmt.Println("=== RUN builtIn")
-	builtIn()
+	fmt.Println("=== RUN builtInArray")
+	builtInArray()
 	fmt.Println("=== RUN initArray")
 	initArray()
 	fmt.Println("=== RUN testArray")
