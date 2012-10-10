@@ -28,7 +28,7 @@ func testInit() {
 	}
 }
 
-func singleLine() { fmt.Println("\tpasssingleLine") }
+func singleLine() { fmt.Println("\tpass") }
 
 func simpleFunc() {
 	pass := true

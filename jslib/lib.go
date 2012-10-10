@@ -59,16 +59,16 @@ func (a arrayType) cap(dim int) int {
 func (a arrayType) typ() int { return arrayT }
 
 // MkArray initializes an array of dimension "dim" to value "zero",
-// merging the elements of "elem" if any.
-func MkArray(dim []int, zero interface{}, elem []interface{}) *arrayType {
+// merging the elements of "data" if any.
+func MkArray(dim []int, zero interface{}, data []interface{}) *arrayType {
 	a := new(arrayType)
 
-	if elem != nil {
-		if !equalDim(dim, getDimArray(elem)) {
+	if data != nil {
+		if !equalDim(dim, getDimArray(data)) {
 			a.v = initArray(dim, zero)
-			mergeArray(a.v, elem)
+			mergeArray(a.v, data)
 		} else {
-			a.v = elem
+			a.v = data
 		}
 	} else {
 		a.v = initArray(dim, zero)
@@ -80,6 +80,8 @@ func MkArray(dim []int, zero interface{}, elem []interface{}) *arrayType {
 
 	return a
 }
+
+// * * *
 
 // equalDim reports whether d1 and d2 are equal.
 func equalDim(d1, d2 []int) bool {
@@ -152,32 +154,39 @@ func mergeArray(dst, src []interface{}) {
 // sliceType represents a slice type.
 type sliceType struct {
 	array interface{}   // the array where this slice is got, if any
-	elem  []interface{} // elements from scratch (make) or appended to the array
+	data  []interface{} // elements from scratch (make) or appended to the array
 
 	low  int // indexes for the array
 	high int
 	len  int // total of elements
 	cap  int
 
-	isNil bool // for variables declared like slices
+	nil_ bool // for variables declared like slices
 }
 
 // typ returns the type.
 func (s sliceType) typ() int { return sliceT }
+
+func (s sliceType) isNil() bool {
+	if s.len != 0 || s.cap != 0 {
+		return false
+	}
+	return s.nil_
+}
 
 // MkSlice initializes a slice with the zero value.
 func MkSlice(zero interface{}, len, cap int) *sliceType {
 	s := new(sliceType)
 
 	if zero == nil {
-		s.isNil = true
+		s.nil_ = true
 		return s
 	}
 
 	s.len = len
 
 	for i := 0; i < len; i++ {
-		s.elem[i] = zero
+		s.data[i] = zero
 	}
 	if cap != nil {
 		s.cap = cap
@@ -187,16 +196,16 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 	return s
 }
 
-// Slice creates a new slice with the elements in "elem".
-func Slice(zero interface{}, elem []interface{}) *sliceType {
+// Slice creates a new slice with the elements in "data".
+func Slice(zero interface{}, data []interface{}) *sliceType {
 	s := new(sliceType)
 
 	if len(arguments) == 0 {
-		s.isNil = true
+		s.nil_ = true
 		return s
 	}
 
-	for i, srcVal := range elem {
+	for i, srcVal := range data {
 		isHashMap := false
 
 		// The position is into a hash map, if any
@@ -206,18 +215,18 @@ func Slice(zero interface{}, elem []interface{}) *sliceType {
 					isHashMap = true
 
 					for i; i < k; i++ {
-						s.elem[i] = zero
+						s.data[i] = zero
 					}
-					s.elem[i] = v
+					s.data[i] = v
 				}
 			}
 		}
 		if !isHashMap {
-			s.elem[i] = srcVal
+			s.data[i] = srcVal
 		}
 	}
 
-	s.len = len(s.elem)
+	s.len = len(s.data)
 	s.cap = s.len
 	return s
 }
@@ -238,25 +247,31 @@ func SliceFrom(a interface{}, low, high int) *sliceType {
 func (s sliceType) set(i interface{}, low, high int) {
 	s.low, s.high = low, high
 
-	if i.elem != nil { // from make
-		s.elem = i.elem.slice(low, high)
+	if i.typ() == arrayT {
+		s.array = i
+		s.cap = i.cap() - low
+		s.len = high - low
+	}
+
+/*	if i.data != nil { // from make
+		s.data = i.data.slice(low, high)
 		s.cap = i.cap - low
-		s.len = len(s.elem)
+		s.len = len(s.data)
 
 	} else { // from array
 		s.array = i
 		s.cap = len(i) - low
 		s.len = high - low
-	}
+	}*/
 }
 
 // get gets the slice.
 func (s sliceType) get() []interface{} {
-	if len(s.elem) != 0 {
-		return s.elem
+	if len(s.data) != 0 {
+		return s.data
 	}
 	//a := s.array
-	return s.array.slice(s.low, s.high)
+	return s.array.v.slice(s.low, s.high)
 }
 
 // str returns the slice like a string.

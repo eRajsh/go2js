@@ -24,12 +24,12 @@ function builtIn() {
 		in_:in_,
 		out:out
 	};}; tests = [
-		_("nil s1", s1.isNil, true),
-		_("nil s2", s2.isNil, false),
-		_("nil s3", s3.isNil, false),
-		_("nil s4", s4.isNil, false),
-		_("nil s5", s5.isNil, false),
-		_("nil s5", !s5.isNil, true),
+		_("nil s1", s1.isNil(), true),
+		_("nil s2", s2.isNil(), false),
+		_("nil s3", s3.isNil(), false),
+		_("nil s4", s4.isNil(), false),
+		_("nil s5", s5.isNil(), false),
+		_("nil s5", !s5.isNil(), true),
 
 		_("len s1", s1.len === 0, true),
 		_("len s2", s2.len === 0, true),
@@ -64,7 +64,7 @@ function shortHand() {
 
 
 	a_slice.set(array, 4, 8);
-	if (a_slice.toString() === "efgh" && a_slice.len === 4 && a_slice.cap === 6) {
+	if (a_slice.str() === "efgh" && a_slice.len === 4 && a_slice.cap === 6) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [4:8] => got " + a_slice.v + ", len=" + a_slice.len + ", cap=" + a_slice.cap + "<br>");
@@ -73,13 +73,13 @@ function shortHand() {
 	}
 
 	a_slice.set(array, 6, 7);
-	if (a_slice.toString() !== "g") {
+	if (a_slice.str() !== "g") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [6:7] => got " + a_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
 	a_slice.set(array, 0, 3);
-	if (a_slice.toString() === "abc" && a_slice.len === 3 && a_slice.cap === 10) {
+	if (a_slice.str() === "abc" && a_slice.len === 3 && a_slice.cap === 10) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [:3] => got " + a_slice.v + ", len=" + a_slice.len + ", cap=" + a_slice.cap + "<br>");
@@ -88,19 +88,19 @@ function shortHand() {
 	}
 
 	a_slice.set(array, 5);
-	if (a_slice.toString() !== "fghij") {
+	if (a_slice.str() !== "fghij") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [5:] => got " + a_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
 	a_slice.set(array, 0);
-	if (a_slice.toString() !== "abcdefghij") {
+	if (a_slice.str() !== "abcdefghij") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [:] => got " + a_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
 	a_slice.set(array, 3, 7);
-	if (a_slice.toString() === "defg" && a_slice.len === 4 && a_slice.cap === 7) {
+	if (a_slice.str() === "defg" && a_slice.len === 4 && a_slice.cap === 7) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [3:7] => got " + a_slice.v + ", len=" + a_slice.len + ", cap=" + a_slice.cap + "<br>");
@@ -108,10 +108,14 @@ function shortHand() {
 		pass = false, PASS = false;
 	}
 
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [1/2]<br>");
+	}
+
 
 
 	b_slice.set(a_slice, 1, 3);
-	if (b_slice.toString() === "ef" && b_slice.len === 2 && b_slice.cap === 6) {
+	if (b_slice.str() === "ef" && b_slice.len === 2 && b_slice.cap === 6) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. [1:3] => got " + b_slice.v + ", len=" + b_slice.len + ", cap=" + b_slice.cap + "<br>");
@@ -120,21 +124,19 @@ function shortHand() {
 	}
 
 	b_slice.set(a_slice, 0, 3);
-	if (b_slice.toString() !== "def") {
+	if (b_slice.str() !== "def") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. [:3] => got " + b_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
 	b_slice.set(a_slice, 0);
-	if (b_slice.toString() !== "defg") {
+	if (b_slice.str() !== "defg") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. [:] => got " + b_slice.v + "<br>");
 		pass = false, PASS = false;
 	}
 
-
-
 	if (pass) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [2/2]<br>");
 	}
 }
 

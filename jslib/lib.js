@@ -60,15 +60,15 @@ arrayType.prototype.typ = function() { return arrayT; }
 
 
 
-function MkArray(dim, zero, elem) {
+function MkArray(dim, zero, data) {
 	var a = new arrayType([], g.Map(0));
 
-	if (elem !== undefined) {
-		if (!equalDim(dim, getDimArray(elem))) {
+	if (data !== undefined) {
+		if (!equalDim(dim, getDimArray(data))) {
 			a.v = initArray(dim, zero);
-			mergeArray(a.v, elem);
+			mergeArray(a.v, data);
 		} else {
-			a.v = elem;
+			a.v = data;
 		}
 	} else {
 		a.v = initArray(dim, zero);
@@ -80,6 +80,8 @@ function MkArray(dim, zero, elem) {
 
 	return a;
 }
+
+
 
 
 function equalDim(d1, d2) {
@@ -150,34 +152,41 @@ function mergeArray(dst, src) {
 
 
 
-function sliceType(array, elem, low, high, len, cap, isNil) {
+function sliceType(array, data, low, high, len, cap, nil_) {
 	this.array=array;
-	this.elem=elem;
+	this.data=data;
 
 	this.low=low;
 	this.high=high;
 	this.len=len;
 	this.cap=cap;
 
-	this.isNil=isNil
+	this.nil_=nil_
 }
 
 
 sliceType.prototype.typ = function() { return sliceT; }
+
+sliceType.prototype.isNil = function() {
+	if (this.len !== 0 || this.cap !== 0) {
+		return false;
+	}
+	return this.nil_;
+}
 
 
 function MkSlice(zero, len, cap) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
 	if (zero === undefined) {
-		s.isNil = true;
+		s.nil_ = true;
 		return s;
 	}
 
 	s.len = len;
 
 	for (var i = 0; i < len; i++) {
-		s.elem[i] = zero;
+		s.data[i] = zero;
 	}
 	if (cap !== undefined) {
 		s.cap = cap;
@@ -188,15 +197,15 @@ function MkSlice(zero, len, cap) {
 }
 
 
-function Slice(zero, elem) {
+function Slice(zero, data) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
 	if (arguments.length === 0) {
-		s.isNil = true;
+		s.nil_ = true;
 		return s;
 	}
 
-	var srcVal; for (var i in elem) { srcVal = elem[i];
+	var srcVal; for (var i in data) { srcVal = data[i];
 		var isHashMap = false;
 
 
@@ -206,18 +215,18 @@ function Slice(zero, elem) {
 					isHashMap = true;
 
 					for (i; i < k; i++) {
-						s.elem[i] = zero;
+						s.data[i] = zero;
 					}
-					s.elem[i] = v;
+					s.data[i] = v;
 				}
 			}
 		}
 		if (!isHashMap) {
-			s.elem[i] = srcVal;
+			s.data[i] = srcVal;
 		}
 	}
 
-	s.len = s.elem.length;
+	s.len = s.data.length;
 	s.cap = s.len;
 	return s;
 }
@@ -238,25 +247,31 @@ function SliceFrom(a, low, high) {
 sliceType.prototype.set = function(i, low, high) {
 	this.low = low, this.high = high;
 
-	if (i.elem !== undefined) {
-		this.elem = i.elem.slice(low, high);
-		this.cap = i.cap - low;
-		this.len = this.elem.length;
-
-	} else {
+	if (JSON.stringify(i.typ()) === JSON.stringify(arrayT)) {
 		this.array = i;
-		this.cap = i.length - low;
+		this.cap = i.cap() - low;
 		this.len = high - low;
 	}
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
 sliceType.prototype.get = function() {
-	if (this.elem.length !== 0) {
-		return this.elem;
+	if (this.data.length !== 0) {
+		return this.data;
 	}
 
-	return this.array.slice(this.low, this.high);
+	return this.array.v.slice(this.low, this.high);
 }
 
 

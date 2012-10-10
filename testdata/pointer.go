@@ -160,7 +160,7 @@ func byReference_1() {
 	x1 := add(&x) // by passing the adress of x to it
 
 	if x1 == 4 && x == 4 {
-		fmt.Println("\tpass")
+		fmt.Println("\tpass [1/2]")
 	} else {
 		fmt.Printf("\tFAIL: x=%v, x1=%v\n", x, x1)
 		PASS = false
@@ -168,7 +168,7 @@ func byReference_1() {
 
 	x1 = add(&x)
 	if x == 5 && x1 == 5 {
-		fmt.Println("\tpass")
+		fmt.Println("\tpass [2/2]")
 	} else {
 		fmt.Printf("\tFAIL: x=%v, x1=%v\n", x, x1)
 		PASS = false
@@ -182,7 +182,7 @@ func byReference_2() {
 
 	add(&value, incr)
 	if value == 7 {
-		fmt.Println("\tpass")
+		fmt.Println("\tpass [1/2]")
 	} else {
 		fmt.Printf("\tFAIL: value=%v\n", value)
 		PASS = false
@@ -190,7 +190,7 @@ func byReference_2() {
 
 	add(&value, incr)
 	if value == 8 {
-		fmt.Println("\tpass")
+		fmt.Println("\tpass [2/2]")
 	} else {
 		fmt.Printf("\tFAIL: value=%v\n", value)
 		PASS = false

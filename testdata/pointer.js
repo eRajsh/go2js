@@ -160,7 +160,7 @@ function byReference_1() {
 	var x1 = add(x);
 
 	if (x1 === 4 && x.p === 4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [1/2]<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x=" + x + ", x1=" + x1 + "<br>");
 		PASS = false;
@@ -168,7 +168,7 @@ function byReference_1() {
 
 	x1 = add(x);
 	if (x.p === 5 && x1 === 5) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [2/2]<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x=" + x + ", x1=" + x1 + "<br>");
 		PASS = false;
@@ -182,7 +182,7 @@ function byReference_2() {
 
 	add(value, incr);
 	if (value.p === 7) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [1/2]<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: value=" + value + "<br>");
 		PASS = false;
@@ -190,7 +190,7 @@ function byReference_2() {
 
 	add(value, incr);
 	if (value.p === 8) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [2/2]<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: value=" + value + "<br>");
 		PASS = false;

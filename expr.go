@@ -218,7 +218,7 @@ func (e *expression) translate(expr ast.Expr) {
 				if isOpNot {
 					e.WriteString("!")
 				}
-				e.WriteString(xStr + ".isNil")
+				e.WriteString(xStr + ".isNil()")
 				break
 			}
 			if x.isNil && e.tr.isType(sliceType, yStr) {
@@ -357,7 +357,7 @@ func (e *expression) translate(expr ast.Expr) {
 			argNoField := stripField(arg)
 
 			if e.tr.isType(sliceType, argNoField) {
-				e.WriteString(argNoField + ".toString()")
+				e.WriteString(argNoField + ".str()")
 			} else {
 				e.WriteString(arg)
 				e.returnBasicLit = true

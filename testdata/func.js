@@ -28,7 +28,7 @@ function testInit() {
 	}
 }
 
-function singleLine() { document.write("&nbsp;&nbsp;&nbsp;&nbsp;passsingleLine<br>"); }
+function singleLine() { document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>"); }
 
 function simpleFunc() {
 	var pass = true;

@@ -108,6 +108,10 @@ func shortHand() {
 		pass, PASS = false, false
 	}
 
+	if pass {
+		fmt.Println("\tpass [1/2]")
+	}
+
 	// == 2. Slice of a slice
 
 	b_slice = a_slice[1:3]
@@ -131,10 +135,8 @@ func shortHand() {
 		pass, PASS = false, false
 	}
 
-	// * * *
-
 	if pass {
-		fmt.Println("\tpass")
+		fmt.Println("\tpass [2/2]")
 	}
 }
 
