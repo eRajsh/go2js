@@ -153,8 +153,8 @@ func mergeArray(dst, src []interface{}) {
 
 // sliceType represents a slice type.
 type sliceType struct {
-	array interface{}   // the array where this slice is got, if any
-	data  []interface{} // elements from scratch (make) or appended to the array
+	arr interface{}   // the array where this slice is got, if any
+	v   []interface{} // elements from scratch (make) or appended to the array
 
 	low  int // indexes for the array
 	high int
@@ -186,7 +186,7 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 	s.len = len
 
 	for i := 0; i < len; i++ {
-		s.data[i] = zero
+		s.v[i] = zero
 	}
 	if cap != nil {
 		s.cap = cap
@@ -215,18 +215,18 @@ func Slice(zero interface{}, data []interface{}) *sliceType {
 					isHashMap = true
 
 					for i; i < k; i++ {
-						s.data[i] = zero
+						s.v[i] = zero
 					}
-					s.data[i] = v
+					s.v[i] = v
 				}
 			}
 		}
 		if !isHashMap {
-			s.data[i] = srcVal
+			s.v[i] = srcVal
 		}
 	}
 
-	s.len = len(s.data)
+	s.len = len(s.v)
 	s.cap = s.len
 	return s
 }
@@ -235,7 +235,7 @@ func Slice(zero interface{}, data []interface{}) *sliceType {
 func SliceFrom(a interface{}, low, high int) *sliceType {
 	s := new(sliceType)
 
-	s.array = a
+	s.arr = a
 	s.low = low
 	s.high = high
 	s.len = high - low
@@ -248,36 +248,47 @@ func (s sliceType) set(i interface{}, low, high int) {
 	s.low, s.high = low, high
 
 	if i.typ() == arrayT {
-		s.array = i
-		s.cap = i.cap() - low
+		s.arr = i
 		s.len = high - low
+		s.cap = i.cap() - low
+		s.v = i.v.slice(low, high)
+
+	} else { // sliceT
+		if len(i.v) != 0 {
+			s.v = i.v.slice(low, high)
+		} else {
+			s.v = i.arr.v.slice(low, high)
+		}
+		s.cap = i.cap - low
+		s.len = len(s.v)
 	}
 
-/*	if i.data != nil { // from make
-		s.data = i.data.slice(low, high)
+	/*if i.v != nil { // from make
+		s.v = i.v.slice(low, high)
 		s.cap = i.cap - low
-		s.len = len(s.data)
+		s.len = len(s.v)
 
 	} else { // from array
-		s.array = i
+		s.arr = i
 		s.cap = len(i) - low
 		s.len = high - low
 	}*/
 }
 
 // get gets the slice.
-func (s sliceType) get() []interface{} {
-	if len(s.data) != 0 {
-		return s.data
+/*func (s sliceType) get() []interface{} {
+	if len(s.v) != 0 {
+		return s.v
 	}
-	//a := s.array
-	return s.array.v.slice(s.low, s.high)
-}
+	//a := s.arr
+	return s.arr.v.slice(s.low, s.high)
+}*/
 
 // str returns the slice like a string.
 func (s sliceType) str() string {
-	_s := s.get()
-	return _s.join("")
+	/*_s := s.get()
+	return _s.join("")*/
+	return s.v.join("")
 }
 
 /*
@@ -285,11 +296,11 @@ func (s sliceType) setSlice(i interface{}, low, high int) {
 	s.low, s.high = low, high
 	s.len = high - low
 
-	if i.array != nil { // from slice
-		s.array = i.array
+	if i.arr != nil { // from slice
+		s.arr = i.arr
 		s.cap = i.cap - low
 	} else { // from array
-		s.array = i
+		s.arr = i
 		s.cap = len(i) - low
 	}
 }

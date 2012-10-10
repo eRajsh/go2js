@@ -152,9 +152,9 @@ function mergeArray(dst, src) {
 
 
 
-function sliceType(array, data, low, high, len, cap, nil_) {
-	this.array=array;
-	this.data=data;
+function sliceType(arr, v, low, high, len, cap, nil_) {
+	this.arr=arr;
+	this.v=v;
 
 	this.low=low;
 	this.high=high;
@@ -186,7 +186,7 @@ function MkSlice(zero, len, cap) {
 	s.len = len;
 
 	for (var i = 0; i < len; i++) {
-		s.data[i] = zero;
+		s.v[i] = zero;
 	}
 	if (cap !== undefined) {
 		s.cap = cap;
@@ -215,18 +215,18 @@ function Slice(zero, data) {
 					isHashMap = true;
 
 					for (i; i < k; i++) {
-						s.data[i] = zero;
+						s.v[i] = zero;
 					}
-					s.data[i] = v;
+					s.v[i] = v;
 				}
 			}
 		}
 		if (!isHashMap) {
-			s.data[i] = srcVal;
+			s.v[i] = srcVal;
 		}
 	}
 
-	s.len = s.data.length;
+	s.len = s.v.length;
 	s.cap = s.len;
 	return s;
 }
@@ -235,7 +235,7 @@ function Slice(zero, data) {
 function SliceFrom(a, low, high) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
-	s.array = a;
+	s.arr = a;
 	s.low = low;
 	s.high = high;
 	s.len = high - low;
@@ -248,9 +248,19 @@ sliceType.prototype.set = function(i, low, high) {
 	this.low = low, this.high = high;
 
 	if (JSON.stringify(i.typ()) === JSON.stringify(arrayT)) {
-		this.array = i;
-		this.cap = i.cap() - low;
+		this.arr = i;
 		this.len = high - low;
+		this.cap = i.cap() - low;
+		this.v = i.v.slice(low, high);
+
+	} else {
+		if (i.v.length !== 0) {
+			this.v = i.v.slice(low, high);
+		} else {
+			this.v = i.arr.v.slice(low, high);
+		}
+		this.cap = i.cap - low;
+		this.len = this.v.length;
 	}
 
 
@@ -266,18 +276,19 @@ sliceType.prototype.set = function(i, low, high) {
 }
 
 
-sliceType.prototype.get = function() {
-	if (this.data.length !== 0) {
-		return this.data;
-	}
 
-	return this.array.v.slice(this.low, this.high);
-}
+
+
+
+
+
+
 
 
 sliceType.prototype.str = function() {
-	var _s = this.get();
-	return _s.join("");
+
+
+	return this.v.join("");
 }
 
 
