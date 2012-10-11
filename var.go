@@ -589,7 +589,7 @@ _noFunc:
 		if !isFuncLit {
 			// Insert "var" to variable of anonymous struct.
 			if tr.wasAnonFunc && tr.isType(structType, name) {
-				nameExpr = "var " + nameExpr
+				tr.WriteString("var ")
 				tr.wasAnonFunc = false
 			}
 			tr.WriteString(nameExpr)
@@ -600,6 +600,8 @@ _noFunc:
 
 			if expr.kind == sliceKind {
 				if isNewVar {
+					tr.slices[tr.funcId][tr.blockId][nameExpr] = void
+
 					if value == "" {
 						tr.WriteString(fmt.Sprintf("%sg.MkSlice(0,%s0)", SP+sign+SP, SP))
 					} else {
@@ -614,6 +616,7 @@ _noFunc:
 				}
 			} else if expr.isMake {
 				tr.WriteString(fmt.Sprintf("%sg.MkSlice(%s)", SP+sign+SP, value))
+				tr.slices[tr.funcId][tr.blockId][nameExpr] = void
 
 			} else {
 				if value != "" {

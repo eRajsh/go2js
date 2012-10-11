@@ -195,9 +195,9 @@ function reference() {
 		out: out
 	};}; var tests = [
 		_("A", A, 0, "abcdefghij"),
-		_("slice1", slice1, "defg"),
-		_("slice2", slice2, "fghij"),
-		_("slice3", slice3, "de")
+		_("slice1", slice1.str(), "defg"),
+		_("slice2", slice2.str(), "fghij"),
+		_("slice3", slice3.str(), "de")
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
@@ -216,9 +216,9 @@ function reference() {
 		out: out
 	};}; var tests = [
 		_("A", A, 0, "abcdEfghij"),
-		_("slice1", slice1, "dEfg"),
-		_("slice2", slice2, "fghij"),
-		_("slice3", slice3, "dE")
+		_("slice1", slice1.str(), "dEfg"),
+		_("slice2", slice2.str(), "fghij"),
+		_("slice3", slice3.str(), "dE")
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
@@ -229,7 +229,7 @@ function reference() {
 	}
 
 
-	slice2[1] = 'G';
+	slice2.v[1] = 'G';
 
 	_ = function(msg, in_, out) { return {
 		msg: msg,
@@ -237,9 +237,9 @@ function reference() {
 		out: out
 	};}; var tests = [
 		_("A", A, 0, "abcdEfGhij"),
-		_("slice1", slice1, "dEfG"),
-		_("slice2", slice2, "fGhij"),
-		_("slice3", slice3, "dE")
+		_("slice1", slice1.str(), "dEfG"),
+		_("slice2", slice2.str(), "fGhij"),
+		_("slice3", slice3.str(), "dE")
 	];
 
 	var t; for (var _ in tests) { t = tests[_];

@@ -899,6 +899,35 @@ func (e *expression) writeElts(elts []ast.Expr, Lbrace, Rbrace token.Pos) {
 		exprElt.isMultiDim = e.isMultiDim
 		exprElt.isValue = e.isValue
 
+		// TODO: remove
+		/*exprElt.varName = e.varName
+		exprElt.funcName = e.funcName
+		exprElt.mapName = e.mapName
+		exprElt.zero = e.zero
+
+		exprElt.kind = e.kind
+
+		exprElt.hasError = e.hasError
+		exprElt.useIota = e.useIota
+
+		exprElt.isSliceExpr = e.isSliceExpr
+		exprElt.isIdent = e.isIdent
+		exprElt.isValue = e.isValue
+		exprElt.isVarAddress = e.isVarAddress
+		exprElt.isPointer = e.isPointer
+		exprElt.isMake = e.isMake
+		exprElt.isNil = e.isNil
+
+		exprElt.arrayHasElts = e.arrayHasElts
+		exprElt.isEllipsis = e.isEllipsis
+		exprElt.isMultiDim = e.isMultiDim
+
+		exprElt.isBasicLit = e.isBasicLit
+		exprElt.returnBasicLit = e.returnBasicLit
+
+		exprElt.lenArray = e.lenArray
+		exprElt.index = e.index*/
+
 		exprElt.translate(el)
 		e.WriteString(exprElt.String())
 
