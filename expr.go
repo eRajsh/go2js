@@ -43,6 +43,7 @@ type expression struct {
 	useIota  bool
 
 	//isFunc    bool // anonymous function
+	isSliceExpr  bool
 	isIdent      bool
 	isValue      bool // is it on the right of the assignment?
 	isVarAddress bool
@@ -83,6 +84,7 @@ func (tr *translate) newExpression(iVar interface{}) *expression {
 		"",
 		"",
 		unknownKind,
+		false,
 		false,
 		false,
 		false,
@@ -824,6 +826,7 @@ func (e *expression) translate(expr ast.Expr) {
 		}*/
 
 		e.kind = sliceKind
+		e.isSliceExpr = true
 
 	// godoc go/ast StarExpr
 	//  Star token.Pos // position of "*"

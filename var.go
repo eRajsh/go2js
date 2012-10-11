@@ -596,7 +596,11 @@ _noFunc:
 					if value == "" {
 						tr.WriteString(fmt.Sprintf("%sg.MkSlice(0,%s0)", SP+sign+SP, SP))
 					} else {
-						tr.WriteString(fmt.Sprintf("%sg.Slice(%s)", SP+sign+SP, value))
+						if expr.isSliceExpr {
+							tr.WriteString(fmt.Sprintf("%sg.SliceFrom(%s)", SP+sign+SP, value))
+						} else {
+							tr.WriteString(fmt.Sprintf("%sg.Slice(%s)", SP+sign+SP, value))
+						}
 					}
 				} else {
 					tr.WriteString(".set(" + value + ")")

@@ -183,9 +183,9 @@ function reference() {
 	var pass = true;
 
 	var A = g.MkArray([10], 0, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
-	var slice1 = g.Slice(A, 3, 7);
-	var slice2 = g.Slice(A, 5);
-	var slice3 = g.Slice(slice1, 0, 2);
+	var slice1 = g.SliceFrom(A, 3, 7);
+	var slice2 = g.SliceFrom(A, 5);
+	var slice3 = g.SliceFrom(slice1, 0, 2);
 
 
 
