@@ -20,10 +20,10 @@ function builtIn() {
 	var s5 = g.Slice(0, [1, 3, 5]);
 
 	var _ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 		_("nil s1", s1.isNil(), true),
 		_("nil s2", s2.isNil(), false),
 		_("nil s3", s3.isNil(), false),
@@ -190,10 +190,10 @@ function reference() {
 
 
 	var _ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 		_("A", A, 0, "abcdefghij"),
 		_("slice1", slice1, "defg"),
 		_("slice2", slice2, "fghij"),
@@ -211,10 +211,10 @@ function reference() {
 	A.v[4] = 'E';
 
 	_ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 		_("A", A, 0, "abcdEfghij"),
 		_("slice1", slice1, "dEfg"),
 		_("slice2", slice2, "fghij"),
@@ -232,10 +232,10 @@ function reference() {
 	slice2[1] = 'G';
 
 	_ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 		_("A", A, 0, "abcdEfGhij"),
 		_("slice1", slice1, "dEfG"),
 		_("slice2", slice2, "fGhij"),

@@ -30,6 +30,7 @@ type dataStmt struct {
 	returnBasicLit bool
 	skipLbrace     bool // left brace
 	skipSemicolon  bool
+	wasAnonFunc    bool
 	wasFallthrough bool // the last statement was "fallthrough"?
 	wasReturn      bool // the last statement was "return"?
 

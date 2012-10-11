@@ -55,10 +55,10 @@ function builtInArray() {
 	var a6 = g.MkArray([3,4,2], 0);
 
 	var _ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 
 
 		_("len a1", a1.len() === 5, true),
@@ -131,10 +131,10 @@ function initArray() {
 		new person("", 0)]);
 
 	var _ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 		_("len", array1.len() === array2.len(), true),
 		_("cap", array1.cap() === array2.cap(), true),
 		_("equality", JSON.stringify(array1.v) === JSON.stringify(array2.v), true)
@@ -212,12 +212,12 @@ function testStruct() {
 	var _ = older(bob, paul), BP_older = _[0], BP_diff = _[1];
 
 	var _ = function(msg, inPerson, outPerson, inDiff, outDiff) { return {
-		msg:msg,
-		inPerson:inPerson,
-		outPerson:outPerson,
-		inDiff:inDiff,
-		outDiff:outDiff
-	};}; tests = [
+		msg: msg,
+		inPerson: inPerson,
+		outPerson: outPerson,
+		inDiff: inDiff,
+		outDiff: outDiff
+	};}; var tests = [
 		_("Tom,Bob", TB_older, bob, TB_diff, 7),
 		_("Tom,Paul", TP_older, paul, TP_diff, 25),
 		_("Bob,Paul", BP_older, paul, BP_diff, 18)

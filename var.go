@@ -275,7 +275,7 @@ func (tr *translate) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 			if name != "" {
 				fieldLines += fmt.Sprintf("this.%s=", fieldName)
 			} else {
-				fieldLines += fmt.Sprintf("%s:", fieldName)
+				fieldLines += fmt.Sprintf("%s:%s", fieldName, SP)
 			}
 			if !isPointer {
 				fieldLines += fmt.Sprintf("%s", fieldName)
@@ -330,6 +330,8 @@ func (tr *translate) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 	} else {
 		tr.WriteString(fmt.Sprintf("_%s=%sfunction(%s)%s{%sreturn%s{%s};};%s",
 			SP, SP, fieldNames, SP, SP, SP, fieldLines, SP))
+		tr.wasAnonFunc = true
+		tr.structSlices[tr.funcId][tr.blockId][tr.lastVarName] = void
 	}
 
 	tr.line += posNewField - firstPos // update the global position
@@ -585,6 +587,11 @@ _noFunc:
 		}
 
 		if !isFuncLit {
+			// Insert "var" to variable of anonymous struct.
+			if tr.wasAnonFunc && tr.isType(structType, name) {
+				nameExpr = "var " + nameExpr
+				tr.wasAnonFunc = false
+			}
 			tr.WriteString(nameExpr)
 
 			/*switch expr.kind {

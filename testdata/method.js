@@ -64,10 +64,10 @@ function method() {
 	var c2 = new Circle(25);
 
 	var _ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 		_("Rectangle{12,2}", r1.area(), 24),
 		_("Rectangle{9,4}", r2.area(), 36),
 		_("Circle{10}", c1.area(), 314.1592653589793),

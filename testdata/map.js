@@ -20,10 +20,10 @@ function builtIn() {
 	var m4 = g.Map(0, {});
 
 	var _ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 		_("nil m1", m1.v === undefined, true),
 		_("nil m2", m2.v === undefined, false),
 		_("nil m3", m3.v === undefined, false),
@@ -70,10 +70,10 @@ function declaration() {
 	rating2.v["C++"] = 2;
 
 	var _ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 		_("numbers[\"one\"]", numbers.get("one")[0], 1),
 		_("numbers[\"ten\"]", numbers.get("ten")[0], 10),
 		_("numbers[\"trois\"]", numbers.get("trois")[0], 3),
@@ -120,10 +120,10 @@ function keyNoExistent() {
 	var k_multiDim = multiDim.get(1, 2)[0];
 
 	var _ = function(msg, in_, out) { return {
-		msg:msg,
-		in_:in_,
-		out:out
-	};}; tests = [
+		msg: msg,
+		in_: in_,
+		out: out
+	};}; var tests = [
 		_("csharp_rating", csharp_rating, 0.00),
 		_("csharp_rating2", csharp_rating2, 0),
 		_("k_multiDim", k_multiDim, 0)
