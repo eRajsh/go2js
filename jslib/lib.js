@@ -56,6 +56,11 @@ arrayType.prototype.cap = function(dim) {
 }
 
 
+arrayType.prototype.str = function() {
+	return this.v.join("");
+}
+
+
 arrayType.prototype.typ = function() { return arrayT; }
 
 
@@ -232,35 +237,40 @@ function Slice(zero, data) {
 }
 
 
-function SliceFrom(a, low, high) {
+function SliceFrom(src, low, high) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
+	s.set(src, low, high);
 
-	s.arr = a;
-	s.low = low;
-	s.high = high;
-	s.len = high - low;
-	s.cap = a.cap - low;
+
+
+
+
+
+
+
+
+
+
 	return s;
 }
 
 
-sliceType.prototype.set = function(i, low, high) {
+sliceType.prototype.set = function(src, low, high) {
 	this.low = low, this.high = high;
 
-	if (JSON.stringify(i.typ()) === JSON.stringify(arrayT)) {
-		this.arr = i;
-		this.len = high - low;
-		this.cap = i.cap() - low;
-		this.v = i.v.slice(low, high);
-
-	} else {
-		if (i.v.length !== 0) {
-			this.v = i.v.slice(low, high);
+	if (src.low !== undefined) {
+		if (src.v.length !== 0) {
+			this.v = src.v.slice(low, high);
 		} else {
-			this.v = i.arr.v.slice(low, high);
+			this.v = src.arr.v.slice(low, high);
 		}
-		this.cap = i.cap - low;
 		this.len = this.v.length;
+		this.cap = src.cap - low;
+	} else {
+		this.arr = src;
+		this.v = src.v.slice(low, high);
+		this.len = high - low;
+		this.cap = src.cap() - low;
 	}
 
 

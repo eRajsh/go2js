@@ -151,6 +151,8 @@ func parameterByValue() {
 }
 
 func byReference_1() {
+	pass := true
+
 	add := func(v *int) int { // pointer to int
 		*v = *v + 1 // we dereference and change the value pointed by a
 		return *v
@@ -160,40 +162,50 @@ func byReference_1() {
 	x1 := add(&x) // by passing the adress of x to it
 
 	if x1 == 4 && x == 4 {
-		fmt.Println("\tpass [1/2]")
+		// ok
 	} else {
-		fmt.Printf("\tFAIL: x=%v, x1=%v\n", x, x1)
-		PASS = false
+		fmt.Printf("\tFAIL: 1. x=%v, x1=%v\n", x, x1)
+		pass, PASS = false, false
 	}
 
 	x1 = add(&x)
 	if x == 5 && x1 == 5 {
-		fmt.Println("\tpass [2/2]")
+		// ok
 	} else {
-		fmt.Printf("\tFAIL: x=%v, x1=%v\n", x, x1)
-		PASS = false
+		fmt.Printf("\tFAIL: 2. x=%v, x1=%v\n", x, x1)
+		pass, PASS = false, false
+	}
+
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
 func byReference_2() {
+	pass := true
+
 	add := func(v *int, i int) { *v += i }
 	value := 6
 	incr := 1
 
 	add(&value, incr)
 	if value == 7 {
-		fmt.Println("\tpass [1/2]")
+		// ok
 	} else {
-		fmt.Printf("\tFAIL: value=%v\n", value)
-		PASS = false
+		fmt.Printf("\tFAIL: 1. value=%v\n", value)
+		pass, PASS = false, false
 	}
 
 	add(&value, incr)
 	if value == 8 {
-		fmt.Println("\tpass [2/2]")
+		// ok
 	} else {
-		fmt.Printf("\tFAIL: value=%v\n", value)
-		PASS = false
+		fmt.Printf("\tFAIL: 2. value=%v\n", value)
+		pass, PASS = false, false
+	}
+
+	if pass {
+		fmt.Println("\tpass")
 	}
 }
 
@@ -208,7 +220,7 @@ func byReference_3() {
 	if *y == 4 {
 		fmt.Println("\tpass")
 	} else {
-		fmt.Printf("\tFAIL: 3. *y=%v\n", *y)
+		fmt.Printf("\tFAIL: *y=%v\n", *y)
 		PASS = false
 	}
 }

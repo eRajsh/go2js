@@ -151,6 +151,8 @@ function parameterByValue() {
 }
 
 function byReference_1() {
+	var pass = true;
+
 	var add = function(v) {
 		v.p = v.p + 1;
 		return v.p;
@@ -160,40 +162,50 @@ function byReference_1() {
 	var x1 = add(x);
 
 	if (x1 === 4 && x.p === 4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [1/2]<br>");
+
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x=" + x + ", x1=" + x1 + "<br>");
-		PASS = false;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. x=" + x + ", x1=" + x1 + "<br>");
+		pass = false, PASS = false;
 	}
 
 	x1 = add(x);
 	if (x.p === 5 && x1 === 5) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [2/2]<br>");
+
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x=" + x + ", x1=" + x1 + "<br>");
-		PASS = false;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. x=" + x + ", x1=" + x1 + "<br>");
+		pass = false, PASS = false;
+	}
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
 function byReference_2() {
+	var pass = true;
+
 	var add = function(v, i) { v.p += i; };
 	var value = {p:6};
 	var incr = 1;
 
 	add(value, incr);
 	if (value.p === 7) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [1/2]<br>");
+
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: value=" + value + "<br>");
-		PASS = false;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. value=" + value + "<br>");
+		pass = false, PASS = false;
 	}
 
 	add(value, incr);
 	if (value.p === 8) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [2/2]<br>");
+
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: value=" + value + "<br>");
-		PASS = false;
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. value=" + value + "<br>");
+		pass = false, PASS = false;
+	}
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
@@ -208,7 +220,7 @@ function byReference_3() {
 	if (y.p === 4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. *y=" + y.p + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: *y=" + y.p + "<br>");
 		PASS = false;
 	}
 }

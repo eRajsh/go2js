@@ -108,10 +108,6 @@ function shortHand() {
 		pass = false, PASS = false;
 	}
 
-	if (pass) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [1/2]<br>");
-	}
-
 
 
 	b_slice.set(a_slice, 1, 3);
@@ -136,7 +132,7 @@ function shortHand() {
 	}
 
 	if (pass) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass [2/2]<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
 }
 
@@ -186,16 +182,6 @@ function useFunc() {
 function reference() {
 	var pass = true;
 
-	var fmtSlice = function(slice) {
-		var s = "[";
-		for (var index = 0; index < slice.len - 1; index++) {
-			s += "" + slice.v[index] + ",";
-		}
-		s += "" + slice.v[slice.len - 1] + "]";
-
-		return s;
-	};
-
 	var A = g.MkArray([10], 0, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
 	var slice1 = g.Slice(A, 3, 7);
 	var slice2 = g.Slice(A, 5);
@@ -208,10 +194,10 @@ function reference() {
 		in_:in_,
 		out:out
 	};}; tests = [
-		_("A", fmtSlice(A, 0), "['a','b','c','d','e','f','g','h','i','j']"),
-		_("slice1", fmtSlice(slice1), "['d','e','f','g']"),
-		_("slice2", fmtSlice(slice2), "['f','g','h','i','j']"),
-		_("slice3", fmtSlice(slice3), "['d','e']")
+		_("A", A, 0, "abcdefghij"),
+		_("slice1", slice1, "defg"),
+		_("slice2", slice2, "fghij"),
+		_("slice3", slice3, "de")
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
@@ -229,10 +215,10 @@ function reference() {
 		in_:in_,
 		out:out
 	};}; tests = [
-		_("A", fmtSlice(A, 0), "['a','b','c','d','E','f','g','h','i','j']"),
-		_("slice1", fmtSlice(slice1), "['d','E','f','g']"),
-		_("slice2", fmtSlice(slice2), "['f','g','h','i','j']"),
-		_("slice3", fmtSlice(slice3), "['d','E']")
+		_("A", A, 0, "abcdEfghij"),
+		_("slice1", slice1, "dEfg"),
+		_("slice2", slice2, "fghij"),
+		_("slice3", slice3, "dE")
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
@@ -250,10 +236,10 @@ function reference() {
 		in_:in_,
 		out:out
 	};}; tests = [
-		_("A", fmtSlice(A, 0), "['a','b','c','d','E','f','G','h','i','j']"),
-		_("slice1", fmtSlice(slice1), "['d','E','f','G']"),
-		_("slice2", fmtSlice(slice2), "['f','G','h','i','j']"),
-		_("slice3", fmtSlice(slice3), "['d','E']")
+		_("A", A, 0, "abcdEfGhij"),
+		_("slice1", slice1, "dEfG"),
+		_("slice2", slice2, "fGhij"),
+		_("slice3", slice3, "dE")
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
@@ -262,8 +248,6 @@ function reference() {
 			pass = false, PASS = false;
 		}
 	}
-
-
 
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");

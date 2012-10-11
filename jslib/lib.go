@@ -55,6 +55,11 @@ func (a arrayType) cap(dim int) int {
 	return a.len_[len(arguments)]
 }
 
+// str returns the array (of bytes or runes) like a string.
+func (a arrayType) str() string {
+	return a.v.join("")
+}
+
 // typ returns the type.
 func (a arrayType) typ() int { return arrayT }
 
@@ -232,40 +237,45 @@ func Slice(zero interface{}, data []interface{}) *sliceType {
 }
 
 // SliceFrom creates a new slice from an array using the indexes low and high.
-func SliceFrom(a interface{}, low, high int) *sliceType {
+func SliceFrom(src interface{}, low, high int) *sliceType {
 	s := new(sliceType)
+	s.set(src, low, high)
 
-	s.arr = a
-	s.low = low
-	s.high = high
-	s.len = high - low
-	s.cap = a.cap - low
+	/*if src.low != nil { // slice
+		
+	} else { // array
+		s.arr = src
+		s.low = low
+		s.high = high
+		s.len = high - low
+		s.cap = src.cap() - low
+	}*/
+
 	return s
 }
 
 // set sets the elements of a slice.
-func (s sliceType) set(i interface{}, low, high int) {
+func (s sliceType) set(src interface{}, low, high int) {
 	s.low, s.high = low, high
 
-	if i.typ() == arrayT {
-		s.arr = i
-		s.len = high - low
-		s.cap = i.cap() - low
-		s.v = i.v.slice(low, high)
-
-	} else { // sliceT
-		if len(i.v) != 0 {
-			s.v = i.v.slice(low, high)
+	if src.low != nil { // slice
+		if len(src.v) != 0 {
+			s.v = src.v.slice(low, high)
 		} else {
-			s.v = i.arr.v.slice(low, high)
+			s.v = src.arr.v.slice(low, high)
 		}
-		s.cap = i.cap - low
 		s.len = len(s.v)
+		s.cap = src.cap - low
+	} else { // array
+		s.arr = src
+		s.v = src.v.slice(low, high)
+		s.len = high - low
+		s.cap = src.cap() - low
 	}
 
-	/*if i.v != nil { // from make
-		s.v = i.v.slice(low, high)
-		s.cap = i.cap - low
+	/*if src.v != nil { // from make
+		s.v = src.v.slice(low, high)
+		s.cap = src.cap - low
 		s.len = len(s.v)
 
 	} else { // from array
@@ -284,7 +294,7 @@ func (s sliceType) set(i interface{}, low, high int) {
 	return s.arr.v.slice(s.low, s.high)
 }*/
 
-// str returns the slice like a string.
+// str returns the slice (of bytes or runes) like a string.
 func (s sliceType) str() string {
 	/*_s := s.get()
 	return _s.join("")*/
@@ -292,13 +302,13 @@ func (s sliceType) str() string {
 }
 
 /*
-func (s sliceType) setSlice(i interface{}, low, high int) {
+func (s sliceType) setSlice(src interface{}, low, high int) {
 	s.low, s.high = low, high
 	s.len = high - low
 
-	if i.arr != nil { // from slice
-		s.arr = i.arr
-		s.cap = i.cap - low
+	if src.arr != nil { // from slice
+		s.arr = src.arr
+		s.cap = src.cap - low
 	} else { // from array
 		s.arr = i
 		s.cap = len(i) - low

@@ -356,7 +356,7 @@ func (e *expression) translate(expr ast.Expr) {
 			arg := e.tr.getExpression(typ.Args[0]).String()
 			argNoField := stripField(arg)
 
-			if e.tr.isType(sliceType, argNoField) {
+			if e.tr.isType(sliceType, argNoField) || e.tr.isType(arrayType, argNoField) {
 				e.WriteString(argNoField + ".str()")
 			} else {
 				e.WriteString(arg)
@@ -819,9 +819,9 @@ func (e *expression) translate(expr ast.Expr) {
 
 		if e.tr.isVar {
 			e.WriteString(x + "," + SP + slice)
-		} else {
+		} /*else {
 			e.WriteString(fmt.Sprintf("g.Slice(%s,%s)", x, SP+slice))
-		}
+		}*/
 
 		e.kind = sliceKind
 

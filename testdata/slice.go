@@ -108,10 +108,6 @@ func shortHand() {
 		pass, PASS = false, false
 	}
 
-	if pass {
-		fmt.Println("\tpass [1/2]")
-	}
-
 	// == 2. Slice of a slice
 
 	b_slice = a_slice[1:3]
@@ -136,7 +132,7 @@ func shortHand() {
 	}
 
 	if pass {
-		fmt.Println("\tpass [2/2]")
+		fmt.Println("\tpass")
 	}
 }
 
@@ -186,16 +182,6 @@ func useFunc() {
 func reference() {
 	pass := true
 
-	fmtSlice := func(slice []byte) string {
-		s := ("[")
-		for index := 0; index < len(slice)-1; index++ {
-			s += fmt.Sprintf("%q,", slice[index])
-		}
-		s += fmt.Sprintf("%q]", slice[len(slice)-1])
-
-		return s
-	}
-
 	A := [10]byte{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'}
 	slice1 := A[3:7]
 	slice2 := A[5:]
@@ -208,10 +194,10 @@ func reference() {
 		in  string
 		out string
 	}{
-		{"A", fmtSlice(A[:]), "['a','b','c','d','e','f','g','h','i','j']"},
-		{"slice1", fmtSlice(slice1), "['d','e','f','g']"},
-		{"slice2", fmtSlice(slice2), "['f','g','h','i','j']"},
-		{"slice3", fmtSlice(slice3), "['d','e']"},
+		{"A", string(A[:]), "abcdefghij"},
+		{"slice1", string(slice1), "defg"},
+		{"slice2", string(slice2), "fghij"},
+		{"slice3", string(slice3), "de"},
 	}
 
 	for _, t := range tests {
@@ -229,10 +215,10 @@ func reference() {
 		in  string
 		out string
 	}{
-		{"A", fmtSlice(A[:]), "['a','b','c','d','E','f','g','h','i','j']"},
-		{"slice1", fmtSlice(slice1), "['d','E','f','g']"},
-		{"slice2", fmtSlice(slice2), "['f','g','h','i','j']"},
-		{"slice3", fmtSlice(slice3), "['d','E']"},
+		{"A", string(A[:]), "abcdEfghij"},
+		{"slice1", string(slice1), "dEfg"},
+		{"slice2", string(slice2), "fghij"},
+		{"slice3", string(slice3), "dE"},
 	}
 
 	for _, t := range tests {
@@ -250,10 +236,10 @@ func reference() {
 		in  string
 		out string
 	}{
-		{"A", fmtSlice(A[:]), "['a','b','c','d','E','f','G','h','i','j']"},
-		{"slice1", fmtSlice(slice1), "['d','E','f','G']"},
-		{"slice2", fmtSlice(slice2), "['f','G','h','i','j']"},
-		{"slice3", fmtSlice(slice3), "['d','E']"},
+		{"A", string(A[:]), "abcdEfGhij"},
+		{"slice1", string(slice1), "dEfG"},
+		{"slice2", string(slice2), "fGhij"},
+		{"slice3", string(slice3), "dE"},
 	}
 
 	for _, t := range tests {
@@ -262,8 +248,6 @@ func reference() {
 			pass, PASS = false, false
 		}
 	}
-
-	// * * *
 
 	if pass {
 		fmt.Println("\tpass")
