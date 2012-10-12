@@ -21,7 +21,7 @@ type Kind uint8
 const (
 	unknownKind Kind = iota
 	//arrayKind // TODO: remove
-	//ellipsisKind
+	ellipsisKind
 	sliceKind
 	structKind
 )
@@ -355,11 +355,14 @@ func (e *expression) translate(expr ast.Expr) {
 
 		// == Conversion
 		case "string":
-			arg := e.tr.getExpression(typ.Args[0]).String()
+			_arg := e.tr.getExpression(typ.Args[0])
+			arg := _arg.String()
 			argNoField := stripField(arg)
 
 			if e.tr.isType(sliceType, argNoField) || e.tr.isType(arrayType, argNoField) {
 				e.WriteString(argNoField + ".str()")
+			} else if _arg.isSliceExpr {
+				e.WriteString(arg + ".str()")
 			} else {
 				e.WriteString(arg)
 				e.returnBasicLit = true
@@ -810,13 +813,14 @@ func (e *expression) translate(expr ast.Expr) {
 			slice += "," + SP + typ.High.(*ast.BasicLit).Value // e.tr.getExpression(typ.High).String()
 		}
 
-		if e.tr.isVar {
+		if e.tr.isVar && e.isValue {
+			// The JS function is handled in file "var.go"; look for SliceFrom.
 			e.WriteString(x + "," + SP + slice)
-		} /*else {
-			e.WriteString(fmt.Sprintf("g.Slice(%s,%s)", x, SP+slice))
-		}*/
+		} else {
+			e.WriteString(fmt.Sprintf("g.SliceFrom(%s,%s)", x, SP+slice))
+			//e.tr.slices[e.tr.funcId][e.tr.blockId][x] = void TODO: REMOVE
+		}
 
-		e.kind = sliceKind
 		e.isSliceExpr = true
 
 	// godoc go/ast StarExpr
@@ -893,40 +897,11 @@ func (e *expression) writeElts(elts []ast.Expr, Lbrace, Rbrace token.Pos) {
 
 		exprElt.kind = e.kind
 		exprElt.hasError = e.hasError
-		exprElt.useIota = e.useIota
 		exprElt.arrayHasElts = e.arrayHasElts
-		exprElt.isEllipsis = e.isEllipsis
-		exprElt.isMultiDim = e.isMultiDim
 		exprElt.isValue = e.isValue
-
-		// TODO: remove
-		/*exprElt.varName = e.varName
-		exprElt.funcName = e.funcName
-		exprElt.mapName = e.mapName
-		exprElt.zero = e.zero
-
-		exprElt.kind = e.kind
-
-		exprElt.hasError = e.hasError
-		exprElt.useIota = e.useIota
-
-		exprElt.isSliceExpr = e.isSliceExpr
-		exprElt.isIdent = e.isIdent
-		exprElt.isValue = e.isValue
-		exprElt.isVarAddress = e.isVarAddress
-		exprElt.isPointer = e.isPointer
-		exprElt.isMake = e.isMake
-		exprElt.isNil = e.isNil
-
-		exprElt.arrayHasElts = e.arrayHasElts
-		exprElt.isEllipsis = e.isEllipsis
-		exprElt.isMultiDim = e.isMultiDim
-
-		exprElt.isBasicLit = e.isBasicLit
-		exprElt.returnBasicLit = e.returnBasicLit
-
-		exprElt.lenArray = e.lenArray
-		exprElt.index = e.index*/
+		//exprElt.isEllipsis = e.isEllipsis
+		//exprElt.isMultiDim = e.isMultiDim
+		//exprElt.useIota = e.useIota
 
 		exprElt.translate(el)
 		e.WriteString(exprElt.String())

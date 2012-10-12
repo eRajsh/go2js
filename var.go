@@ -601,7 +601,7 @@ _noFunc:
 			case sliceKind:
 			}*/
 
-			if expr.kind == sliceKind {
+			if expr.kind == sliceKind || expr.isSliceExpr {
 				if isNewVar {
 					tr.slices[tr.funcId][tr.blockId][nameExpr] = void
 

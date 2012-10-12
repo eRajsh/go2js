@@ -19,10 +19,6 @@ Translation compiler from Go to JavaScript.
 
 Active | Incomplete
 
-There are some errors in the translation.  
-Code related to slices (file "jslib/lib.go") is not finished; it has to works in
-JS just like in Go.
-
 ## License
 
 The source files are distributed under the [Mozilla Public License, version 2.0](http://mozilla.org/MPL/2.0/),

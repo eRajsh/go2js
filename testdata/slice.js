@@ -194,7 +194,7 @@ function reference() {
 		in_: in_,
 		out: out
 	};}; var tests = [
-		_("A", A, 0, "abcdefghij"),
+		_("A", g.SliceFrom(A, 0).str(), "abcdefghij"),
 		_("slice1", slice1.str(), "defg"),
 		_("slice2", slice2.str(), "fghij"),
 		_("slice3", slice3.str(), "de")
@@ -215,7 +215,7 @@ function reference() {
 		in_: in_,
 		out: out
 	};}; tests = [
-		_("A", A, 0, "abcdEfghij"),
+		_("A", g.SliceFrom(A, 0).str(), "abcdEfghij"),
 		_("slice1", slice1.str(), "dEfg"),
 		_("slice2", slice2.str(), "fghij"),
 		_("slice3", slice3.str(), "dE")
@@ -236,7 +236,7 @@ function reference() {
 		in_: in_,
 		out: out
 	};}; tests = [
-		_("A", A, 0, "abcdEfGhij"),
+		_("A", g.SliceFrom(A, 0).str(), "abcdEfGhij"),
 		_("slice1", slice1.str(), "dEfG"),
 		_("slice2", slice2.str(), "fGhij"),
 		_("slice3", slice3.str(), "dE")
