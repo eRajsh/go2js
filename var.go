@@ -330,8 +330,11 @@ func (tr *translate) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 	} else {
 		tr.WriteString(fmt.Sprintf("_%s=%sfunction(%s)%s{%sreturn%s{%s};};%s",
 			SP, SP, fieldNames, SP, SP, SP, fieldLines, SP))
-		tr.wasAnonFunc = true
-		tr.structSlices[tr.funcId][tr.blockId][tr.lastVarName] = void
+
+		if _, ok := tr.structSlices[tr.funcId][tr.blockId][tr.lastVarName]; !ok {
+			tr.structSlices[tr.funcId][tr.blockId][tr.lastVarName] = void
+			tr.wasAnonFunc = true
+		}
 	}
 
 	tr.line += posNewField - firstPos // update the global position

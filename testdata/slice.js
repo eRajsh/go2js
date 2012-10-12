@@ -214,7 +214,7 @@ function reference() {
 		msg: msg,
 		in_: in_,
 		out: out
-	};}; var tests = [
+	};}; tests = [
 		_("A", A, 0, "abcdEfghij"),
 		_("slice1", slice1.str(), "dEfg"),
 		_("slice2", slice2.str(), "fghij"),
@@ -235,7 +235,7 @@ function reference() {
 		msg: msg,
 		in_: in_,
 		out: out
-	};}; var tests = [
+	};}; tests = [
 		_("A", A, 0, "abcdEfGhij"),
 		_("slice1", slice1.str(), "dEfG"),
 		_("slice2", slice2.str(), "fGhij"),
