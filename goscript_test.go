@@ -17,7 +17,7 @@ func init() {
 	MaxMessage = 100 // to show all errors
 
 	for _, v := range []string{"", "ln", "f"} {
-		Function["fmt.Print" + v] = "document.write"
+		Function["fmt.Print"+v] = "document.write"
 	}
 	Function["print"] = "alert"
 	Function["println"] = "alert"
