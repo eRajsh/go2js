@@ -117,6 +117,8 @@ var Function = map[string]string{
 	"rand.Float64": "Math.random",
 }
 
+var Char = map[string]string{"\n": "\\n", "\t": "\\t"}
+
 // Imports
 //
 // http://golang.org/doc/go_spec.html#Import_declarations
@@ -223,7 +225,7 @@ func (tr *translate) joinArgsPrint(args []ast.Expr, addLine bool) string {
 
 		if addLine {
 			if i == lenArgs {
-				jsArgs = add(jsArgs, "<br>")
+				jsArgs = add(jsArgs, Char["\n"])
 			} else {
 				jsArgs = add(jsArgs, " ")
 			}

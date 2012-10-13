@@ -47,8 +47,6 @@ By this reason, the integers of 64 bits are unsupported.
 
 ## Translation
 
-The characters "\n" are translated to "<br>" while "\t" to four strings "&nbsp;".
-
 #### Reserved words
 
 The reserved words and keywords used in JavaScript are translated adding "_" at
@@ -129,8 +127,8 @@ its translation would be:
 JavaScript has several built-in functions and constants which can be translated
 from Go. They are defined in the maps "Constant", and "Function".
 
-Since the Go functions "print" and "println" are used to debug, they are
-translated to "alert".
+Since the Go functions "print*" are used to debug, they are translated to
+"console.error"; the functions "fmt.Print*" are translated to "console.log"
 
 "panic" is translated to "throw new Error()".
 
