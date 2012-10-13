@@ -21,7 +21,7 @@ type Kind uint8
 const (
 	unknownKind Kind = iota
 	//arrayKind // TODO: remove
-	ellipsisKind
+	//ellipsisKind
 	sliceKind
 	structKind
 )
@@ -376,7 +376,8 @@ func (e *expression) translate(expr ast.Expr) {
 		// ==
 
 		case "print", "println":
-			e.WriteString(fmt.Sprintf("alert(%s)", e.tr.GetArgs(call, typ.Args)))
+			e.WriteString(fmt.Sprintf("%s(%s)",
+				Function[call], e.tr.GetArgs(call, typ.Args)))
 
 		case "len":
 			e.returnBasicLit = true

@@ -86,9 +86,11 @@ var Constant = map[string]string{
 
 // Functions that can be translated since JavaScript has an equivalent one.
 var Function = map[string]string{
-	"fmt.Print":   "document.write",
-	"fmt.Println": "document.write",
-	"fmt.Printf":  "document.write",
+	"print":       "console.error", // since print/println is used in Go to debug
+	"println":     "console.error",
+	"fmt.Print":   "console.log",
+	"fmt.Println": "console.log",
+	"fmt.Printf":  "console.log",
 	"fmt.Sprint":  "",
 	"fmt.Sprintf": "",
 
