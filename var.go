@@ -333,7 +333,7 @@ func (tr *translate) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 
 		if _, ok := tr.structSlices[tr.funcId][tr.blockId][tr.lastVarName]; !ok {
 			tr.structSlices[tr.funcId][tr.blockId][tr.lastVarName] = void
-			tr.wasAnonFunc = true
+			tr.insertVar = true
 		}
 	}
 
@@ -591,9 +591,9 @@ _noFunc:
 
 		if !isFuncLit {
 			// Insert "var" to variable of anonymous struct.
-			if tr.wasAnonFunc && tr.isType(structType, name) {
+			if tr.insertVar && tr.isType(structType, name) {
 				tr.WriteString("var ")
-				tr.wasAnonFunc = false
+				tr.insertVar = false
 			}
 			tr.WriteString(nameExpr)
 

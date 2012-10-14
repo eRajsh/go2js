@@ -24,13 +24,13 @@ type dataStmt struct {
 	iCase   int // index in "case" statements
 
 	initIsPointer  bool // the value initialized is a pointer?
+	insertVar      bool
 	isArray        bool // to close the parenthesis
 	isConst        bool
 	isVar          bool
 	returnBasicLit bool
 	skipLbrace     bool // left brace
 	skipSemicolon  bool
-	wasAnonFunc    bool
 	wasFallthrough bool // the last statement was "fallthrough"?
 	wasReturn      bool // the last statement was "return"?
 
