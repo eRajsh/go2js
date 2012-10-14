@@ -232,8 +232,6 @@ func Compile(filename string, write bool) error {
 		return err
 	}
 
-	trans.WriteString(HEADER)
-
 	// Package name
 	pkgName = trans.getExpression(node.Name).String()
 
@@ -313,7 +311,9 @@ func Compile(filename string, write bool) error {
 
 		trans.WriteString(NL + "})();")
 	}
-	trans.WriteString(NL)
+	trans.WriteString("\n")
+
+	trans.WriteString(HEADER + NL)
 
 	// == Write
 	baseFilename := strings.Replace(filename, path.Ext(filename), "", 1)
