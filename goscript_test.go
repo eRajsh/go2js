@@ -24,8 +24,8 @@ func init() {
 	Function["print"] = "alert"
 	Function["println"] = "alert"
 
-	Char["\n"] = "<br>"
-	Char["\t"] = "&nbsp;&nbsp;&nbsp;&nbsp;"
+	Char['\n'] = "<br>"
+	Char['\t'] = "&nbsp;&nbsp;&nbsp;&nbsp;"
 }
 
 func TestConst(t *testing.T)    { compile('t', "decl_const.go", t) }

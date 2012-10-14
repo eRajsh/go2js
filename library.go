@@ -117,7 +117,7 @@ var Function = map[string]string{
 	"rand.Float64": "Math.random",
 }
 
-var Char = map[string]string{"\n": "\\n", "\t": "\\t"}
+var Char = map[int]string{'\n': "\\n", '\t': "\\t"}
 
 // Imports
 //
@@ -225,7 +225,7 @@ func (tr *translate) joinArgsPrint(args []ast.Expr, addLine bool) string {
 
 		if addLine {
 			if i == lenArgs {
-				jsArgs = add(jsArgs, Char["\n"])
+				jsArgs = add(jsArgs, Char['\n'])
 			} else {
 				jsArgs = add(jsArgs, " ")
 			}

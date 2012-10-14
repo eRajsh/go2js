@@ -169,11 +169,11 @@ func (e *expression) translate(expr ast.Expr) {
 
 		// Replace new lines
 		if strings.Contains(typ.Value, "\\n") {
-			typ.Value = strings.Replace(typ.Value, "\\n", Char["\n"], -1)
+			typ.Value = strings.Replace(typ.Value, "\\n", Char['\n'], -1)
 		}
 		// Replace tabulators
 		if strings.Contains(typ.Value, "\\t") {
-			typ.Value = strings.Replace(typ.Value, "\\t", Char["\t"], -1)
+			typ.Value = strings.Replace(typ.Value, "\\t", Char['\t'], -1)
 		}
 
 		e.WriteString(typ.Value)
