@@ -88,14 +88,20 @@ func shortHand() {
 	}
 
 	a_slice = array[5:]
-	if string(a_slice) != "fghij" {
-		fmt.Printf("\tFAIL: 1. [5:] => got %v\n", a_slice)
+	if string(a_slice) == "fghij" && len(a_slice) == 5 && cap(a_slice) == 5 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 1. [5:] => got %v, len=%v, cap=%v\n",
+			a_slice, len(a_slice), cap(a_slice))
 		pass, PASS = false, false
 	}
 
 	a_slice = array[:]
-	if string(a_slice) != "abcdefghij" {
-		fmt.Printf("\tFAIL: 1. [:] => got %v\n", a_slice)
+	if string(a_slice) == "abcdefghij" && len(a_slice) == 10 && cap(a_slice) == 10 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 1. [:] => got %v, len=%v, cap=%v\n",
+			a_slice, len(a_slice), cap(a_slice))
 		pass, PASS = false, false
 	}
 
@@ -120,14 +126,20 @@ func shortHand() {
 	}
 
 	b_slice = a_slice[:3]
-	if string(b_slice) != "def" {
-		fmt.Printf("\tFAIL: 2. [:3] => got %v\n", b_slice)
+	if string(b_slice) == "def" && len(b_slice) == 3 && cap(b_slice) == 7 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 2. [:3] => got %v, len=%v, cap=%v\n",
+			b_slice, len(b_slice), cap(b_slice))
 		pass, PASS = false, false
 	}
 
 	b_slice = a_slice[:]
-	if string(b_slice) != "defg" {
-		fmt.Printf("\tFAIL: 2. [:] => got %v\n", b_slice)
+	if string(b_slice) == "defg" && len(b_slice) == 4 && cap(b_slice) == 7 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 2. [:] => got %v, len=%v, cap=%v\n",
+			b_slice, len(b_slice), cap(b_slice))
 		pass, PASS = false, false
 	}
 
@@ -317,26 +329,3 @@ func main() {
 		print("Fail: Slices")
 	}
 }
-
-/*
-== reference()
-
-=== First content of A and the slices
-A is : ['a','b','c','d','e','f','g','h','i','j']
-slice1 is : ['d','e','f','g']
-slice2 is : ['f','g','h','i','j']
-slice3 is : ['d','e']
-
-=== Content of A and the slices, after changing 'e' to 'E' in array A
-A is : ['a','b','c','d','E','f','g','h','i','j']
-slice1 is : ['d','E','f','g']
-slice2 is : ['f','g','h','i','j']
-slice3 is : ['d','E']
-
-=== Content of A and the slices, after changing 'g' to 'G' in slice2
-A is : ['a','b','c','d','E','f','G','h','i','j']
-slice1 is : ['d','E','f','G']
-slice2 is : ['f','G','h','i','j']
-slice3 is : ['d','E']
-
-*/

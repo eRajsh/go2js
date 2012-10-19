@@ -188,16 +188,21 @@ function MkSlice(zero, len, cap) {
 		return s;
 	}
 
-	s.len = len;
-
+	var a = new arrayType([], g.Map(0));
+	a.len_[0] = len;
 	for (var i = 0; i < len; i++) {
-		s.v[i] = zero;
+		a.v[i] = zero;
 	}
+	s.arr = a;
+
 	if (cap !== undefined) {
 		s.cap = cap;
 	} else {
 		s.cap = len;
 	}
+	s.len = len;
+	s.high = len;
+
 	return s;
 }
 
@@ -240,49 +245,37 @@ function Slice(zero, data) {
 function SliceFrom(src, low, high) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 	s.set(src, low, high);
-
-
-
-
-
-
-
-
-
-
-
 	return s;
 }
 
 
 sliceType.prototype.set = function(src, low, high) {
-	this.low = low, this.high = high;
-
-	if (src.low !== undefined) {
-		if (src.v.length !== 0) {
-			this.v = src.v.slice(low, high);
-		} else {
-			this.v = src.arr.v.slice(low, high);
-		}
-		this.len = this.v.length;
-		this.cap = src.cap - low;
+	if (low !== undefined) {
+		this.low = low;
 	} else {
-		this.arr = src;
-		this.v = src.v.slice(low, high);
-		this.len = high - low;
-		this.cap = src.cap() - low;
+		this.low = 0;
+	}
+	if (high !== undefined) {
+		this.high = high;
+	} else {
+		if (src.arr !== undefined) {
+			this.high = src.len;
+		} else {
+			this.high = src.v.length;
+		}
 	}
 
+	this.len = this.high - this.low;
 
-
-
-
-
-
-
-
-
-
+	if (src.arr !== undefined) {
+		this.arr = src.arr;
+		this.cap = src.cap - this.low;
+		this.low += src.low;
+		this.high += src.low;
+	} else {
+		this.arr = src;
+		this.cap = src.cap() - this.low;
+	}
 }
 
 
@@ -291,28 +284,18 @@ sliceType.prototype.set = function(src, low, high) {
 
 
 
-
-
+sliceType.prototype.get = function() {
+	if (this.arr !== undefined) {
+		return this.arr.v.slice(this.low, this.high);
+	}
+	return this.v;
+}
 
 
 sliceType.prototype.str = function() {
-
-
-	return this.v.join("");
+	var _s = this.get();
+	return _s.join("");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

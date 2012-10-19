@@ -408,7 +408,7 @@ func (e *expression) translate(expr ast.Expr) {
 			argNoIndex, index := splitIndex(arg)
 
 			if e.tr.isType(sliceType, argNoField) {
-				if strings.HasSuffix(arg, VALUE_FIELD) {
+				if strings.HasSuffix(arg, VALUE_FIELD) || strings.HasSuffix(arg, GET_FIELD) {
 					e.WriteString(argNoField + ".cap")
 				} else {
 					e.WriteString(arg + ".cap")
@@ -636,7 +636,7 @@ func (e *expression) translate(expr ast.Expr) {
 						name = "this" + TYPE_FIELD
 					}
 					if e.tr.isType(sliceType, name) {
-						name += VALUE_FIELD // slice field
+						name += GET_FIELD // slice field
 					}
 
 					if _, ok := e.tr.vars[e.tr.funcId][e.tr.blockId][name]; ok {
@@ -673,11 +673,13 @@ func (e *expression) translate(expr ast.Expr) {
 
 		x := e.tr.getExpression(typ.X).String()
 		index := ""
+		sliceIndex := ""
 		indexArgs := ""
 
 		for i := len(e.index) - 1; i >= 0; i-- { // inverse order
 			idx := e.index[i]
 			index += "[" + idx + "]"
+			sliceIndex += fmt.Sprintf("[%s.low+%s]", x, idx)
 
 			if indexArgs != "" {
 				indexArgs += "," + SP
@@ -694,7 +696,7 @@ func (e *expression) translate(expr ast.Expr) {
 				e.WriteString(x + ".get(" + indexArgs + ")[0]")
 			}
 		} else if e.tr.isType(sliceType, x) {
-			e.WriteString(x + VALUE_FIELD + index)
+			e.WriteString(x + ".arr" + VALUE_FIELD + sliceIndex)
 		} else {
 			e.WriteString(x + index)
 		}
@@ -968,10 +970,13 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 
 // * * *
 
-// stripField strips the field name VALUE_FIELD, if any.
+// stripField strips the field name VALUE_FIELD or GET_FIELD, if any.
 func stripField(name string) string {
 	if strings.HasSuffix(name, VALUE_FIELD) {
 		return name[:len(name)-2]
+	}
+	if strings.HasSuffix(name, GET_FIELD) {
+		return name[:len(name)-6]
 	}
 	return name
 }

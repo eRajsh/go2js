@@ -235,7 +235,7 @@ function testRange() {
 		2: 5
 	});
 
-	var v; for (var i in s.v) { v = s.v[i];
+	var v; for (var i in s.get()) { v = s.get()[i];
 		if (JSON.stringify(tests.get(i)[0]) !== JSON.stringify(v)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + i + ". got " + v + ", want " + tests.get(i)[0] + "<br>");
 			pass = false, PASS = false;

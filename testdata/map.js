@@ -219,18 +219,18 @@ function blankIdInRange() {
 	var A3 = g.MkArray([1], 0, [1]);
 
 	slice.set(A1, 0);
-	if (Max(slice.v) !== 9) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.v) + ", want 9<br>");
+	if (Max(slice.get()) !== 9) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.get()) + ", want 9<br>");
 		pass = false, PASS = false;
 	}
 	slice.set(A2, 0);
-	if (Max(slice.v) !== 4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.v) + ", want 4<br>");
+	if (Max(slice.get()) !== 4) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.get()) + ", want 4<br>");
 		pass = false, PASS = false;
 	}
 	slice.set(A3, 0);
-	if (Max(slice.v) !== 1) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.v) + ", want 1<br>");
+	if (Max(slice.get()) !== 1) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.get()) + ", want 1<br>");
 		pass = false, PASS = false;
 	}
 
