@@ -200,9 +200,9 @@ function MkSlice(zero, len, cap) {
 	} else {
 		s.cap = len;
 	}
+
 	s.len = len;
 	s.high = len;
-
 	return s;
 }
 
@@ -210,11 +210,12 @@ function MkSlice(zero, len, cap) {
 function Slice(zero, data) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
-	if (arguments.length === 0) {
+	if (zero === undefined) {
 		s.nil_ = true;
 		return s;
 	}
 
+	var a = new arrayType([], g.Map(0));
 	var srcVal; for (var i in data) { srcVal = data[i];
 		var isHashMap = false;
 
@@ -225,19 +226,22 @@ function Slice(zero, data) {
 					isHashMap = true;
 
 					for (i; i < k; i++) {
-						s.v[i] = zero;
+						a.v[i] = zero;
 					}
-					s.v[i] = v;
+					a.v[i] = v;
 				}
 			}
 		}
 		if (!isHashMap) {
-			s.v[i] = srcVal;
+			a.v[i] = srcVal;
 		}
 	}
+	s.len = a.v.length;
+	a.len_[0] = s.len;
+	s.arr = a;
 
-	s.len = s.v.length;
 	s.cap = s.len;
+	s.high = s.len;
 	return s;
 }
 

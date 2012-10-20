@@ -158,8 +158,8 @@ func mergeArray(dst, src []interface{}) {
 
 // sliceType represents a slice type.
 type sliceType struct {
-	arr interface{}   // the array where data is got, if any
-	v   []interface{} // elements from scratch (make) or appended
+	arr interface{}   // the array where data is got or created from scratch using make
+	v   []interface{} // elements appended
 
 	low  int // indexes for the array
 	high int
@@ -200,9 +200,9 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 	} else {
 		s.cap = len
 	}
+
 	s.len = len
 	s.high = len
-
 	return s
 }
 
@@ -210,11 +210,12 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 func Slice(zero interface{}, data []interface{}) *sliceType {
 	s := new(sliceType)
 
-	if len(arguments) == 0 {
+	if zero == nil {
 		s.nil_ = true
 		return s
 	}
 
+	a := new(arrayType)
 	for i, srcVal := range data {
 		isHashMap := false
 
@@ -225,19 +226,22 @@ func Slice(zero interface{}, data []interface{}) *sliceType {
 					isHashMap = true
 
 					for i; i < k; i++ {
-						s.v[i] = zero
+						a.v[i] = zero
 					}
-					s.v[i] = v
+					a.v[i] = v
 				}
 			}
 		}
 		if !isHashMap {
-			s.v[i] = srcVal
+			a.v[i] = srcVal
 		}
 	}
+	s.len = len(a.v)
+	a.len_[0] = s.len
+	s.arr = a
 
-	s.len = len(s.v)
 	s.cap = s.len
+	s.high = s.len
 	return s
 }
 
