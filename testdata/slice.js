@@ -347,17 +347,17 @@ function grow() {
 
 
 
+	slice.set(slice, 0, slice.len + 2);
+	slice.arr.v[slice.low+4] = 4, slice.arr.v[slice.low+5] = 5;
+
+	if (slice.len === 6 && slice.cap === 7 && slice.get()[0] === 0 && slice.get()[1] === 1 && slice.get()[2] === 2 && slice.get()[3] === 3 && slice.get()[4] === 4 && slice.get()[5] === 5) {
 
 
 
-
-
-
-
-
-
-
-
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. got " + slice.get() + ", want [0 1 2 3 4 5])<br>");
+		pass = false, PASS = false;
+	}
 
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");

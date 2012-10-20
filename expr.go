@@ -810,10 +810,10 @@ func (e *expression) translate(expr ast.Expr) {
 		x := typ.X.(*ast.Ident).Name
 
 		if typ.Low != nil {
-			slice = typ.Low.(*ast.BasicLit).Value // e.tr.getExpression(typ.Low).String()
+			slice = e.tr.getExpression(typ.Low).String()
 		}
 		if typ.High != nil {
-			slice += "," + SP + typ.High.(*ast.BasicLit).Value // e.tr.getExpression(typ.High).String()
+			slice += "," + SP + e.tr.getExpression(typ.High).String()
 		}
 
 		if e.tr.isVar && e.isValue {
