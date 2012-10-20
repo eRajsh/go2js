@@ -308,6 +308,62 @@ func resize() {
 	}
 }
 
+func grow() {
+	pass := true
+
+	// Add elements to the slice.
+	GrowIntSlice := func(slice []int, add int) []int {
+		new_capacity := cap(slice)+add
+		new_slice := make([]int, len(slice), new_capacity)
+		for index := 0; index < len(slice); index++ {
+			new_slice[index] = slice[index]
+		}
+		return new_slice
+	}
+
+	slice := []int{0, 1, 2, 3}
+
+	// == 1.
+	if len(slice) == 4 && cap(slice) == 4 &&
+		slice[0] == 0 && slice[1] == 1 && slice[2] == 2 && slice[3] == 3 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 1. got %v, want [0 1 2 3])\n", slice)
+		pass, PASS = false, false
+	}
+
+	// == 2.
+	slice = GrowIntSlice(slice, 3)
+
+	if len(slice) == 4 && cap(slice) == 7 &&
+		slice[0] == 0 && slice[1] == 1 && slice[2] == 2 && slice[3] == 3 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 2. got %v, want [0 1 2 3])\n", slice)
+		pass, PASS = false, false
+	}
+
+	// == 3.
+/*
+	// Let's two elements to the slice
+	// So we reslice the slice to add 2 to its original length
+	slice = slice[:len(slice)+2] // We can do this because cap(slice) == 7
+	slice[4], slice[5] = 4, 5
+
+	if len(slice) == 6 && cap(slice) == 7 &&
+		slice[0] == 0 && slice[1] == 1 && slice[2] == 2 && slice[3] == 3 &&
+		slice[4] == 4 && slice[5] == 5 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 3. got %v, want [0 1 2 3 4 5])\n", slice)
+		pass, PASS = false, false
+	}
+*/
+	if pass {
+		fmt.Println("\tpass")
+	}
+}
+
 func main() {
 	fmt.Print("\n\n== Slices\n\n")
 
@@ -321,6 +377,8 @@ func main() {
 	reference()
 	fmt.Println("=== RUN resize")
 	resize()
+	fmt.Println("=== RUN grow")
+	grow()
 
 	if PASS {
 		fmt.Println("PASS")

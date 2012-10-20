@@ -349,6 +349,7 @@ func (tr *translate) getStatement(stmt ast.Stmt) {
 			} else {
 				tr.WriteString("return;")
 			}
+			tr.wasReturn = false
 			break
 		}
 
@@ -366,6 +367,7 @@ func (tr *translate) getStatement(stmt ast.Stmt) {
 		} else {
 			tr.WriteString("return " + tr.getExpression(typ.Results[0]).String() + ";")
 		}
+		tr.wasReturn = false
 
 	// http://golang.org/doc/go_spec.html#Switch_statements
 	// https://developer.mozilla.org/en/JavaScript/Reference/Statements/switch

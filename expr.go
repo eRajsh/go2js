@@ -635,8 +635,8 @@ func (e *expression) translate(expr ast.Expr) {
 					if name == e.tr.recvVar {
 						name = "this" + TYPE_FIELD
 					}
-					if e.tr.isType(sliceType, name) {
-						name += GET_FIELD // slice field
+					if e.tr.isType(sliceType, name) && !e.tr.wasReturn {
+						name += GET_FIELD
 					}
 
 					if _, ok := e.tr.vars[e.tr.funcId][e.tr.blockId][name]; ok {

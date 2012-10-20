@@ -308,6 +308,62 @@ function resize() {
 	}
 }
 
+function grow() {
+	var pass = true;
+
+
+	var GrowIntSlice = function(slice, add) {
+		var new_capacity = slice.cap + add;
+		var new_slice = g.MkSlice(0, slice.len, new_capacity);
+		for (var index = 0; index < slice.len; index++) {
+			new_slice.arr.v[new_slice.low+index] = slice.arr.v[slice.low+index];
+		}
+		return new_slice;
+	};
+
+	var slice = g.Slice(0, [0, 1, 2, 3]);
+
+
+	if (slice.len === 4 && slice.cap === 4 && slice.get()[0] === 0 && slice.get()[1] === 1 && slice.get()[2] === 2 && slice.get()[3] === 3) {
+
+
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. got " + slice.get() + ", want [0 1 2 3])<br>");
+		pass = false, PASS = false;
+	}
+
+
+	slice = GrowIntSlice(slice, 3);
+
+	if (slice.len === 4 && slice.cap === 7 && slice.get()[0] === 0 && slice.get()[1] === 1 && slice.get()[2] === 2 && slice.get()[3] === 3) {
+
+
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. got " + slice.get() + ", want [0 1 2 3])<br>");
+		pass = false, PASS = false;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
+}
+
 function main() {
 	document.write("<br><br>== Slices<br><br>");
 
@@ -321,6 +377,8 @@ function main() {
 	reference();
 	document.write("=== RUN resize<br>");
 	resize();
+	document.write("=== RUN grow<br>");
+	grow();
 
 	if (PASS) {
 		document.write("PASS<br>");
