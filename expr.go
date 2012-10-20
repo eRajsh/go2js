@@ -375,10 +375,6 @@ func (e *expression) translate(expr ast.Expr) {
 			e.returnBasicLit = true
 		// ==
 
-		case "print", "println":
-			e.WriteString(fmt.Sprintf("%s(%s)",
-				Function[call], e.tr.GetArgs(call, typ.Args)))
-
 		case "len":
 			e.returnBasicLit = true
 			e.tr.returnBasicLit = true
@@ -427,6 +423,16 @@ func (e *expression) translate(expr ast.Expr) {
 				FIELD_VALUE,
 				e.tr.getExpression(typ.Args[1]).String()))
 
+		case "copy":
+			e.WriteString(fmt.Sprintf("g.Copy(%s,%s%s)",
+				e.tr.getExpression(typ.Args[0]).String(),
+				SP,
+				e.tr.getExpression(typ.Args[1]).String()))
+
+		case "print", "println":
+			e.WriteString(fmt.Sprintf("%s(%s)",
+				Function[call], e.tr.GetArgs(call, typ.Args)))
+
 		case "panic":
 			e.WriteString(fmt.Sprintf("throw new Error(%s)",
 				e.tr.getExpression(typ.Args[0])))
@@ -444,7 +450,7 @@ func (e *expression) translate(expr ast.Expr) {
 			return
 
 		// == Not implemented
-		case "append", "close", "copy", "uintptr":
+		case "append", "close", "uintptr":
 			panic(fmt.Sprintf("built-in call unimplemented: %s", call))
 
 		// Defined functions

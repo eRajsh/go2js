@@ -157,6 +157,35 @@ function mergeArray(dst, src) {
 
 
 
+
+
+
+
+
+
+
+
+function Copy(dst, src) { var n = 0;
+	if (JSON.stringify(dst.typ()) === JSON.stringify(sliceT) && JSON.stringify(src.typ()) === JSON.stringify(sliceT)) {
+		for (var i = src.low; i < src.high; i++) {
+			if (JSON.stringify(n) === JSON.stringify(dst.len)) {
+				break;
+			}
+			dst.arr.v[n] = src.arr.v[i];
+			n++;
+		}
+		var v; for (var i in src.v) { v = src.v[i];
+			if (JSON.stringify(n) === JSON.stringify(dst.len)) {
+				break;
+			}
+			dst.v[i] = v;
+			n++;
+		}
+		return n;
+	}
+}
+
+
 function sliceType(arr, v, low, high, len, cap, nil_) {
 	this.arr=arr;
 	this.v=v;
@@ -312,16 +341,6 @@ sliceType.prototype.str = function() {
 
 
 
-
-
-
-
-
-
-
-
-
-
 function mapType(v, zero) {
 	this.v=v;
 	this.zero=zero
@@ -375,6 +394,7 @@ function Export(pkg, exported) {
 }
 
 g.MkArray = MkArray;
+g.Copy = Copy;
 g.MkSlice = MkSlice;
 g.Slice = Slice;
 g.SliceFrom = SliceFrom;

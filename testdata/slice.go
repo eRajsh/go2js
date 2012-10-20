@@ -278,7 +278,7 @@ func resize() {
 		slice[0] == 0 && slice[1] == 0 && slice[2] == 0 && slice[3] == 0 {
 		// ok
 	} else {
-		fmt.Printf("\tFAIL: 1. got %v, want [0 0 0 0])\n", slice)
+		fmt.Printf("\tFAIL: 1. got %v, want [0 0 0 0]\n", slice)
 		pass, PASS = false, false
 	}
 
@@ -288,7 +288,7 @@ func resize() {
 	if slice[0] == 0 && slice[1] == 2 && slice[2] == 0 && slice[3] == 3 {
 		// ok
 	} else {
-		fmt.Printf("\tFAIL: 2. got %v, want [0 2 0 3])\n", slice)
+		fmt.Printf("\tFAIL: 2. got %v, want [0 2 0 3]\n", slice)
 		pass, PASS = false, false
 	}
 
@@ -298,7 +298,7 @@ func resize() {
 	if len(slice) == 2 && cap(slice) == 2 && slice[0] == 0 && slice[1] == 0 {
 		// ok
 	} else {
-		fmt.Printf("\tFAIL: 3. got %v, want [0 0])\n", slice)
+		fmt.Printf("\tFAIL: 3. got %v, want [0 0]\n", slice)
 		pass, PASS = false, false
 	}
 	//==
@@ -328,7 +328,7 @@ func grow() {
 		slice[0] == 0 && slice[1] == 1 && slice[2] == 2 && slice[3] == 3 {
 		// ok
 	} else {
-		fmt.Printf("\tFAIL: 1. got %v, want [0 1 2 3])\n", slice)
+		fmt.Printf("\tFAIL: 1. got %v, want [0 1 2 3]\n", slice)
 		pass, PASS = false, false
 	}
 
@@ -339,7 +339,7 @@ func grow() {
 		slice[0] == 0 && slice[1] == 1 && slice[2] == 2 && slice[3] == 3 {
 		// ok
 	} else {
-		fmt.Printf("\tFAIL: 2. got %v, want [0 1 2 3])\n", slice)
+		fmt.Printf("\tFAIL: 2. got %v, want [0 1 2 3]\n", slice)
 		pass, PASS = false, false
 	}
 
@@ -355,9 +355,40 @@ func grow() {
 		slice[4] == 4 && slice[5] == 5 {
 		// ok
 	} else {
-		fmt.Printf("\tFAIL: 3. got %v, want [0 1 2 3 4 5])\n", slice)
+		fmt.Printf("\tFAIL: 3. got %v, want [0 1 2 3 4 5]\n", slice)
 		pass, PASS = false, false
 	}
+	//==
+
+	if pass {
+		fmt.Println("\tpass")
+	}
+}
+
+func testCopy() {
+	pass := true
+
+	var a = [...]byte{'0', '1', '2', '3', '4', '5', '6', '7'}
+	var s = make([]byte, 6)
+	//var b = make([]byte, 5)
+
+	n1 := copy(s, a[0:])
+	if string(s) == "012345" && n1 == 6 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 1. => got %v, n=%v\n", string(s), n1)
+		pass, PASS = false, false
+	}
+
+	n2 := copy(s, s[2:])
+	if string(s) == "234545" && n2 == 4 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 2. => got %v, n=%v\n", string(s), n2)
+		pass, PASS = false, false
+	}
+
+	//n3 := copy(b, "Hello, World!")  // n3 == 5, b == []byte("Hello")
 
 	if pass {
 		fmt.Println("\tpass")
@@ -379,6 +410,8 @@ func main() {
 	resize()
 	fmt.Println("=== RUN grow")
 	grow()
+	fmt.Println("=== RUN testCopy")
+	testCopy()
 
 	if PASS {
 		fmt.Println("PASS")

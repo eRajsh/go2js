@@ -156,6 +156,35 @@ func mergeArray(dst, src []interface{}) {
 // == Slice
 //
 
+// Append implements the function "append".
+/*func Append(dst, elt interface{}) {
+	if s.len == s.cap {
+		s.cap = s.len * 2
+	}
+	s.len++
+}*/
+
+// Copy implements the function "copy".
+func Copy(dst, src interface{}) (n int) {
+	if dst.typ() == sliceT && src.typ() == sliceT {
+		for i := src.low; i < src.high; i++ {
+			if n == dst.len {
+				break
+			}
+			dst.arr.v[n] = src.arr.v[i]
+			n++
+		}
+		for i, v := range src.v {
+			if n == dst.len {
+				break
+			}
+			dst.v[i] = v
+			n++
+		}
+		return
+	}
+}
+
 // sliceType represents a slice type.
 type sliceType struct {
 	arr interface{}   // the array where data is got or created from scratch using make
@@ -300,16 +329,6 @@ func (s sliceType) str() string {
 	_s := s.get()
 	return _s.join("")
 }
-
-/*
-// Appends an element to the slice.
-func (s sliceType) append(elt interface{}) {
-	if s.len == s.cap {
-		s.cap = s.len * 2
-	}
-	s.len++
-}
-*/
 
 // == Map
 //

@@ -278,7 +278,7 @@ function resize() {
 
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. got " + slice.get() + ", want [0 0 0 0])<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. got " + slice.get() + ", want [0 0 0 0]<br>");
 		pass = false, PASS = false;
 	}
 
@@ -288,7 +288,7 @@ function resize() {
 	if (slice.get()[0] === 0 && slice.get()[1] === 2 && slice.get()[2] === 0 && slice.get()[3] === 3) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. got " + slice.get() + ", want [0 2 0 3])<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. got " + slice.get() + ", want [0 2 0 3]<br>");
 		pass = false, PASS = false;
 	}
 
@@ -298,7 +298,7 @@ function resize() {
 	if (slice.len === 2 && slice.cap === 2 && slice.get()[0] === 0 && slice.get()[1] === 0) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. got " + slice.get() + ", want [0 0])<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. got " + slice.get() + ", want [0 0]<br>");
 		pass = false, PASS = false;
 	}
 
@@ -328,7 +328,7 @@ function grow() {
 
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. got " + slice.get() + ", want [0 1 2 3])<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. got " + slice.get() + ", want [0 1 2 3]<br>");
 		pass = false, PASS = false;
 	}
 
@@ -339,7 +339,7 @@ function grow() {
 
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. got " + slice.get() + ", want [0 1 2 3])<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. got " + slice.get() + ", want [0 1 2 3]<br>");
 		pass = false, PASS = false;
 	}
 
@@ -355,9 +355,40 @@ function grow() {
 
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. got " + slice.get() + ", want [0 1 2 3 4 5])<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. got " + slice.get() + ", want [0 1 2 3 4 5]<br>");
 		pass = false, PASS = false;
 	}
+
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
+}
+
+function testCopy() {
+	var pass = true;
+
+	var a = g.MkArray([8], 0, ['0', '1', '2', '3', '4', '5', '6', '7']);
+	var s = g.MkSlice(0, 6);
+
+
+	var n1 = g.Copy(s, g.SliceFrom(a, 0));
+	if (s.str() === "012345" && n1 === 6) {
+
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. => got " + s.str() + ", n=" + n1 + "<br>");
+		pass = false, PASS = false;
+	}
+
+	var n2 = g.Copy(s, g.SliceFrom(s, 2));
+	if (s.str() === "234545" && n2 === 4) {
+
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. => got " + s.str() + ", n=" + n2 + "<br>");
+		pass = false, PASS = false;
+	}
+
+
 
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
@@ -379,6 +410,8 @@ function main() {
 	resize();
 	document.write("=== RUN grow<br>");
 	grow();
+	document.write("=== RUN testCopy<br>");
+	testCopy();
 
 	if (PASS) {
 		document.write("PASS<br>");

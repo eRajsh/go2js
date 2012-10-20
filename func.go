@@ -112,9 +112,10 @@ func (tr *translate) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.Fu
 	} else if name != nil {
 		tr.WriteString(fmt.Sprintf("function %s(%s)%s",
 			validIdent(name), joinParams(typ), SP))
+		tr.recvVar = "_" // avoid that been added "this" in selectors
 	} else { // Literal function
 		tr.WriteString(fmt.Sprintf("%s=%sfunction(%s)%s", SP, SP, joinParams(typ), SP))
-		tr.recvVar = "_" // avoid that been added "this" in selectors
+		tr.recvVar = "_" // avoid "this" in selectors
 	}
 
 	// Return multiple values
