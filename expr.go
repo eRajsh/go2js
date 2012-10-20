@@ -408,7 +408,7 @@ func (e *expression) translate(expr ast.Expr) {
 			argNoIndex, index := splitIndex(arg)
 
 			if e.tr.isType(sliceType, argNoField) {
-				if strings.HasSuffix(arg, VALUE_FIELD) || strings.HasSuffix(arg, GET_FIELD) {
+				if strings.HasSuffix(arg, FIELD_VALUE) || strings.HasSuffix(arg, FIELD_GET) {
 					e.WriteString(argNoField + ".cap")
 				} else {
 					e.WriteString(arg + ".cap")
@@ -424,7 +424,7 @@ func (e *expression) translate(expr ast.Expr) {
 		case "delete":
 			e.WriteString(fmt.Sprintf("delete %s%s[%s]",
 				e.tr.getExpression(typ.Args[0]).String(),
-				VALUE_FIELD,
+				FIELD_VALUE,
 				e.tr.getExpression(typ.Args[1]).String()))
 
 		case "panic":
@@ -625,18 +625,18 @@ func (e *expression) translate(expr ast.Expr) {
 		default:
 			name = validIdent(typ.Name)
 
-			if e.isPointer { // `*x` => `x.POINTER_FIELD`
-				name += POINTER_FIELD
+			if e.isPointer { // `*x` => `x.FIELD_POINTER`
+				name += FIELD_POINTER
 			} else if e.isVarAddress { // `&x` => `x`
 				e.tr.addPointer(name)
 			} else {
 				if !e.tr.isVar {
 
 					if name == e.tr.recvVar {
-						name = "this" + TYPE_FIELD
+						name = "this" + FIELD_TYPE
 					}
 					if e.tr.isType(sliceType, name) && !e.tr.wasReturn {
-						name += GET_FIELD
+						name += FIELD_GET
 					}
 
 					if _, ok := e.tr.vars[e.tr.funcId][e.tr.blockId][name]; ok {
@@ -646,7 +646,7 @@ func (e *expression) translate(expr ast.Expr) {
 					e.isIdent = true
 
 					if !e.tr.returnBasicLit && e.tr.isType(arrayType, name) {
-						name += VALUE_FIELD
+						name += FIELD_VALUE
 					}
 				}
 			}
@@ -691,12 +691,12 @@ func (e *expression) translate(expr ast.Expr) {
 			e.mapName = x
 
 			if e.tr.isVar && !e.isValue {
-				e.WriteString(x + VALUE_FIELD + index)
+				e.WriteString(x + FIELD_VALUE + index)
 			} else {
 				e.WriteString(x + ".get(" + indexArgs + ")[0]")
 			}
 		} else if e.tr.isType(sliceType, x) {
-			e.WriteString(x + ".arr" + VALUE_FIELD + sliceIndex)
+			e.WriteString(x + ".arr" + FIELD_VALUE + sliceIndex)
 		} else {
 			e.WriteString(x + index)
 		}
@@ -970,12 +970,12 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 
 // * * *
 
-// stripField strips the field name VALUE_FIELD or GET_FIELD, if any.
+// stripField strips the field name FIELD_VALUE or FIELD_GET, if any.
 func stripField(name string) string {
-	if strings.HasSuffix(name, VALUE_FIELD) {
+	if strings.HasSuffix(name, FIELD_VALUE) {
 		return name[:len(name)-2]
 	}
-	if strings.HasSuffix(name, GET_FIELD) {
+	if strings.HasSuffix(name, FIELD_GET) {
 		return name[:len(name)-6]
 	}
 	return name

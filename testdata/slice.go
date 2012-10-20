@@ -313,7 +313,7 @@ func grow() {
 
 	// Add elements to the slice.
 	GrowIntSlice := func(slice []int, add int) []int {
-		new_capacity := cap(slice)+add
+		new_capacity := cap(slice) + add
 		new_slice := make([]int, len(slice), new_capacity)
 		for index := 0; index < len(slice); index++ {
 			new_slice[index] = slice[index]
@@ -344,10 +344,10 @@ func grow() {
 	}
 
 	// == 3.
-/*
+
 	// Let's two elements to the slice
 	// So we reslice the slice to add 2 to its original length
-	slice = slice[:len(slice)+2] // We can do this because cap(slice) == 7
+	/*slice = slice[:len(slice)+2] // We can do this because cap(slice) == 7
 	slice[4], slice[5] = 4, 5
 
 	if len(slice) == 6 && cap(slice) == 7 &&
@@ -357,8 +357,8 @@ func grow() {
 	} else {
 		fmt.Printf("\tFAIL: 3. got %v, want [0 1 2 3 4 5])\n", slice)
 		pass, PASS = false, false
-	}
-*/
+	}*/
+
 	if pass {
 		fmt.Println("\tpass")
 	}

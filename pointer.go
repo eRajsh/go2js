@@ -89,12 +89,12 @@ func (tr *translate) replacePointers(str *string) {
 
 			// Comparing pointers with value nil
 			reNil := regexp.MustCompile(pointer + NIL)
-			*str = reNil.ReplaceAllString(*str, POINTER_FIELD)
+			*str = reNil.ReplaceAllString(*str, FIELD_POINTER)
 
 			if tr.addr[funcId][block][varName] {
 				*str = strings.Replace(*str, pointer+ADDR, "", -1)
 			} else {
-				*str = strings.Replace(*str, pointer, POINTER_FIELD, -1)
+				*str = strings.Replace(*str, pointer, FIELD_POINTER, -1)
 			}
 		}
 	}
@@ -142,12 +142,12 @@ func (tr *translate) replacePointers(str *string) {
 				pointer := tagPointer(false, 'P', funcId, blockId, globVarName)
 
 				reNil := regexp.MustCompile(pointer + NIL)
-				*str = reNil.ReplaceAllString(*str, POINTER_FIELD)
+				*str = reNil.ReplaceAllString(*str, FIELD_POINTER)
 
 				if tr.addr[funcId][blockId][globVarName] {
 					*str = strings.Replace(*str, pointer+ADDR, "", -1)
 				} else {
-					*str = strings.Replace(*str, pointer, POINTER_FIELD, -1)
+					*str = strings.Replace(*str, pointer, FIELD_POINTER, -1)
 				}
 			}
 		}

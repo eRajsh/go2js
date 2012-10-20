@@ -40,10 +40,10 @@ const (
 )
 
 const (
-	POINTER_FIELD = ".p"
-	TYPE_FIELD    = ".t"
-	VALUE_FIELD   = ".v"
-	GET_FIELD     = ".get()"
+	FIELD_GET     = ".get()"
+	FIELD_POINTER = ".p"
+	FIELD_TYPE    = ".t"
+	FIELD_VALUE   = ".v"
 )
 
 var void struct{} // A struct without any elements occupies no space at all.
