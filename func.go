@@ -107,23 +107,35 @@ func (tr *translate) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.Fu
 			fType = fType[:len(fType)-2]
 		}
 
-		tr.WriteString(fmt.Sprintf("%s.prototype.%s=%sfunction(%s)%s",
-			fType, validIdent(name)+SP, SP, joinParams(typ), SP))
+		tr.WriteString(fmt.Sprintf("%s.prototype.%s=%sfunction",
+			fType, validIdent(name)+SP, SP))
 	} else if name != nil {
-		tr.WriteString(fmt.Sprintf("function %s(%s)%s",
-			validIdent(name), joinParams(typ), SP))
+		tr.WriteString(fmt.Sprintf("function %s", validIdent(name)))
 		tr.recvVar = "_" // avoid that been added "this" in selectors
 	} else { // Literal function
-		tr.WriteString(fmt.Sprintf("%s=%sfunction(%s)%s", SP, SP, joinParams(typ), SP))
+		tr.WriteString(fmt.Sprintf("%s=%sfunction", SP, SP))
 		tr.recvVar = "_" // avoid "this" in selectors
 	}
 
-	// Return multiple values
+	// Get the parameters
+	paramFix, paramVar := joinParams(typ)
+
+	tr.WriteString(fmt.Sprintf("(%s)%s", paramFix, SP))
+
+	if paramVar != "" {
+		tr.WriteString("{" + SP + paramVar)
+		tr.skipLbrace = true
+	}
+
+	// To return multiple values
 	declResults, declReturn := tr.joinResults(typ)
 
 	if declResults != "" {
-		tr.WriteString("{" + SP + declResults)
-		tr.skipLbrace = true
+		if !tr.skipLbrace {
+			tr.WriteString("{")
+			tr.skipLbrace = true
+		}
+		tr.WriteString(SP + declResults)
 		tr.results = declReturn
 	} else {
 		tr.results = ""
@@ -131,28 +143,38 @@ func (tr *translate) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.Fu
 }
 
 // joinParams gets the parameters.
-func joinParams(f *ast.FuncType) string {
+func joinParams(f *ast.FuncType) (paramFix, paramVar string) {
 	isFirst := true
-	s := ""
 
 	//if f.Params == nil {
-	//return s
+	//return
 	//}
 
-	for _, list := range f.Params.List {
+	for i, list := range f.Params.List {
+		if _, ok := list.Type.(*ast.Ellipsis); ok {
+			paramVar = fmt.Sprintf("var %s=%sarguments",
+				validIdent(list.Names[0].Name)+SP, SP)
+
+			if i != 0 {
+				paramVar += fmt.Sprintf(".slice(%d);", i)
+			} else {
+				paramVar += ";"
+			}
+			break // since it is the last parameter
+		}
+
 		for _, v := range list.Names {
 			if !isFirst {
-				s += "," + SP
+				paramFix += "," + SP
 			}
-			s += validIdent(v.Name)
+			paramFix += validIdent(v.Name)
 
 			if isFirst {
 				isFirst = false
 			}
 		}
 	}
-
-	return s
+	return
 }
 
 // joinResults gets the results to use both in the declaration and in its return.
