@@ -166,23 +166,34 @@ function mergeArray(dst, src) {
 
 
 function Copy(dst, src) { var n = 0;
-	if (JSON.stringify(dst.typ()) === JSON.stringify(sliceT) && JSON.stringify(src.typ()) === JSON.stringify(sliceT)) {
+
+	if (src.arr !== undefined) {
 		for (var i = src.low; i < src.high; i++) {
 			if (JSON.stringify(n) === JSON.stringify(dst.len)) {
-				break;
+				return n;
 			}
 			dst.arr.v[n] = src.arr.v[i];
 			n++;
 		}
 		var v; for (var i in src.v) { v = src.v[i];
 			if (JSON.stringify(n) === JSON.stringify(dst.len)) {
-				break;
+				return n;
 			}
 			dst.v[i] = v;
 			n++;
 		}
 		return n;
 	}
+
+
+	for (var i = 0; i < src.length; i++) {
+		if (JSON.stringify(n) === JSON.stringify(dst.len)) {
+			break;
+		}
+		dst.arr.v[i] = src[i];
+		n++;
+	}
+	return n;
 }
 
 

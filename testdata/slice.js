@@ -370,7 +370,7 @@ function testCopy() {
 
 	var a = g.MkArray([8], 0, ['0', '1', '2', '3', '4', '5', '6', '7']);
 	var s = g.MkSlice(0, 6);
-
+	var b = g.MkSlice(0, 5);
 
 	var n1 = g.Copy(s, g.SliceFrom(a, 0));
 	if (s.str() === "012345" && n1 === 6) {
@@ -388,7 +388,13 @@ function testCopy() {
 		pass = false, PASS = false;
 	}
 
+	var n3 = g.Copy(b, "Hello, World!");
+	if (b.str() === "Hello" && n3 === 5) {
 
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. => got " + b.str() + ", n=" + n3 + "<br>");
+		pass = false, PASS = false;
+	}
 
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");

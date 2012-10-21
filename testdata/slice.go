@@ -370,13 +370,13 @@ func testCopy() {
 
 	var a = [...]byte{'0', '1', '2', '3', '4', '5', '6', '7'}
 	var s = make([]byte, 6)
-	//var b = make([]byte, 5)
+	var b = make([]byte, 5)
 
 	n1 := copy(s, a[0:])
 	if string(s) == "012345" && n1 == 6 {
 		// ok
 	} else {
-		fmt.Printf("\tFAIL: 1. => got %v, n=%v\n", string(s), n1)
+		fmt.Printf("\tFAIL: 1. => got %q, n=%v\n", string(s), n1)
 		pass, PASS = false, false
 	}
 
@@ -384,11 +384,17 @@ func testCopy() {
 	if string(s) == "234545" && n2 == 4 {
 		// ok
 	} else {
-		fmt.Printf("\tFAIL: 2. => got %v, n=%v\n", string(s), n2)
+		fmt.Printf("\tFAIL: 2. => got %q, n=%v\n", string(s), n2)
 		pass, PASS = false, false
 	}
 
-	//n3 := copy(b, "Hello, World!")  // n3 == 5, b == []byte("Hello")
+	n3 := copy(b, "Hello, World!")  // n3 == 5, b == []byte("Hello")
+	if string(b) == "Hello" && n3 == 5 {
+		// ok
+	} else {
+		fmt.Printf("\tFAIL: 3. => got %q, n=%v\n", string(b), n3)
+		pass, PASS = false, false
+	}
 
 	if pass {
 		fmt.Println("\tpass")

@@ -166,23 +166,34 @@ func mergeArray(dst, src []interface{}) {
 
 // Copy implements the function "copy".
 func Copy(dst, src interface{}) (n int) {
-	if dst.typ() == sliceT && src.typ() == sliceT {
+	// []T to []T
+	if src.arr != nil {
 		for i := src.low; i < src.high; i++ {
 			if n == dst.len {
-				break
+				return
 			}
 			dst.arr.v[n] = src.arr.v[i]
 			n++
 		}
 		for i, v := range src.v {
 			if n == dst.len {
-				break
+				return
 			}
 			dst.v[i] = v
 			n++
 		}
 		return
 	}
+
+	// string to []byte
+	for i := 0; i < len(src); i++ {
+		if n == dst.len {
+			break
+		}
+		dst.arr.v[i] = src[i]
+		n++
+	}
+	return
 }
 
 // sliceType represents a slice type.
