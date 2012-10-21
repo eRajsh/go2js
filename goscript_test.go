@@ -40,7 +40,7 @@ func TestCompo(t *testing.T) { compile('t', "composite.go", t) }
 func TestSlice(t *testing.T) { compile('t', "slice.go", t) }
 func TestMap(t *testing.T)   { compile('t', "map.go", t) }
 
-func TestMethod(t *testing.T)   { compile('t', "method.go", t) }
+func TestMethod(t *testing.T) { compile('t', "method.go", t) }
 
 func ExampleControl() {
 	Compile(DIR_TEST+"control.go", true)

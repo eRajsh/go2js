@@ -202,33 +202,41 @@ func variadic() {
 	rob := person{"Rob", 54}
 	karl := person{"Karl", 19}
 
-	tests := []string{"Jim", "Sam", "Sam", "Karl"}
+	tests := []struct {
+		msg string
+		out string
+	}{
+		{"paul,jim", "Jim"},
+		{"paul,jim,sam", "Sam"},
+		{"paul,jim,sam,rob", "Sam"},
+		{"karl", "Karl"},
+	}
 
 	older, _ = getOlder(paul, jim)
-	if older.name != tests[0] {
-		fmt.Printf("\tFAIL: (getOlder paul,jim) => got %v, want %v\n",
-			older.name, tests[0])
+	if older.name != tests[0].out {
+		fmt.Printf("\tFAIL: (getOlder %s) => got %v, want %v\n",
+			tests[0].msg, older.name, tests[0].out)
 		pass, PASS = false, false
 	}
 
 	older, _ = getOlder(paul, jim, sam)
-	if older.name != tests[1] {
-		fmt.Printf("\tFAIL: (getOlder paul,jim,sam) => got %v, want %v\n",
-			older.name, tests[1])
+	if older.name != tests[1].out {
+		fmt.Printf("\tFAIL: (getOlder %s) => got %v, want %v\n",
+			tests[1].msg, older.name, tests[1].out)
 		pass, PASS = false, false
 	}
 
 	older, _ = getOlder(paul, jim, sam, rob)
-	if older.name != tests[2] {
-		fmt.Printf("\tFAIL: (getOlder paul,jim,sam,rob) => got %v, want %v\n",
-			older.name, tests[2])
+	if older.name != tests[2].out {
+		fmt.Printf("\tFAIL: (getOlder %s) => got %v, want %v\n",
+			tests[2].msg, older.name, tests[2].out)
 		pass, PASS = false, false
 	}
 
 	older, _ = getOlder(karl)
-	if older.name != tests[3] {
-		fmt.Printf("\tFAIL: (getOlder karl) => got %v, want %v\n",
-			older.name, tests[3])
+	if older.name != tests[3].out {
+		fmt.Printf("\tFAIL: (getOlder %s) => got %v, want %v\n",
+			tests[3].msg, older.name, tests[3].out)
 		pass, PASS = false, false
 	}
 
@@ -238,6 +246,10 @@ func variadic() {
 		fmt.Printf("\tFAIL: (getOlder) => got %v, want %v\n", ok, !ok)
 		pass, PASS = false, false
 	}
+
+	// * * *
+
+	
 
 	if pass {
 		fmt.Println("\tpass")

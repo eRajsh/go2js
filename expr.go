@@ -641,7 +641,8 @@ func (e *expression) translate(expr ast.Expr) {
 					if name == e.tr.recvVar {
 						name = "this" + FIELD_TYPE
 					}
-					if e.tr.isType(sliceType, name) && !e.tr.wasReturn {
+					if e.tr.isType(sliceType, name) && !e.tr.isType(structType, name) &&
+						!e.tr.wasReturn {
 						name += FIELD_GET
 					}
 
@@ -701,7 +702,7 @@ func (e *expression) translate(expr ast.Expr) {
 			} else {
 				e.WriteString(x + ".get(" + indexArgs + ")[0]")
 			}
-		} else if e.tr.isType(sliceType, x) {
+		} else if e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {
 			e.WriteString(x + ".arr" + FIELD_VALUE + sliceIndex)
 		} else {
 			e.WriteString(x + index)
@@ -979,10 +980,10 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 // stripField strips the field name FIELD_VALUE or FIELD_GET, if any.
 func stripField(name string) string {
 	if strings.HasSuffix(name, FIELD_VALUE) {
-		return name[:len(name)-2]
+		return name[:len(name)-len(FIELD_VALUE)]
 	}
 	if strings.HasSuffix(name, FIELD_GET) {
-		return name[:len(name)-6]
+		return name[:len(name)-len(FIELD_GET)]
 	}
 	return name
 }

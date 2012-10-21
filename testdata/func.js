@@ -202,32 +202,40 @@ function variadic() {
 	var rob = new person("Rob", 54);
 	var karl = new person("Karl", 19);
 
-	var tests = g.Slice("", ["Jim", "Sam", "Sam", "Karl"]);
+	var _ = function(msg, out) { return {
+		msg: msg,
+		out: out
+	};}; var tests = [
+		_("paul,jim", "Jim"),
+		_("paul,jim,sam", "Sam"),
+		_("paul,jim,sam,rob", "Sam"),
+		_("karl", "Karl")
+	];
 
 	older = getOlder(paul, jim)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests.get()[0])) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim) => got " + older.name + ", want " + tests.get()[0] + "<br>");
+	if (JSON.stringify(older.name) !== JSON.stringify(tests[0].out)) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder " + tests[0].msg + ") => got " + older.name + ", want " + tests[0].out + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	older = getOlder(paul, jim, sam)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests.get()[1])) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim,sam) => got " + older.name + ", want " + tests.get()[1] + "<br>");
+	if (JSON.stringify(older.name) !== JSON.stringify(tests[1].out)) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder " + tests[1].msg + ") => got " + older.name + ", want " + tests[1].out + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	older = getOlder(paul, jim, sam, rob)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests.get()[2])) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder paul,jim,sam,rob) => got " + older.name + ", want " + tests.get()[2] + "<br>");
+	if (JSON.stringify(older.name) !== JSON.stringify(tests[2].out)) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder " + tests[2].msg + ") => got " + older.name + ", want " + tests[2].out + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	older = getOlder(karl)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests.get()[3])) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder karl) => got " + older.name + ", want " + tests.get()[3] + "<br>");
+	if (JSON.stringify(older.name) !== JSON.stringify(tests[3].out)) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder " + tests[3].msg + ") => got " + older.name + ", want " + tests[3].out + "<br>");
 
 		pass = false, PASS = false;
 	}
@@ -238,6 +246,10 @@ function variadic() {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder) => got " + ok + ", want " + !ok + "<br>");
 		pass = false, PASS = false;
 	}
+
+
+
+
 
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
