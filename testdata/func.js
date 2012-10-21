@@ -249,7 +249,26 @@ function variadic() {
 
 
 
+	var getUser = function(name, surname, age) { var email = [].slice.call(arguments).slice(3);
+		var emails = "";
+		var v; for (var _ in email) { v = email[_];
+			emails += " " + v;
+		}
+		return "" + name + " " + surname + ", age " + age + ", emails:" + emails + "";
+	};
 
+	var name = "John";
+	var surname = "Smith";
+	var age = 17;
+	var email1 = "foo@mail.se";
+	var email2 = "bar@mail.se";
+
+	var dataUser = getUser(name, surname, age, email1, email2);
+	if (JSON.stringify(dataUser) !== JSON.stringify("" + name + " " + surname + ", age " + age + ", emails: " + email1 + " " + email2 + "")) {
+
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: multiple parameters => got " + dataUser + "<br>");
+		pass = false, PASS = false;
+	}
 
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");

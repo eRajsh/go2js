@@ -641,8 +641,8 @@ func (e *expression) translate(expr ast.Expr) {
 					if name == e.tr.recvVar {
 						name = "this" + FIELD_TYPE
 					}
-					if e.tr.isType(sliceType, name) && !e.tr.isType(structType, name) &&
-						!e.tr.wasReturn {
+					if e.tr.isType(sliceType, name) && !e.tr.wasReturn &&
+						!e.tr.isType(structType, name) {
 						name += FIELD_GET
 					}
 

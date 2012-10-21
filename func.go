@@ -152,13 +152,13 @@ func joinParams(f *ast.FuncType) (paramFix, paramVar string) {
 
 	for i, list := range f.Params.List {
 		if _, ok := list.Type.(*ast.Ellipsis); ok {
-			paramVar = fmt.Sprintf("var %s=%sarguments",
+			paramVar = fmt.Sprintf("var %s=%s",
 				validIdent(list.Names[0].Name)+SP, SP)
 
 			if i != 0 {
-				paramVar += fmt.Sprintf(".slice(%d);", i)
+				paramVar += fmt.Sprintf("[].slice.call(arguments).slice(%d);", i+1)
 			} else {
-				paramVar += ";"
+				paramVar += "arguments;"
 			}
 			break // since it is the last parameter
 		}

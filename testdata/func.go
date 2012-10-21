@@ -247,9 +247,28 @@ func variadic() {
 		pass, PASS = false, false
 	}
 
-	// * * *
+	// == Multiple parameters
 
-	
+	getUser := func(name, surname string, age int, email ...string) string {
+		emails := ""
+		for _, v := range email {
+			emails += " " + v
+		}
+		return fmt.Sprintf("%s %s, age %d, emails:%s", name, surname, age, emails)
+	}
+
+	name := "John"
+	surname := "Smith"
+	age := 17
+	email1 := "foo@mail.se"
+	email2 := "bar@mail.se"
+
+	dataUser := getUser(name, surname, age, email1, email2)
+	if dataUser != fmt.Sprintf("%s %s, age %d, emails: %s %s",
+	name, surname, age, email1, email2) {
+		fmt.Printf("\tFAIL: multiple parameters => got %q\n", dataUser)
+		pass, PASS = false, false
+	}
 
 	if pass {
 		fmt.Println("\tpass")
