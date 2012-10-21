@@ -388,7 +388,7 @@ func testCopy() {
 		pass, PASS = false, false
 	}
 
-	n3 := copy(b, "Hello, World!")  // n3 == 5, b == []byte("Hello")
+	n3 := copy(b, "Hello, World!")
 	if string(b) == "Hello" && n3 == 5 {
 		// ok
 	} else {

@@ -186,12 +186,11 @@ func Copy(dst, src interface{}) (n int) {
 	}
 
 	// string to []byte
-	for i := 0; i < len(src); i++ {
+	for ; n < len(src); n++ {
 		if n == dst.len {
 			break
 		}
-		dst.arr.v[i] = src[i]
-		n++
+		dst.arr.v[n] = src[n]
 	}
 	return
 }

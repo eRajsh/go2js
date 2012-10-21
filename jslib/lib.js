@@ -186,12 +186,11 @@ function Copy(dst, src) { var n = 0;
 	}
 
 
-	for (var i = 0; i < src.length; i++) {
+	for (; n < src.length; n++) {
 		if (JSON.stringify(n) === JSON.stringify(dst.len)) {
 			break;
 		}
-		dst.arr.v[i] = src[i];
-		n++;
+		dst.arr.v[n] = src[n];
 	}
 	return n;
 }
