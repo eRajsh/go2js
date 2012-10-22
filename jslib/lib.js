@@ -310,9 +310,8 @@ sliceType.prototype.str = function() {
 
 
 
-function Append(src) { var elt = [].slice.call(arguments).slice(1);
+function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
-	var dst = new sliceType(undefined, [], 0, 0, 0, 0, false);
 	dst.low = src.low;
 	dst.high = src.high;
 	dst.len = src.len;
@@ -332,8 +331,18 @@ function Append(src) { var elt = [].slice.call(arguments).slice(1);
 
 
 	var v; for (var _ in elt) { v = elt[_];
-		dst.v.push(v);
+		if (Array.isArray(v)) {
+			var vArr; for (var _ in v) { vArr = v[_];
+				dst.v.push(vArr);
+				if (JSON.stringify(dst.len) === JSON.stringify(dst.cap)) {
+					dst.cap = dst.len * 2;
+				}
+				dst.len++;
+			}
+			break;
+		}
 
+		dst.v.push(v);
 		if (JSON.stringify(dst.len) === JSON.stringify(dst.cap)) {
 			dst.cap = dst.len * 2;
 		}

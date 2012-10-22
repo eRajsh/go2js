@@ -310,9 +310,8 @@ func (s sliceType) str() string {
 // * * *
 
 // Append implements the function "append".
-func Append(src []interface{}, elt ...interface{}) sliceType {
-	// Create a new slice
-	dst := new(sliceType)
+func Append(src []interface{}, elt ...interface{}) (dst sliceType) {
+	// Copy src to the new slice
 	dst.low = src.low
 	dst.high = src.high
 	dst.len = src.len
@@ -332,8 +331,18 @@ func Append(src []interface{}, elt ...interface{}) sliceType {
 	//==
 
 	for _, v := range elt {
-		dst.v.push(v)
+		if Array.isArray(v) { // The last field could be an ellipsis
+			for _, vArr := range v {
+				dst.v.push(vArr)
+				if dst.len == dst.cap {
+					dst.cap = dst.len * 2
+				}
+				dst.len++
+			}
+			break
+		}
 
+		dst.v.push(v)
 		if dst.len == dst.cap {
 			dst.cap = dst.len * 2
 		}

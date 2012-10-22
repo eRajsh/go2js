@@ -432,6 +432,18 @@ function _append() {
 		pass = false, PASS = false;
 	}
 
+
+	var a_slice = g.Slice(0, ['1', '2', '3']);
+	var b_slice = g.Slice(0, ['5', '6', '7']);
+
+	a_slice = g.Append(a_slice, b_slice.get());
+	if (a_slice.str() === "123567" && a_slice.len === 6) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: append a slice => got " + a_slice.str() + ", len=" + a_slice.len + "<br>");
+
+		pass = false, PASS = false;
+	}
+
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}

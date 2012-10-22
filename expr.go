@@ -418,14 +418,19 @@ func (e *expression) translate(expr ast.Expr) {
 			e.tr.returnBasicLit = false
 
 		case "append":
-			paramVar := make([]string, 0)
-			for _, v := range typ.Args[1:] {
-				paramVar = append(paramVar, e.tr.getExpression(v).String())
+			src := ""
+			for i, v := range typ.Args[1:] {
+				if i != 0 {
+					src += "," + SP
+				}
+				src += e.tr.getExpression(v).String()
+			}
+			if typ.Ellipsis != 0 { // last argument is an ellipsis
+				src += FIELD_GET
 			}
 
 			e.WriteString(fmt.Sprintf("g.Append(%s,%s%s)",
-				e.tr.getExpression(typ.Args[0]).String(), SP,
-				strings.Join(paramVar, ","+SP)))
+				e.tr.getExpression(typ.Args[0]).String(), SP, src))
 
 		case "copy":
 			e.WriteString(fmt.Sprintf("g.Copy(%s,%s%s)",

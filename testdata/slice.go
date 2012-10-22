@@ -432,6 +432,18 @@ func _append() {
 		pass, PASS = false, false
 	}
 
+	// == A slice
+	a_slice := []byte{'1', '2', '3'}
+	b_slice := []byte{'5', '6', '7'}
+
+	a_slice = append(a_slice, b_slice...)
+	if string(a_slice) == "123567" && len(a_slice) == 6 {
+	} else {
+		fmt.Printf("\tFAIL: append a slice => got %q, len=%d\n",
+			string(a_slice), len(a_slice))
+		pass, PASS = false, false
+	}
+
 	if pass {
 		fmt.Println("\tpass")
 	}
