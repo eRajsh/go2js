@@ -188,12 +188,12 @@ function MkSlice(zero, len, cap) {
 		return s;
 	}
 
-	var a = new arrayType([], g.Map(0));
-	a.len_[0] = len;
+	var arr = new arrayType([], g.Map(0));
+	arr.len_[0] = len;
 	for (var i = 0; i < len; i++) {
-		a.v[i] = zero;
+		arr.v[i] = zero;
 	}
-	s.arr = a;
+	s.arr = arr;
 
 	if (cap !== undefined) {
 		s.cap = cap;
@@ -215,7 +215,7 @@ function Slice(zero, data) {
 		return s;
 	}
 
-	var a = new arrayType([], g.Map(0));
+	var arr = new arrayType([], g.Map(0));
 	var srcVal; for (var i in data) { srcVal = data[i];
 		var isHashMap = false;
 
@@ -226,19 +226,19 @@ function Slice(zero, data) {
 					isHashMap = true;
 
 					for (i; i < k; i++) {
-						a.v[i] = zero;
+						arr.v[i] = zero;
 					}
-					a.v[i] = v;
+					arr.v[i] = v;
 				}
 			}
 		}
 		if (!isHashMap) {
-			a.v[i] = srcVal;
+			arr.v[i] = srcVal;
 		}
 	}
-	s.len = a.v.length;
-	a.len_[0] = s.len;
-	s.arr = a;
+	s.len = arr.v.length;
+	arr.len_[0] = s.len;
+	s.arr = arr;
 
 	s.cap = s.len;
 	s.high = s.len;
@@ -290,12 +290,12 @@ sliceType.prototype.set = function(src, low, high) {
 
 sliceType.prototype.get = function() {
 	if (this.arr !== undefined) {
-		var result = this.arr.v.slice(this.low, this.high);
+		var arr = this.arr.v.slice(this.low, this.high);
 
 		if (this.v.length !== 0) {
-			return result.concat(this.v);
+			return arr.concat(this.v);
 		} else {
-			return result;
+			return arr;
 		}
 	}
 	return this.v;
@@ -310,7 +310,27 @@ sliceType.prototype.str = function() {
 
 
 
-function Append(dst) { var elt = [].slice.call(arguments).slice(1);
+function Append(src) { var elt = [].slice.call(arguments).slice(1);
+
+	var dst = new sliceType(undefined, [], 0, 0, 0, 0, false);
+	dst.low = src.low;
+	dst.high = src.high;
+	dst.len = src.len;
+	dst.cap = src.cap;
+	dst.nil_ = src.nil_;
+
+	var arr = new arrayType([], g.Map(0));
+	arr.len_[0] = src.arr.len_[0];
+	var v; for (var _ in src.arr.v) { v = src.arr.v[_];
+		arr.v.push(v);
+	}
+	dst.arr = arr;
+
+	var v; for (var _ in src.v) { v = src.v[_];
+		dst.v.push(v);
+	}
+
+
 	var v; for (var _ in elt) { v = elt[_];
 		dst.v.push(v);
 

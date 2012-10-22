@@ -188,12 +188,12 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 		return s
 	}
 
-	a := new(arrayType)
-	a.len_[0] = len
+	arr := new(arrayType)
+	arr.len_[0] = len
 	for i := 0; i < len; i++ {
-		a.v[i] = zero
+		arr.v[i] = zero
 	}
-	s.arr = a
+	s.arr = arr
 
 	if cap != nil {
 		s.cap = cap
@@ -215,7 +215,7 @@ func Slice(zero interface{}, data []interface{}) *sliceType {
 		return s
 	}
 
-	a := new(arrayType)
+	arr := new(arrayType)
 	for i, srcVal := range data {
 		isHashMap := false
 
@@ -226,19 +226,19 @@ func Slice(zero interface{}, data []interface{}) *sliceType {
 					isHashMap = true
 
 					for i; i < k; i++ {
-						a.v[i] = zero
+						arr.v[i] = zero
 					}
-					a.v[i] = v
+					arr.v[i] = v
 				}
 			}
 		}
 		if !isHashMap {
-			a.v[i] = srcVal
+			arr.v[i] = srcVal
 		}
 	}
-	s.len = len(a.v)
-	a.len_[0] = s.len
-	s.arr = a
+	s.len = len(arr.v)
+	arr.len_[0] = s.len
+	s.arr = arr
 
 	s.cap = s.len
 	s.high = s.len
@@ -290,12 +290,12 @@ func (s sliceType) set(src interface{}, low, high int) {
 // get gets the slice.
 func (s sliceType) get() []interface{} {
 	if s.arr != nil {
-		result := s.arr.v.slice(s.low, s.high)
+		arr := s.arr.v.slice(s.low, s.high)
 
 		if len(s.v) != 0 {
-			return result.concat(s.v)
+			return arr.concat(s.v)
 		} else {
-			return result
+			return arr
 		}
 	}
 	return s.v
@@ -310,7 +310,27 @@ func (s sliceType) str() string {
 // * * *
 
 // Append implements the function "append".
-func Append(dst []interface{}, elt ...interface{}) sliceType {
+func Append(src []interface{}, elt ...interface{}) sliceType {
+	// Create a new slice
+	dst := new(sliceType)
+	dst.low = src.low
+	dst.high = src.high
+	dst.len = src.len
+	dst.cap = src.cap
+	dst.nil_ = src.nil_
+
+	arr := new(arrayType)
+	arr.len_[0] = src.arr.len_[0]
+	for _, v := range src.arr.v {
+		arr.v.push(v)
+	}
+	dst.arr = arr
+
+	for _, v := range src.v {
+		dst.v.push(v)
+	}
+	//==
+
 	for _, v := range elt {
 		dst.v.push(v)
 
