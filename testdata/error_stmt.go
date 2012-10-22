@@ -18,7 +18,7 @@ func unvalidDirectives() {
 	recover()
 }
 
-func testGoto() {
+func _goto() {
 	isFirst := true
 
 _skipPoint:

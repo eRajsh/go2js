@@ -19,7 +19,7 @@ func init() {
 	x = 13
 }
 
-func testInit() {
+func _init() {
 	if x == 13 {
 		fmt.Println("\tpass")
 	} else {
@@ -139,7 +139,7 @@ func resultVariable() {
 	}
 }
 
-func testReturn() {
+func _return() {
 	pass := true
 
 	MySqrt := func(f float64) (squareroot float64, ok bool) {
@@ -265,7 +265,7 @@ func variadic() {
 
 	dataUser := getUser(name, surname, age, email1, email2)
 	if dataUser != fmt.Sprintf("%s %s, age %d, emails: %s %s",
-	name, surname, age, email1, email2) {
+		name, surname, age, email1, email2) {
 		fmt.Printf("\tFAIL: multiple parameters => got %q\n", dataUser)
 		pass, PASS = false, false
 	}
@@ -278,8 +278,8 @@ func variadic() {
 func main() {
 	fmt.Print("\n\n== Functions\n\n")
 
-	fmt.Println("=== RUN testInit")
-	testInit()
+	fmt.Println("=== RUN init")
+	_init()
 	fmt.Println("=== RUN singleLine")
 	singleLine()
 	fmt.Println("=== RUN simpleFunc")
@@ -288,8 +288,8 @@ func main() {
 	twoOuputValues()
 	fmt.Println("=== RUN resultVariable")
 	resultVariable()
-	fmt.Println("=== RUN testReturn")
-	testReturn()
+	fmt.Println("=== RUN return")
+	_return()
 	fmt.Println("=== RUN variadic")
 	variadic()
 

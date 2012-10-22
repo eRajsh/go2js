@@ -10,7 +10,7 @@
 
 var PASS = true;
 
-function testIf() {
+function _if() {
 	var pass = true;
 
 
@@ -48,7 +48,7 @@ function testIf() {
 	}
 }
 
-function testSwitch() {
+function _switch() {
 	var pass = true;
 
 
@@ -124,7 +124,7 @@ function testSwitch() {
 	}
 }
 
-function testFor() {
+function _for() {
 	var pass = true;
 
 
@@ -224,7 +224,7 @@ function testFor() {
 	}
 }
 
-function testRange() {
+function _range() {
 	var pass = true;
 
 	var s = g.Slice(0, [2, 3, 5]);
@@ -250,14 +250,14 @@ function testRange() {
 function main() {
 	document.write("<br><br>== Control statements<br><br>");
 
-	document.write("=== RUN testIf<br>");
-	testIf();
-	document.write("=== RUN testSwitch<br>");
-	testSwitch();
-	document.write("=== RUN testFor<br>");
-	testFor();
-	document.write("=== RUN testRange<br>");
-	testRange();
+	document.write("=== RUN if<br>");
+	_if();
+	document.write("=== RUN switch<br>");
+	_switch();
+	document.write("=== RUN for<br>");
+	_for();
+	document.write("=== RUN range<br>");
+	_range();
 
 	if (PASS) {
 		document.write("PASS<br>");

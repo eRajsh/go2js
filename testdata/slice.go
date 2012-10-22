@@ -365,7 +365,7 @@ func grow() {
 	}
 }
 
-func testCopy() {
+func _copy() {
 	pass := true
 
 	var a = [...]byte{'0', '1', '2', '3', '4', '5', '6', '7'}
@@ -401,6 +401,14 @@ func testCopy() {
 	}
 }
 
+func _append() {
+	pass := true
+
+	if pass {
+		fmt.Println("\tpass")
+	}
+}
+
 func main() {
 	fmt.Print("\n\n== Slices\n\n")
 
@@ -416,8 +424,10 @@ func main() {
 	resize()
 	fmt.Println("=== RUN grow")
 	grow()
-	fmt.Println("=== RUN testCopy")
-	testCopy()
+	fmt.Println("=== RUN copy")
+	_copy()
+	fmt.Println("=== RUN append")
+	_append()
 
 	if PASS {
 		fmt.Println("PASS")

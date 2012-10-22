@@ -159,7 +159,7 @@ func deleteKey() {
 	}
 }
 
-func testRange() {
+func _range() {
 	pass := true
 
 	for key, value := range rating {
@@ -252,8 +252,8 @@ func main() {
 	keyNoExistent()
 	fmt.Println("=== RUN deleteKey")
 	deleteKey()
-	fmt.Println("=== RUN testRange")
-	testRange()
+	fmt.Println("=== RUN range")
+	_range()
 	fmt.Println("=== RUN blankIdInRange")
 	blankIdInRange()
 

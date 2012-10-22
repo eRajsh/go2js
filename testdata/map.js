@@ -159,7 +159,7 @@ function deleteKey() {
 	}
 }
 
-function testRange() {
+function _range() {
 	var pass = true;
 
 	var value; for (var key in rating.v) { value = rating.get(key)[0];
@@ -252,8 +252,8 @@ function main() {
 	keyNoExistent();
 	document.write("=== RUN deleteKey<br>");
 	deleteKey();
-	document.write("=== RUN testRange<br>");
-	testRange();
+	document.write("=== RUN range<br>");
+	_range();
 	document.write("=== RUN blankIdInRange<br>");
 	blankIdInRange();
 

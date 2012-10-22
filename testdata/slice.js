@@ -365,7 +365,7 @@ function grow() {
 	}
 }
 
-function testCopy() {
+function _copy() {
 	var pass = true;
 
 	var a = g.MkArray([8], 0, ['0', '1', '2', '3', '4', '5', '6', '7']);
@@ -401,6 +401,14 @@ function testCopy() {
 	}
 }
 
+function _append() {
+	var pass = true;
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
+}
+
 function main() {
 	document.write("<br><br>== Slices<br><br>");
 
@@ -416,8 +424,10 @@ function main() {
 	resize();
 	document.write("=== RUN grow<br>");
 	grow();
-	document.write("=== RUN testCopy<br>");
-	testCopy();
+	document.write("=== RUN copy<br>");
+	_copy();
+	document.write("=== RUN append<br>");
+	_append();
 
 	if (PASS) {
 		document.write("PASS<br>");

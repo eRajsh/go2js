@@ -10,7 +10,7 @@ import "fmt"
 
 var PASS = true
 
-func testIf() {
+func _if() {
 	pass := true
 
 	// == Simple
@@ -48,7 +48,7 @@ func testIf() {
 	}
 }
 
-func testSwitch() {
+func _switch() {
 	pass := true
 
 	// == Simple
@@ -124,7 +124,7 @@ func testSwitch() {
 	}
 }
 
-func testFor() {
+func _for() {
 	pass := true
 
 	// == Simple
@@ -224,7 +224,7 @@ func testFor() {
 	}
 }
 
-func testRange() {
+func _range() {
 	pass := true
 
 	s := []int{2, 3, 5}
@@ -250,14 +250,14 @@ func testRange() {
 func main() {
 	fmt.Print("\n\n== Control statements\n\n")
 
-	fmt.Println("=== RUN testIf")
-	testIf()
-	fmt.Println("=== RUN testSwitch")
-	testSwitch()
-	fmt.Println("=== RUN testFor")
-	testFor()
-	fmt.Println("=== RUN testRange")
-	testRange()
+	fmt.Println("=== RUN if")
+	_if()
+	fmt.Println("=== RUN switch")
+	_switch()
+	fmt.Println("=== RUN for")
+	_for()
+	fmt.Println("=== RUN range")
+	_range()
 
 	if PASS {
 		fmt.Println("PASS")

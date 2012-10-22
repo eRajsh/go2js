@@ -151,7 +151,7 @@ func initArray() {
 	}
 }
 
-func testArray() {
+func _array() {
 	// Declare an example array variable of 10 person called 'array'.
 	var array [10]person
 
@@ -198,7 +198,7 @@ func multiArray() {
 // == Struct
 //
 
-func testStruct() {
+func _struct() {
 	pass := true
 
 	var tom person
@@ -247,13 +247,13 @@ func main() {
 	builtInArray()
 	fmt.Println("=== RUN initArray")
 	initArray()
-	fmt.Println("=== RUN testArray")
-	testArray()
+	fmt.Println("=== RUN array")
+	_array()
 	fmt.Println("=== RUN multiArray")
 	multiArray()
 
-	fmt.Println("=== RUN testStruct")
-	testStruct()
+	fmt.Println("=== RUN struct")
+	_struct()
 
 	if PASS {
 		fmt.Println("PASS")

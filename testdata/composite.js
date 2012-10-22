@@ -151,7 +151,7 @@ function initArray() {
 	}
 }
 
-function testArray() {
+function _array() {
 
 	var array = g.MkArray([10], new person("", 0));
 
@@ -198,7 +198,7 @@ function multiArray() {
 
 
 
-function testStruct() {
+function _struct() {
 	var pass = true;
 
 	var tom = new person("", 0);
@@ -247,13 +247,13 @@ function main() {
 	builtInArray();
 	document.write("=== RUN initArray<br>");
 	initArray();
-	document.write("=== RUN testArray<br>");
-	testArray();
+	document.write("=== RUN array<br>");
+	_array();
 	document.write("=== RUN multiArray<br>");
 	multiArray();
 
-	document.write("=== RUN testStruct<br>");
-	testStruct();
+	document.write("=== RUN struct<br>");
+	_struct();
 
 	if (PASS) {
 		document.write("PASS<br>");

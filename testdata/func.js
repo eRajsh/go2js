@@ -19,7 +19,7 @@ var x = 10;
 	x = 13;
 }());
 
-function testInit() {
+function _init() {
 	if (x === 13) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
@@ -139,7 +139,7 @@ function resultVariable() {
 	}
 }
 
-function testReturn() {
+function _return() {
 	var pass = true;
 
 	var MySqrt = function(f) { var squareroot = 0, ok = false;
@@ -278,8 +278,8 @@ function variadic() {
 function main() {
 	document.write("<br><br>== Functions<br><br>");
 
-	document.write("=== RUN testInit<br>");
-	testInit();
+	document.write("=== RUN init<br>");
+	_init();
 	document.write("=== RUN singleLine<br>");
 	singleLine();
 	document.write("=== RUN simpleFunc<br>");
@@ -288,8 +288,8 @@ function main() {
 	twoOuputValues();
 	document.write("=== RUN resultVariable<br>");
 	resultVariable();
-	document.write("=== RUN testReturn<br>");
-	testReturn();
+	document.write("=== RUN return<br>");
+	_return();
 	document.write("=== RUN variadic<br>");
 	variadic();
 
