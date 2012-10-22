@@ -156,45 +156,6 @@ func mergeArray(dst, src []interface{}) {
 // == Slice
 //
 
-// Append implements the function "append".
-/*func Append(dst, elt interface{}) {
-	if s.len == s.cap {
-		s.cap = s.len * 2
-	}
-	s.len++
-}*/
-
-// Copy implements the function "copy".
-func Copy(dst, src interface{}) (n int) {
-	// []T to []T
-	if src.arr != nil {
-		for i := src.low; i < src.high; i++ {
-			if n == dst.len {
-				return
-			}
-			dst.arr.v[n] = src.arr.v[i]
-			n++
-		}
-		for i, v := range src.v {
-			if n == dst.len {
-				return
-			}
-			dst.v[i] = v
-			n++
-		}
-		return
-	}
-
-	// string to []byte
-	for ; n < len(src); n++ {
-		if n == dst.len {
-			break
-		}
-		dst.arr.v[n] = src[n]
-	}
-	return
-}
-
 // sliceType represents a slice type.
 type sliceType struct {
 	arr interface{}   // the array where data is got or created from scratch using make
@@ -329,7 +290,13 @@ func (s sliceType) set(src interface{}, low, high int) {
 // get gets the slice.
 func (s sliceType) get() []interface{} {
 	if s.arr != nil {
-		return s.arr.v.slice(s.low, s.high)
+		result := s.arr.v.slice(s.low, s.high)
+
+		if len(s.v) != 0 {
+			return result.concat(s.v)
+		} else {
+			return result
+		}
 	}
 	return s.v
 }
@@ -338,6 +305,52 @@ func (s sliceType) get() []interface{} {
 func (s sliceType) str() string {
 	_s := s.get()
 	return _s.join("")
+}
+
+// * * *
+
+// Append implements the function "append".
+func Append(dst []interface{}, elt ...interface{}) sliceType {
+	for _, v := range elt {
+		dst.v.push(v)
+
+		if dst.len == dst.cap {
+			dst.cap = dst.len * 2
+		}
+		dst.len++
+	}
+	return dst
+}
+
+// Copy implements the function "copy".
+func Copy(dst []interface{}, src interface{}) (n int) {
+	// []T to []T
+	if src.arr != nil {
+		for i := src.low; i < src.high; i++ {
+			if n == dst.len {
+				return
+			}
+			dst.arr.v[n] = src.arr.v[i]
+			n++
+		}
+		for i, v := range src.v {
+			if n == dst.len {
+				return
+			}
+			dst.v[i] = v
+			n++
+		}
+		return
+	}
+
+	// string to []byte
+	for ; n < len(src); n++ {
+		if n == dst.len {
+			break
+		}
+		dst.arr.v[n] = src[n]
+	}
+	return
 }
 
 // == Map

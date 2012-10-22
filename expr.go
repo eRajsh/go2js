@@ -417,16 +417,25 @@ func (e *expression) translate(expr ast.Expr) {
 			}
 			e.tr.returnBasicLit = false
 
+		case "append":
+			paramVar := make([]string, 0)
+			for _, v := range typ.Args[1:] {
+				paramVar = append(paramVar, e.tr.getExpression(v).String())
+			}
+
+			e.WriteString(fmt.Sprintf("g.Append(%s,%s%s)",
+				e.tr.getExpression(typ.Args[0]).String(), SP,
+				strings.Join(paramVar, ","+SP)))
+
+		case "copy":
+			e.WriteString(fmt.Sprintf("g.Copy(%s,%s%s)",
+				e.tr.getExpression(typ.Args[0]).String(), SP,
+				e.tr.getExpression(typ.Args[1]).String()))
+
 		case "delete":
 			e.WriteString(fmt.Sprintf("delete %s%s[%s]",
 				e.tr.getExpression(typ.Args[0]).String(),
 				FIELD_VALUE,
-				e.tr.getExpression(typ.Args[1]).String()))
-
-		case "copy":
-			e.WriteString(fmt.Sprintf("g.Copy(%s,%s%s)",
-				e.tr.getExpression(typ.Args[0]).String(),
-				SP,
 				e.tr.getExpression(typ.Args[1]).String()))
 
 		case "print", "println":
@@ -450,7 +459,7 @@ func (e *expression) translate(expr ast.Expr) {
 			return
 
 		// == Not implemented
-		case "append", "close", "uintptr":
+		case "close", "uintptr":
 			panic(fmt.Sprintf("built-in call unimplemented: %s", call))
 
 		// Defined functions

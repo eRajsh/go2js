@@ -145,18 +145,19 @@ func (tr *translate) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.Fu
 // joinParams gets the parameters.
 func joinParams(f *ast.FuncType) (paramFix, paramVar string) {
 	isFirst := true
+	i := 0
 
 	//if f.Params == nil {
 	//return
 	//}
 
-	for i, list := range f.Params.List {
+	for _, list := range f.Params.List {
 		if _, ok := list.Type.(*ast.Ellipsis); ok {
 			paramVar = fmt.Sprintf("var %s=%s",
 				validIdent(list.Names[0].Name)+SP, SP)
 
 			if i != 0 {
-				paramVar += fmt.Sprintf("[].slice.call(arguments).slice(%d);", i+1)
+				paramVar += fmt.Sprintf("[].slice.call(arguments).slice(%d);", i)
 			} else {
 				paramVar += "arguments;"
 			}
@@ -167,6 +168,7 @@ func joinParams(f *ast.FuncType) (paramFix, paramVar string) {
 			if !isFirst {
 				paramFix += "," + SP
 			}
+			i++
 			paramFix += validIdent(v.Name)
 
 			if isFirst {

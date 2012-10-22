@@ -404,6 +404,34 @@ func _copy() {
 func _append() {
 	pass := true
 
+	slice := []byte{'1', '2', '3'}
+	if string(slice) == "123" && len(slice) == 3 {
+	} else {
+		fmt.Printf("\tFAIL: 1. => got %q, len=%d\n", string(slice), len(slice))
+		pass, PASS = false, false
+	}
+
+	slice = append(slice, '4')
+	if string(slice) == "1234" && len(slice) == 4 {
+	} else {
+		fmt.Printf("\tFAIL: 2. => got %q, len=%d\n", string(slice), len(slice))
+		pass, PASS = false, false
+	}
+
+	slice = append(slice, '5', '6')
+	if string(slice) == "123456" && len(slice) == 6 {
+	} else {
+		fmt.Printf("\tFAIL: 3. => got %q, len=%d\n", string(slice), len(slice))
+		pass, PASS = false, false
+	}
+
+	slice = append(slice, '7', '8', '9')
+	if string(slice) == "123456789" && len(slice) == 9 {
+	} else {
+		fmt.Printf("\tFAIL: 4. => got %q, len=%d\n", string(slice), len(slice))
+		pass, PASS = false, false
+	}
+
 	if pass {
 		fmt.Println("\tpass")
 	}

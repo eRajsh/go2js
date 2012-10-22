@@ -404,6 +404,34 @@ function _copy() {
 function _append() {
 	var pass = true;
 
+	var slice = g.Slice(0, ['1', '2', '3']);
+	if (slice.str() === "123" && slice.len === 3) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. => got " + slice.str() + ", len=" + slice.len + "<br>");
+		pass = false, PASS = false;
+	}
+
+	slice = g.Append(slice, '4');
+	if (slice.str() === "1234" && slice.len === 4) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. => got " + slice.str() + ", len=" + slice.len + "<br>");
+		pass = false, PASS = false;
+	}
+
+	slice = g.Append(slice, '5', '6');
+	if (slice.str() === "123456" && slice.len === 6) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 3. => got " + slice.str() + ", len=" + slice.len + "<br>");
+		pass = false, PASS = false;
+	}
+
+	slice = g.Append(slice, '7', '8', '9');
+	if (slice.str() === "123456789" && slice.len === 9) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 4. => got " + slice.str() + ", len=" + slice.len + "<br>");
+		pass = false, PASS = false;
+	}
+
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
