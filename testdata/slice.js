@@ -459,10 +459,18 @@ function _append() {
 		return slice;
 	};
 
-	slice = g.Slice(0, ['1', '2', '3', '4', '5', '6', '7', '8', '9']);
+	slice = g.Slice(0, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+
+	slice = del(5, slice);
+	if (slice.str() === "012346789" && slice.len === 9) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: delete 5th element => got " + slice.str() + ", len=" + slice.len + "<br>");
+
+		pass = false, PASS = false;
+	}
 
 	slice = del(0, slice);
-	if (slice.str() === "23456789" && slice.len === 8) {
+	if (slice.str() === "12346789" && slice.len === 8) {
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: delete first element => got " + slice.str() + ", len=" + slice.len + "<br>");
 
@@ -470,17 +478,40 @@ function _append() {
 	}
 
 	slice = del(slice.len - 1, slice);
-	if (slice.str() === "2345678" && slice.len === 7) {
+	if (slice.str() === "1234678" && slice.len === 7) {
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: delete last element => got " + slice.str() + ", len=" + slice.len + "<br>");
 
 		pass = false, PASS = false;
 	}
 
-	slice = del(3, slice);
-	if (slice.str() === "234678" && slice.len === 6) {
+
+
+	var simpleDel = function(i, slice) {
+		slice = g.Append(g.SliceFrom(slice, 0, i), g.SliceFrom(slice, i + 1).get());
+		return slice;
+	};
+
+	slice = simpleDel(3, slice);
+	if (slice.str() === "123678" && slice.len === 6) {
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: delete 3rd element => got " + slice.str() + ", len=" + slice.len + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (simple) delete 3rd element => got " + slice.str() + ", len=" + slice.len + "<br>");
+
+		pass = false, PASS = false;
+	}
+
+	slice = simpleDel(0, slice);
+	if (slice.str() === "23678" && slice.len === 5) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (simple) delete first element => got " + slice.str() + ", len=" + slice.len + "<br>");
+
+		pass = false, PASS = false;
+	}
+
+	slice = simpleDel(slice.len - 1, slice);
+	if (slice.str() === "2367" && slice.len === 4) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (simple) delete last element => got " + slice.str() + ", len=" + slice.len + "<br>");
 
 		pass = false, PASS = false;
 	}

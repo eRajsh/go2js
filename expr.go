@@ -469,8 +469,9 @@ func (e *expression) translate(expr ast.Expr) {
 
 		// Defined functions
 		default:
-			args := ""
+			e.tr.isFunc = true
 
+			args := ""
 			for i, v := range typ.Args {
 				if i != 0 {
 					args += "," + SP
@@ -479,6 +480,7 @@ func (e *expression) translate(expr ast.Expr) {
 			}
 
 			e.WriteString(fmt.Sprintf("%s(%s)", call, args))
+			e.tr.isFunc = false
 		}
 
 	// godoc go/ast ChanType
@@ -655,8 +657,8 @@ func (e *expression) translate(expr ast.Expr) {
 					if name == e.tr.recvVar {
 						name = "this" + FIELD_TYPE
 					}
-					if e.tr.isType(sliceType, name) && !e.tr.wasReturn &&
-						!e.tr.isType(structType, name) {
+					if e.tr.isType(sliceType, name) && /*!e.tr.isFunc &&*/
+						!e.tr.wasReturn && !e.tr.isType(structType, name) {
 						name += FIELD_GET
 					}
 

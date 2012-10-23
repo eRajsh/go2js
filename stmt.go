@@ -25,9 +25,10 @@ type dataStmt struct {
 
 	initIsPointer  bool // the value initialized is a pointer?
 	insertVar      bool
-	isArray        bool // to close the parenthesis
 	isConst        bool
 	isVar          bool
+	isArray        bool // to close the parenthesis
+	isFunc         bool
 	returnBasicLit bool
 	skipLbrace     bool // left brace
 	skipSemicolon  bool

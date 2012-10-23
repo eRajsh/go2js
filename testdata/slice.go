@@ -459,10 +459,18 @@ func _append() {
 		return slice
 	}
 
-	slice = []byte{'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+	slice = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+
+	slice = del(5, slice)
+	if string(slice) == "012346789" && len(slice) == 9 {
+	} else {
+		fmt.Printf("\tFAIL: delete 5th element => got %q, len=%d\n",
+			string(slice), len(slice))
+		pass, PASS = false, false
+	}
 
 	slice = del(0, slice)
-	if string(slice) == "23456789" && len(slice) == 8 {
+	if string(slice) == "12346789" && len(slice) == 8 {
 	} else {
 		fmt.Printf("\tFAIL: delete first element => got %q, len=%d\n",
 			string(slice), len(slice))
@@ -470,17 +478,40 @@ func _append() {
 	}
 
 	slice = del(len(slice)-1, slice)
-	if string(slice) == "2345678" && len(slice) == 7 {
+	if string(slice) == "1234678" && len(slice) == 7 {
 	} else {
 		fmt.Printf("\tFAIL: delete last element => got %q, len=%d\n",
 			string(slice), len(slice))
 		pass, PASS = false, false
 	}
 
-	slice = del(3, slice)
-	if string(slice) == "234678" && len(slice) == 6 {
+	// == Simple delete
+
+	simpleDel := func(i int, slice []byte) []byte {
+		slice = append(slice[:i], slice[i+1:]...)
+		return slice
+	}
+
+	slice = simpleDel(3, slice)
+	if string(slice) == "123678" && len(slice) == 6 {
 	} else {
-		fmt.Printf("\tFAIL: delete 3rd element => got %q, len=%d\n",
+		fmt.Printf("\tFAIL: (simple) delete 3rd element => got %q, len=%d\n",
+			string(slice), len(slice))
+		pass, PASS = false, false
+	}
+
+	slice = simpleDel(0, slice)
+	if string(slice) == "23678" && len(slice) == 5 {
+	} else {
+		fmt.Printf("\tFAIL: (simple) delete first element => got %q, len=%d\n",
+			string(slice), len(slice))
+		pass, PASS = false, false
+	}
+
+	slice = simpleDel(len(slice)-1, slice)
+	if string(slice) == "2367" && len(slice) == 4 {
+	} else {
+		fmt.Printf("\tFAIL: (simple) delete last element => got %q, len=%d\n",
 			string(slice), len(slice))
 		pass, PASS = false, false
 	}

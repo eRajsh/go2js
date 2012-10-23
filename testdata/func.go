@@ -275,6 +275,36 @@ func variadic() {
 	}
 }
 
+func Max(slice []int) int {
+	if len(slice) == 1 {
+		return slice[0]
+	}
+
+	middle := len(slice) / 2
+	m1 := Max(slice[:middle])
+	m2 := Max(slice[middle:])
+
+	if m1 > m2 {
+		return m1
+	}
+	return m2
+}
+
+func recursive() {
+	pass := true
+
+	s := []int{1, 2, 3, 4, 6, 8}
+
+	if Max(s) != 8 {
+		fmt.Printf("\tFAIL: 1. => got %d, want 8\n", Max(s))
+		pass, PASS = false, false
+	}
+
+	if pass {
+		fmt.Println("\tpass")
+	}
+}
+
 func main() {
 	fmt.Print("\n\n== Functions\n\n")
 
@@ -292,6 +322,8 @@ func main() {
 	_return()
 	fmt.Println("=== RUN variadic")
 	variadic()
+	fmt.Println("=== RUN recursive")
+	recursive()
 
 	if PASS {
 		fmt.Println("PASS")
