@@ -330,6 +330,9 @@ function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = ne
 	}
 
 
+
+
+
 	var v; for (var _ in elt) { v = elt[_];
 		if (Array.isArray(v)) {
 			var vArr; for (var _ in v) { vArr = v[_];
@@ -362,11 +365,11 @@ function Copy(dst, src) { var n = 0;
 			dst.arr.v[n] = src.arr.v[i];
 			n++;
 		}
-		var v; for (var i in src.v) { v = src.v[i];
+		var v; for (var _ in src.v) { v = src.v[_];
 			if (JSON.stringify(n) === JSON.stringify(dst.len)) {
 				return n;
 			}
-			dst.v[i] = v;
+			dst.v.push(v);
 			n++;
 		}
 		return n;

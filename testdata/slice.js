@@ -63,7 +63,7 @@ function shortHand() {
 
 
 
-	a_slice.set(array, 4, 8);
+	a_slice = g.SliceFrom(array, 4, 8);
 	if (a_slice.str() === "efgh" && a_slice.len === 4 && a_slice.cap === 6) {
 
 	} else {
@@ -72,13 +72,13 @@ function shortHand() {
 		pass = false, PASS = false;
 	}
 
-	a_slice.set(array, 6, 7);
+	a_slice = g.SliceFrom(array, 6, 7);
 	if (a_slice.str() !== "g") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. [6:7] => got " + a_slice.get() + "<br>");
 		pass = false, PASS = false;
 	}
 
-	a_slice.set(array, 0, 3);
+	a_slice = g.SliceFrom(array, 0, 3);
 	if (a_slice.str() === "abc" && a_slice.len === 3 && a_slice.cap === 10) {
 
 	} else {
@@ -87,7 +87,7 @@ function shortHand() {
 		pass = false, PASS = false;
 	}
 
-	a_slice.set(array, 5);
+	a_slice = g.SliceFrom(array, 5);
 	if (a_slice.str() === "fghij" && a_slice.len === 5 && a_slice.cap === 5) {
 
 	} else {
@@ -96,7 +96,7 @@ function shortHand() {
 		pass = false, PASS = false;
 	}
 
-	a_slice.set(array, 0);
+	a_slice = g.SliceFrom(array, 0);
 	if (a_slice.str() === "abcdefghij" && a_slice.len === 10 && a_slice.cap === 10) {
 
 	} else {
@@ -105,7 +105,7 @@ function shortHand() {
 		pass = false, PASS = false;
 	}
 
-	a_slice.set(array, 3, 7);
+	a_slice = g.SliceFrom(array, 3, 7);
 	if (a_slice.str() === "defg" && a_slice.len === 4 && a_slice.cap === 7) {
 
 	} else {
@@ -116,7 +116,7 @@ function shortHand() {
 
 
 
-	b_slice.set(a_slice, 1, 3);
+	b_slice = g.SliceFrom(a_slice, 1, 3);
 	if (b_slice.str() === "ef" && b_slice.len === 2 && b_slice.cap === 6) {
 
 	} else {
@@ -125,7 +125,7 @@ function shortHand() {
 		pass = false, PASS = false;
 	}
 
-	b_slice.set(a_slice, 0, 3);
+	b_slice = g.SliceFrom(a_slice, 0, 3);
 	if (b_slice.str() === "def" && b_slice.len === 3 && b_slice.cap === 7) {
 
 	} else {
@@ -134,7 +134,7 @@ function shortHand() {
 		pass = false, PASS = false;
 	}
 
-	b_slice.set(a_slice, 0);
+	b_slice = g.SliceFrom(a_slice, 0);
 	if (b_slice.str() === "defg" && b_slice.len === 4 && b_slice.cap === 7) {
 
 	} else {
@@ -168,19 +168,19 @@ function useFunc() {
 
 	var slice = g.MkSlice();
 
-	slice.set(A1, 0);
+	slice = g.SliceFrom(A1, 0);
 	if (Max(slice.get()) !== 9) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.get()) + ", want 9<br>");
 		pass = false, PASS = false;
 	}
 
-	slice.set(A2, 0);
+	slice = g.SliceFrom(A2, 0);
 	if (Max(slice.get()) !== 4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.get()) + ", want 4<br>");
 		pass = false, PASS = false;
 	}
 
-	slice.set(A3, 0);
+	slice = g.SliceFrom(A3, 0);
 	if (Max(slice.get()) !== 1) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.get()) + ", want 1<br>");
 		pass = false, PASS = false;
@@ -347,7 +347,7 @@ function grow() {
 
 
 
-	slice.set(slice, 0, slice.len + 2);
+	slice = g.SliceFrom(slice, 0, slice.len + 2);
 	slice.arr.v[slice.low+4] = 4, slice.arr.v[slice.low+5] = 5;
 
 	if (slice.len === 6 && slice.cap === 7 && slice.get()[0] === 0 && slice.get()[1] === 1 && slice.get()[2] === 2 && slice.get()[3] === 3 && slice.get()[4] === 4 && slice.get()[5] === 5) {
@@ -433,16 +433,62 @@ function _append() {
 	}
 
 
+
 	var a_slice = g.Slice(0, ['1', '2', '3']);
-	var b_slice = g.Slice(0, ['5', '6', '7']);
+	var b_slice = g.Slice(0, ['7', '8', '9']);
 
 	a_slice = g.Append(a_slice, b_slice.get());
-	if (a_slice.str() === "123567" && a_slice.len === 6) {
+	if (a_slice.str() === "123789" && a_slice.len === 6) {
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: append a slice => got " + a_slice.str() + ", len=" + a_slice.len + "<br>");
 
 		pass = false, PASS = false;
 	}
+
+
+
+	var del = function(i, slice) {
+		switch (i) {
+		case 0:
+			slice = g.SliceFrom(slice, 1); break;
+		case slice.len - 1:
+			slice = g.SliceFrom(slice, 0, slice.len - 1); break;
+		default:
+			slice = g.Append(g.SliceFrom(slice, 0, i), g.SliceFrom(slice, i + 1).get());
+		}
+		return slice;
+	};
+
+	slice = g.Slice(0, ['1', '2', '3', '4', '5', '6', '7', '8', '9']);
+
+	slice = del(0, slice);
+	if (slice.str() === "23456789" && slice.len === 8) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: delete first element => got " + slice.str() + ", len=" + slice.len + "<br>");
+
+		pass = false, PASS = false;
+	}
+
+	slice = del(slice.len - 1, slice);
+	if (slice.str() === "2345678" && slice.len === 7) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: delete last element => got " + slice.str() + ", len=" + slice.len + "<br>");
+
+		pass = false, PASS = false;
+	}
+
+	slice = del(3, slice);
+	if (slice.str() === "234678" && slice.len === 6) {
+	} else {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: delete 3rd element => got " + slice.str() + ", len=" + slice.len + "<br>");
+
+		pass = false, PASS = false;
+	}
+
+
+
+
+
 
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");

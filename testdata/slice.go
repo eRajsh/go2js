@@ -433,16 +433,62 @@ func _append() {
 	}
 
 	// == A slice
+
 	a_slice := []byte{'1', '2', '3'}
-	b_slice := []byte{'5', '6', '7'}
+	b_slice := []byte{'7', '8', '9'}
 
 	a_slice = append(a_slice, b_slice...)
-	if string(a_slice) == "123567" && len(a_slice) == 6 {
+	if string(a_slice) == "123789" && len(a_slice) == 6 {
 	} else {
 		fmt.Printf("\tFAIL: append a slice => got %q, len=%d\n",
 			string(a_slice), len(a_slice))
 		pass, PASS = false, false
 	}
+
+	// == Delete
+
+	del := func(i int, slice []byte) []byte {
+		switch i {
+		case 0:
+			slice = slice[1:]
+		case len(slice) - 1:
+			slice = slice[:len(slice)-1]
+		default:
+			slice = append(slice[:i], slice[i+1:]...)
+		}
+		return slice
+	}
+
+	slice = []byte{'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+
+	slice = del(0, slice)
+	if string(slice) == "23456789" && len(slice) == 8 {
+	} else {
+		fmt.Printf("\tFAIL: delete first element => got %q, len=%d\n",
+			string(slice), len(slice))
+		pass, PASS = false, false
+	}
+
+	slice = del(len(slice)-1, slice)
+	if string(slice) == "2345678" && len(slice) == 7 {
+	} else {
+		fmt.Printf("\tFAIL: delete last element => got %q, len=%d\n",
+			string(slice), len(slice))
+		pass, PASS = false, false
+	}
+
+	slice = del(3, slice)
+	if string(slice) == "234678" && len(slice) == 6 {
+	} else {
+		fmt.Printf("\tFAIL: delete 3rd element => got %q, len=%d\n",
+			string(slice), len(slice))
+		pass, PASS = false, false
+	}
+
+	// == []interface
+
+	//var t []interface{}
+	//t = append(t, 42, 3.1415, "foo") //  t == []interface{}{42, 3.1415, "foo"}
 
 	if pass {
 		fmt.Println("\tpass")

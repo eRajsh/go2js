@@ -346,7 +346,7 @@ func (tr *translate) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 // writeVar translates variables for both declarations and assignments.
 func (tr *translate) writeVar(names interface{}, values []ast.Expr, type_ interface{}, operator token.Token, isGlobal, isMultipleLine bool) {
 	var sign string
-	var isNewVar, isBitClear bool
+	var signIsAssign, signIsDefine, isBitClear bool
 
 	tr.isVar = true
 	defer func() { tr.isVar = false }()
@@ -358,11 +358,13 @@ func (tr *translate) writeVar(names interface{}, values []ast.Expr, type_ interf
 	// == Operator
 	switch operator {
 	case token.DEFINE:
-		isNewVar = true
 		tr.WriteString("var ")
 		sign = "="
-	case token.ASSIGN,
-		token.ADD_ASSIGN, token.SUB_ASSIGN, token.MUL_ASSIGN, token.QUO_ASSIGN,
+		signIsDefine = true
+	case token.ASSIGN:
+		sign = operator.String()
+		signIsAssign = true
+	case token.ADD_ASSIGN, token.SUB_ASSIGN, token.MUL_ASSIGN, token.QUO_ASSIGN,
 		token.REM_ASSIGN,
 		token.AND_ASSIGN, token.OR_ASSIGN, token.XOR_ASSIGN, token.SHL_ASSIGN,
 		token.SHR_ASSIGN:
@@ -487,7 +489,7 @@ _noFunc:
 			nameExpr += "," + SP + name
 		}
 
-		if !isNewVar {
+		if !signIsDefine {
 			nameExpr += tagPointer(false, 'P', tr.funcId, tr.blockId, name)
 		}
 
@@ -524,7 +526,7 @@ _noFunc:
 
 				if expr.isVarAddress {
 					tr.addr[tr.funcId][tr.blockId][name] = true
-					if !isNewVar {
+					if !signIsDefine {
 						nameExpr += ADDR
 					}
 				} /*else {
@@ -558,7 +560,7 @@ _noFunc:
 			}
 
 			// Check if new variables assigned to another ones are slices or maps.
-			if isNewVar && expr.isIdent {
+			if signIsDefine && expr.isIdent {
 				if tr.isType(sliceType, value) {
 					tr.slices[tr.funcId][tr.blockId][name] = void
 				}
@@ -568,7 +570,7 @@ _noFunc:
 			}
 		}
 
-		if isNewVar {
+		if signIsDefine {
 			typeIsPointer := false
 			if typeIs == pointerType {
 				typeIsPointer = true
@@ -602,7 +604,7 @@ _noFunc:
 			}*/
 
 			if expr.kind == sliceKind || expr.isSliceExpr {
-				if isNewVar {
+				if signIsDefine || signIsAssign {
 					tr.slices[tr.funcId][tr.blockId][nameExpr] = void
 
 					if value == "" {
@@ -615,7 +617,7 @@ _noFunc:
 						}
 					}
 				} else {
-					tr.WriteString(".set(" + value + ")")
+					tr.WriteString(".set(" + value + ")") // TODO: remove
 				}
 			} else if expr.isMake {
 				tr.WriteString(fmt.Sprintf("%sg.MkSlice(%s)", SP+sign+SP, value))

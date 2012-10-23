@@ -23,7 +23,7 @@ func init() {
 	// Use the toString() method when Array.isArray isn't implemented:
 	// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray#Compatibility
 	if !Array.isArray {
-		Array.isArray = func(arg interface{}) {
+		Array.isArray = func(arg interface{}) bool {
 			return Object.prototype.toString.call(arg) == "[object Array]"
 		}
 	}
@@ -253,7 +253,7 @@ func SliceFrom(src interface{}, low, high int) *sliceType {
 }
 
 // set sets the elements of a slice.
-func (s sliceType) set(src interface{}, low, high int) {
+func (s sliceType) set(src interface{}, low, high int) { // TODO: remove
 	if low != nil {
 		s.low = low
 	} else {
@@ -330,8 +330,11 @@ func Append(src []interface{}, elt ...interface{}) (dst sliceType) {
 	}
 	//==
 
+	// TODO: handle len() in interfaces
+	// lastIdxElt := len(elt) - 1
+
 	for _, v := range elt {
-		if Array.isArray(v) { // The last field could be an ellipsis
+		if /*i == lastIdxElt &&*/ Array.isArray(v) { // The last field could be an ellipsis
 			for _, vArr := range v {
 				dst.v.push(vArr)
 				if dst.len == dst.cap {
@@ -362,11 +365,11 @@ func Copy(dst []interface{}, src interface{}) (n int) {
 			dst.arr.v[n] = src.arr.v[i]
 			n++
 		}
-		for i, v := range src.v {
+		for _, v := range src.v {
 			if n == dst.len {
 				return
 			}
-			dst.v[i] = v
+			dst.v.push(v)
 			n++
 		}
 		return
@@ -444,3 +447,7 @@ func Export(pkg map[interface{}]interface{}, exported []interface{}) {
 		pkg.v = v
 	}
 }
+
+/*func Len(v interface{}) {
+	
+}*/
