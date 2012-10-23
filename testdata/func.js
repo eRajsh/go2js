@@ -322,8 +322,8 @@ function main() {
 	_return();
 	document.write("=== RUN variadic<br>");
 	variadic();
-	document.write("=== RUN recursive<br>");
-	recursive();
+
+
 
 	if (PASS) {
 		document.write("PASS<br>");

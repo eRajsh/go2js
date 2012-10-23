@@ -447,7 +447,7 @@ func _append() {
 
 	// == Delete
 
-	del := func(i int, slice []byte) []byte {
+	/*del := func(i int, slice []byte) []byte {
 		switch i {
 		case 0:
 			slice = slice[1:]
@@ -514,7 +514,7 @@ func _append() {
 		fmt.Printf("\tFAIL: (simple) delete last element => got %q, len=%d\n",
 			string(slice), len(slice))
 		pass, PASS = false, false
-	}
+	}*/
 
 	// == []interface
 
