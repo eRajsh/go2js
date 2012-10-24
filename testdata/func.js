@@ -295,8 +295,8 @@ function recursive() {
 
 	var s = g.Slice(0, [1, 2, 3, 4, 6, 8]);
 
-	if (Max(s.get()) !== 8) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. => got " + Max(s.get()) + ", want 8<br>");
+	if (Max(s.v) !== 8) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. => got " + Max(s.v) + ", want 8<br>");
 		pass = false, PASS = false;
 	}
 

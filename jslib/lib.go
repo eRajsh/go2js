@@ -158,8 +158,7 @@ func mergeArray(dst, src []interface{}) {
 
 // sliceType represents a slice type.
 type sliceType struct {
-	arr interface{}   // the array where data is got or created from scratch using make
-	v   []interface{} // elements appended
+	v   []interface{} // slice's value
 
 	low  int // indexes for the array
 	high int
@@ -188,12 +187,11 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 		return s
 	}
 
-	arr := new(arrayType)
-	arr.len_[0] = len
+	// The fastest way of fill in an array is when array length is specified first.
+	s.v = Array(len)
 	for i := 0; i < len; i++ {
-		arr.v[i] = zero
+		s.v[i] = zero
 	}
-	s.arr = arr
 
 	if cap != nil {
 		s.cap = cap
@@ -202,7 +200,6 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 	}
 
 	s.len = len
-	s.high = len
 	return s
 }
 
@@ -215,7 +212,6 @@ func Slice(zero interface{}, data []interface{}) *sliceType {
 		return s
 	}
 
-	arr := new(arrayType)
 	for i, srcVal := range data {
 		isHashMap := false
 
@@ -226,34 +222,26 @@ func Slice(zero interface{}, data []interface{}) *sliceType {
 					isHashMap = true
 
 					for i; i < k; i++ {
-						arr.v[i] = zero
+						s.v[i] = zero
 					}
-					arr.v[i] = v
+					s.v[i] = v
 				}
 			}
 		}
 		if !isHashMap {
-			arr.v[i] = srcVal
+			s.v[i] = srcVal
 		}
 	}
-	s.len = len(arr.v)
-	arr.len_[0] = s.len
-	s.arr = arr
 
+	s.len = len(s.v)
 	s.cap = s.len
-	s.high = s.len
 	return s
 }
 
-// SliceFrom creates a new slice from an array using the indexes low and high.
+// SliceFrom creates a new slice from an array or slice using the indexes low and high.
 func SliceFrom(src interface{}, low, high int) *sliceType {
 	s := new(sliceType)
-	s.set(src, low, high)
-	return s
-}
 
-// set sets the elements of a slice.
-func (s sliceType) set(src interface{}, low, high int) { // TODO: remove
 	if low != nil {
 		s.low = low
 	} else {
@@ -271,40 +259,22 @@ func (s sliceType) set(src interface{}, low, high int) { // TODO: remove
 
 	s.len = s.high - s.low
 
-	if src.arr != nil { // slice
-		s.arr = src.arr
+	if src.nil_ != nil { // slice
 		s.cap = src.cap - s.low
-		s.low += src.low
-		s.high += src.low
+//		s.low += src.low
+//		s.high += src.low
 	} else { // array
-		s.arr = src
 		s.cap = src.cap() - s.low
 	}
-}
 
-// setv sets a value.
-/*func (s sliceType) setv(index int, v interface{}) {
-	s.arr.v[index[0]+s.len] = v
-}*/
-
-// get gets the slice.
-func (s sliceType) get() []interface{} {
-	if s.arr != nil {
-		arr := s.arr.v.slice(s.low, s.high)
-
-		if len(s.v) != 0 {
-			return arr.concat(s.v)
-		} else {
-			return arr
-		}
-	}
-	return s.v
+	s.v = src.v.slice(s.low, s.high)
+//	s.v = src.v.slice(low, high)
+	return s
 }
 
 // str returns the slice (of bytes or runes) like a string.
 func (s sliceType) str() string {
-	_s := s.get()
-	return _s.join("")
+	return s.v.join("")
 }
 
 // * * *
@@ -318,15 +288,9 @@ func Append(src []interface{}, elt ...interface{}) (dst sliceType) {
 	dst.cap = src.cap
 	dst.nil_ = src.nil_
 
-	arr := new(arrayType)
-	arr.len_[0] = src.arr.len_[0]
-	for _, v := range src.arr.v {
-		arr.v.push(v)
-	}
-	dst.arr = arr
-
-	for _, v := range src.v {
-		dst.v.push(v)
+	dst.v = Array(src.len)
+	for i, v := range src.v {
+		dst.v[i] = v
 	}
 	//==
 
@@ -356,31 +320,23 @@ func Append(src []interface{}, elt ...interface{}) (dst sliceType) {
 
 // Copy implements the function "copy".
 func Copy(dst []interface{}, src interface{}) (n int) {
-	// []T to []T
-	if src.arr != nil {
-		for i := src.low; i < src.high; i++ {
+	// []T <= []T
+	if src.nil_ != nil {
+		for ; n < src.len; n++ {
 			if n == dst.len {
 				return
 			}
-			dst.arr.v[n] = src.arr.v[i]
-			n++
-		}
-		for _, v := range src.v {
-			if n == dst.len {
-				return
-			}
-			dst.v.push(v)
-			n++
+			dst.v[n] = src.v[n]
 		}
 		return
 	}
 
-	// string to []byte
+	// []byte <= string
 	for ; n < len(src); n++ {
 		if n == dst.len {
 			break
 		}
-		dst.arr.v[n] = src[n]
+		dst.v[n] = src[n]
 	}
 	return
 }

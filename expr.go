@@ -404,7 +404,7 @@ func (e *expression) translate(expr ast.Expr) {
 			argNoIndex, index := splitIndex(arg)
 
 			if e.tr.isType(sliceType, argNoField) {
-				if strings.HasSuffix(arg, FIELD_VALUE) || strings.HasSuffix(arg, FIELD_GET) {
+				if strings.HasSuffix(arg, FIELD_VALUE) {
 					e.WriteString(argNoField + ".cap")
 				} else {
 					e.WriteString(arg + ".cap")
@@ -426,7 +426,7 @@ func (e *expression) translate(expr ast.Expr) {
 				src += e.tr.getExpression(v).String()
 			}
 			if typ.Ellipsis != 0 { // last argument is an ellipsis
-				src += FIELD_GET
+				src += FIELD_VALUE
 			}
 
 			e.WriteString(fmt.Sprintf("g.Append(%s,%s%s)",
@@ -659,7 +659,7 @@ func (e *expression) translate(expr ast.Expr) {
 					}
 					if e.tr.isType(sliceType, name) && /*!e.tr.isFunc &&*/
 						!e.tr.wasReturn && !e.tr.isType(structType, name) {
-						name += FIELD_GET
+						name += FIELD_VALUE
 					}
 
 					if _, ok := e.tr.vars[e.tr.funcId][e.tr.blockId][name]; ok {
@@ -696,13 +696,11 @@ func (e *expression) translate(expr ast.Expr) {
 
 		x := e.tr.getExpression(typ.X).String()
 		index := ""
-		sliceIndex := ""
 		indexArgs := ""
 
 		for i := len(e.index) - 1; i >= 0; i-- { // inverse order
 			idx := e.index[i]
 			index += "[" + idx + "]"
-			sliceIndex += fmt.Sprintf("[%s.low+%s]", x, idx)
 
 			if indexArgs != "" {
 				indexArgs += "," + SP
@@ -719,7 +717,7 @@ func (e *expression) translate(expr ast.Expr) {
 				e.WriteString(x + ".get(" + indexArgs + ")[0]")
 			}
 		} else if e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {
-			e.WriteString(x + ".arr" + FIELD_VALUE + sliceIndex)
+			e.WriteString(x + FIELD_VALUE + index)
 		} else {
 			e.WriteString(x + index)
 		}
@@ -993,13 +991,10 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 
 // * * *
 
-// stripField strips the field name FIELD_VALUE or FIELD_GET, if any.
+// stripField strips the field name FIELD_VALUE, if any.
 func stripField(name string) string {
 	if strings.HasSuffix(name, FIELD_VALUE) {
 		return name[:len(name)-len(FIELD_VALUE)]
-	}
-	if strings.HasSuffix(name, FIELD_GET) {
-		return name[:len(name)-len(FIELD_GET)]
 	}
 	return name
 }
