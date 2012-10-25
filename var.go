@@ -379,30 +379,37 @@ func (tr *translate) writeVar(names interface{}, values []ast.Expr, type_ interf
 	}
 
 	// == Names
+	// TODO: use this struct
+	/*var Name = []struct {
+		str      string
+		idxValid int
+		expr     *expression
+	}{}*/
+
 	var _names []string
 	var idxValidNames []int // index of variables which are not in blank
-	var nameIsPointer []bool
+	var name_expr []*expression
 
 	switch t := names.(type) {
 	case []*ast.Ident:
 		_names = make([]string, len(t))
-		nameIsPointer = make([]bool, len(t))
+		name_expr = make([]*expression, len(t))
 
 		for i, v := range t {
 			expr := tr.getExpression(v)
 
 			_names[i] = validIdent(expr.String())
-			nameIsPointer[i] = expr.isPointer
+			name_expr[i] = expr
 		}
 	case []ast.Expr: // like avobe
 		_names = make([]string, len(t))
-		nameIsPointer = make([]bool, len(t))
+		name_expr = make([]*expression, len(t))
 
 		for i, v := range t {
 			expr := tr.getExpression(v)
 
 			_names[i] = expr.String()
-			nameIsPointer[i] = expr.isPointer
+			name_expr[i] = expr
 		}
 	default:
 		panic("unreachable")
@@ -475,8 +482,8 @@ _noFunc:
 		isZeroValue = true
 	}
 
-	for _, i := range idxValidNames {
-		name := _names[i]
+	for _, idxName := range idxValidNames {
+		name := _names[idxName]
 		nameExpr := ""
 
 		tr.lastVarName = name
@@ -502,10 +509,10 @@ _noFunc:
 			var valueOfValidName ast.Expr
 
 			// _, ok = m[k]
-			if len(values) == 1 && i == 1 {
+			if len(values) == 1 && idxName == 1 {
 				valueOfValidName = values[0]
 			} else {
-				valueOfValidName = values[i]
+				valueOfValidName = values[idxName]
 			}
 
 			// If the expression is an anonymous function, then, at translating,
@@ -603,7 +610,10 @@ _noFunc:
 			case sliceKind:
 			}*/
 
-			if expr.kind == sliceKind || expr.isSliceExpr {
+			if name_expr[idxName].addSet {
+				tr.WriteString(SP + value + ")")
+
+			} else if expr.kind == sliceKind || expr.isSliceExpr {
 				if signIsDefine || signIsAssign {
 					tr.slices[tr.funcId][tr.blockId][nameExpr] = void
 
@@ -616,8 +626,6 @@ _noFunc:
 							tr.WriteString(fmt.Sprintf("%sg.Slice(%s)", SP+sign+SP, value))
 						}
 					}
-				} else {
-					tr.WriteString(".set(" + value + ")") // TODO: remove
 				}
 			} else if expr.isMake {
 				tr.WriteString(fmt.Sprintf("%sg.MkSlice(%s)", SP+sign+SP, value))

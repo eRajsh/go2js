@@ -50,6 +50,7 @@ type expression struct {
 	isPointer    bool
 	isMake       bool
 	isNil        bool
+	addSet       bool
 
 	arrayHasElts bool // does array has elements?
 	isEllipsis   bool
@@ -84,6 +85,7 @@ func (tr *translate) newExpression(iVar interface{}) *expression {
 		"",
 		"",
 		unknownKind,
+		false,
 		false,
 		false,
 		false,
@@ -670,6 +672,7 @@ func (e *expression) translate(expr ast.Expr) {
 
 					if !e.tr.returnBasicLit && e.tr.isType(arrayType, name) {
 						name += FIELD_VALUE
+						e.addSet = true
 					}
 				}
 			}
@@ -694,7 +697,8 @@ func (e *expression) translate(expr ast.Expr) {
 		}
 		// ==
 
-		x := e.tr.getExpression(typ.X).String()
+		_x := e.tr.getExpression(typ.X)
+		x := _x.String()
 		index := ""
 		indexArgs := ""
 
@@ -703,12 +707,19 @@ func (e *expression) translate(expr ast.Expr) {
 			index += "[" + idx + "]"
 
 			if indexArgs != "" {
-				indexArgs += "," + SP
+				indexArgs += ","
 			}
 			indexArgs += idx
 		}
 
-		if e.tr.isType(mapType, x) {
+		if _x.addSet { // set at get the array name
+			e.WriteString(fmt.Sprintf("%s.set([%s],", stripField(x), indexArgs))
+			e.addSet = true
+		} else if !e.isValue && e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {
+			e.WriteString(fmt.Sprintf("%s.set([%s],", x, indexArgs))
+			e.addSet = true
+
+		} else if e.tr.isType(mapType, x) {
 			e.mapName = x
 
 			if e.tr.isVar && !e.isValue {
@@ -716,8 +727,7 @@ func (e *expression) translate(expr ast.Expr) {
 			} else {
 				e.WriteString(x + ".get(" + indexArgs + ")[0]")
 			}
-		} else if e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {
-			e.WriteString(x + FIELD_VALUE + index)
+
 		} else {
 			e.WriteString(x + index)
 		}

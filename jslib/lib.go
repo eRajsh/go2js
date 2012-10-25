@@ -34,22 +34,23 @@ func init() {
 
 // arrayType represents a fixed array type.
 type arrayType struct {
-	v []interface{} // array's value
+	v     []interface{} // array's value
+	refer []interface{} // references from slices
 
 	len_ map[int]int
 }
 
 // len returns the length for the given dimension.
-func (a arrayType) len(dim int) int {
-	if dim == nil {
+func (a arrayType) len(index int) int {
+	if index == nil {
 		return a.len_[0]
 	}
 	return a.len_[len(arguments)]
 }
 
 // cap returns the capacity for the given dimension.
-func (a arrayType) cap(dim int) int {
-	if dim == nil {
+func (a arrayType) cap(index int) int {
+	if index == nil {
 		return a.len_[0]
 	}
 	return a.len_[len(arguments)]
@@ -63,48 +64,61 @@ func (a arrayType) str() string {
 // typ returns the type.
 func (a arrayType) typ() int { return arrayT }
 
-// MkArray initializes an array of dimension "dim" to value "zero",
+// MkArray initializes an array of dimension "index" to value "zero",
 // merging the elements of "data" if any.
-func MkArray(dim []int, zero interface{}, data []interface{}) *arrayType {
+func MkArray(index []int, zero interface{}, data []interface{}) *arrayType {
 	a := new(arrayType)
 
 	if data != nil {
-		if !equalDim(dim, getDimArray(data)) {
-			a.v = initArray(dim, zero)
+		if !equalIndex(index, indexArray(data)) {
+			a.v = initArray(index, zero)
 			mergeArray(a.v, data)
 		} else {
 			a.v = data
 		}
 	} else {
-		a.v = initArray(dim, zero)
+		a.v = initArray(index, zero)
 	}
 
-	for i, v := range dim {
+	for i, v := range index {
 		a.len_[i] = v
 	}
 
 	return a
 }
 
+// set sets the value v in the index, and updates the slices that are
+// referencing to this array (if any).
+func (a arrayType) set(index []int, v interface{}) {
+	for i := 0; i < len(index)-1; i++ {
+		a.v = a.v[index[i]]
+	}
+	a.v[index[i]] = v
+
+	for _, r := range a.refer {
+		r.v[index[i]] = v
+	}
+}
+
 // * * *
 
-// equalDim reports whether d1 and d2 are equal.
-func equalDim(d1, d2 []int) bool {
-	if len(d1) != len(d2) {
+// equalIndex reports whether index1 and index2 are equal.
+func equalIndex(index1, index2 []int) bool {
+	if len(index1) != len(index2) {
 		return false
 	}
-	for i, v := range d1 {
-		if v != d2[i] {
+	for i, v := range index1 {
+		if v != index2[i] {
 			return false
 		}
 	}
 	return true
 }
 
-// getDimArray returns the dimension of an array.
-func getDimArray(a []interface{}) (dim []int) {
+// indexArray returns the dimension of an array.
+func indexArray(a []interface{}) (index []int) {
 	for {
-		dim.push(len(a))
+		index.push(len(a))
 
 		if Array.isArray(a[0]) {
 			a = a[0]
@@ -115,14 +129,14 @@ func getDimArray(a []interface{}) (dim []int) {
 	return
 }
 
-// initArray returns an array of dimension given in "dim" initialized to "zero".
-func initArray(dim []int, zero interface{}) (a []interface{}) {
-	if len(dim) == 0 {
+// initArray returns an array of dimension given in "index" initialized to "zero".
+func initArray(index []int, zero interface{}) (a []interface{}) {
+	if len(index) == 0 {
 		return zero
 	}
-	nextArray := initArray(dim.slice(1), zero)
+	nextArray := initArray(index.slice(1), zero)
 
-	for i := 0; i < dim[0]; i++ {
+	for i := 0; i < index[0]; i++ {
 		a[i] = nextArray
 	}
 	return
@@ -158,7 +172,8 @@ func mergeArray(dst, src []interface{}) {
 
 // sliceType represents a slice type.
 type sliceType struct {
-	v   []interface{} // slice's value
+	v     []interface{} // slice's value
+	refer []interface{} // references from other slices
 
 	low  int // indexes for the array
 	high int
@@ -168,15 +183,20 @@ type sliceType struct {
 	nil_ bool // for variables declared like slices
 }
 
-// typ returns the type.
-func (s sliceType) typ() int { return sliceT }
-
 func (s sliceType) isNil() bool {
 	if s.len != 0 || s.cap != 0 {
 		return false
 	}
 	return s.nil_
 }
+
+// str returns the slice (of bytes or runes) like a string.
+func (s sliceType) str() string {
+	return s.v.join("")
+}
+
+// typ returns the type.
+func (s sliceType) typ() int { return sliceT }
 
 // MkSlice initializes a slice with the zero value.
 func MkSlice(zero interface{}, len, cap int) *sliceType {
@@ -269,12 +289,22 @@ func SliceFrom(src interface{}, low, high int) *sliceType {
 
 	s.v = src.v.slice(s.low, s.high)
 //	s.v = src.v.slice(low, high)
+
+	src.refer.push(s)
 	return s
 }
 
-// str returns the slice (of bytes or runes) like a string.
-func (s sliceType) str() string {
-	return s.v.join("")
+// set sets the value v in the index, and updates the slices that are
+// referencing to this slice (if any).
+func (s sliceType) set(index []int, v interface{}) {
+	for i := 0; i < len(index)-1; i++ {
+		s.v = s.v[index[i]]
+	}
+	s.v[index[i]] = v
+
+	for _, r := range s.refer {
+		r.v[index[i]] = v
+	}
 }
 
 // * * *
@@ -328,6 +358,12 @@ func Copy(dst []interface{}, src interface{}) (n int) {
 			}
 			dst.v[n] = src.v[n]
 		}
+		// TODO: copy refer?
+		/*if len(src.refer) != 0 {
+			for _, v := range src.refer {
+				dst.refer.push(v)
+			}
+		}*/
 		return
 	}
 

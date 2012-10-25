@@ -33,23 +33,24 @@ sliceT = 3;
 
 
 
-function arrayType(v, len_) {
+function arrayType(v, refer, len_) {
 	this.v=v;
+	this.refer=refer;
 
 	this.len_=len_
 }
 
 
-arrayType.prototype.len = function(dim) {
-	if (dim === undefined) {
+arrayType.prototype.len = function(index) {
+	if (index === undefined) {
 		return this.len_[0];
 	}
 	return this.len_[arguments.length];
 }
 
 
-arrayType.prototype.cap = function(dim) {
-	if (dim === undefined) {
+arrayType.prototype.cap = function(index) {
+	if (index === undefined) {
 		return this.len_[0];
 	}
 	return this.len_[arguments.length];
@@ -65,21 +66,21 @@ arrayType.prototype.typ = function() { return arrayT; }
 
 
 
-function MkArray(dim, zero, data) {
-	var a = new arrayType([], g.Map(0));
+function MkArray(index, zero, data) {
+	var a = new arrayType([], [], g.Map(0));
 
 	if (data !== undefined) {
-		if (!equalDim(dim, getDimArray(data))) {
-			a.v = initArray(dim, zero);
+		if (!equalIndex(index, indexArray(data))) {
+			a.v = initArray(index, zero);
 			mergeArray(a.v, data);
 		} else {
 			a.v = data;
 		}
 	} else {
-		a.v = initArray(dim, zero);
+		a.v = initArray(index, zero);
 	}
 
-	var v; for (var i in dim) { v = dim[i];
+	var v; for (var i in index) { v = index[i];
 		a.len_[i] = v;
 	}
 
@@ -88,13 +89,26 @@ function MkArray(dim, zero, data) {
 
 
 
+arrayType.prototype.set = function(index, v) {
+	for (var i = 0; i < index.length - 1; i++) {
+		this.v = this.v[index[i]];
+	}
+	this.v[index[i]] = v;
 
-function equalDim(d1, d2) {
-	if (d1.length !== d2.length) {
+	var r; for (var _ in this.refer) { r = this.refer[_];
+		r.v[index[i]] = v;
+	}
+}
+
+
+
+
+function equalIndex(index1, index2) {
+	if (index1.length !== index2.length) {
 		return false;
 	}
-	var v; for (var i in d1) { v = d1[i];
-		if (JSON.stringify(v) !== JSON.stringify(d2[i])) {
+	var v; for (var i in index1) { v = index1[i];
+		if (JSON.stringify(v) !== JSON.stringify(index2[i])) {
 			return false;
 		}
 	}
@@ -102,9 +116,9 @@ function equalDim(d1, d2) {
 }
 
 
-function getDimArray(a) { var dim = [];
+function indexArray(a) { var index = [];
 	for (;;) {
-		dim.push(a.length);
+		index.push(a.length);
 
 		if (Array.isArray(a[0])) {
 			a = a[0];
@@ -112,17 +126,17 @@ function getDimArray(a) { var dim = [];
 			break;
 		}
 	}
-	return dim;
+	return index;
 }
 
 
-function initArray(dim, zero) { var a = [];
-	if (dim.length === 0) {
+function initArray(index, zero) { var a = [];
+	if (index.length === 0) {
 		return zero;
 	}
-	var nextArray = initArray(dim.slice(1), zero);
+	var nextArray = initArray(index.slice(1), zero);
 
-	for (var i = 0; i < dim[0]; i++) {
+	for (var i = 0; i < index[0]; i++) {
 		a[i] = nextArray;
 	}
 	return a;
@@ -157,8 +171,9 @@ function mergeArray(dst, src) {
 
 
 
-function sliceType(v, low, high, len, cap, nil_) {
+function sliceType(v, refer, low, high, len, cap, nil_) {
 	this.v=v;
+	this.refer=refer;
 
 	this.low=low;
 	this.high=high;
@@ -168,9 +183,6 @@ function sliceType(v, low, high, len, cap, nil_) {
 	this.nil_=nil_
 }
 
-
-sliceType.prototype.typ = function() { return sliceT; }
-
 sliceType.prototype.isNil = function() {
 	if (this.len !== 0 || this.cap !== 0) {
 		return false;
@@ -179,8 +191,16 @@ sliceType.prototype.isNil = function() {
 }
 
 
+sliceType.prototype.str = function() {
+	return this.v.join("");
+}
+
+
+sliceType.prototype.typ = function() { return sliceT; }
+
+
 function MkSlice(zero, len, cap) {
-	var s = new sliceType([], 0, 0, 0, 0, false);
+	var s = new sliceType([], [], 0, 0, 0, 0, false);
 
 	if (zero === undefined) {
 		s.nil_ = true;
@@ -205,7 +225,7 @@ function MkSlice(zero, len, cap) {
 
 
 function Slice(zero, data) {
-	var s = new sliceType([], 0, 0, 0, 0, false);
+	var s = new sliceType([], [], 0, 0, 0, 0, false);
 
 	if (zero === undefined) {
 		s.nil_ = true;
@@ -240,7 +260,7 @@ function Slice(zero, data) {
 
 
 function SliceFrom(src, low, high) {
-	var s = new sliceType([], 0, 0, 0, 0, false);
+	var s = new sliceType([], [], 0, 0, 0, 0, false);
 
 	if (low !== undefined) {
 		s.low = low;
@@ -269,18 +289,28 @@ function SliceFrom(src, low, high) {
 
 	s.v = src.v.slice(s.low, s.high);
 
+
+	src.refer.push(s);
 	return s;
 }
 
 
-sliceType.prototype.str = function() {
-	return this.v.join("");
+
+sliceType.prototype.set = function(index, v) {
+	for (var i = 0; i < index.length - 1; i++) {
+		this.v = this.v[index[i]];
+	}
+	this.v[index[i]] = v;
+
+	var r; for (var _ in this.refer) { r = this.refer[_];
+		r.v[index[i]] = v;
+	}
 }
 
 
 
 
-function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = new sliceType([], 0, 0, 0, 0, false);
+function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = new sliceType([], [], 0, 0, 0, 0, false);
 
 	dst.low = src.low;
 	dst.high = src.high;
@@ -328,6 +358,12 @@ function Copy(dst, src) { var n = 0;
 			}
 			dst.v[n] = src.v[n];
 		}
+
+
+
+
+
+
 		return n;
 	}
 

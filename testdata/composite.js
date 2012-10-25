@@ -157,11 +157,11 @@ function _array() {
 
 
 
-	array.v[1] = new person("Paul", 23);
-	array.v[2] = new person("Jim", 24);
-	array.v[3] = new person("Sam", 84);
-	array.v[4] = new person("Rob", 54);
-	array.v[8] = new person("Karl", 19);
+	array.set([1], new person("Paul", 23));
+	array.set([2], new person("Jim", 24));
+	array.set([3], new person("Sam", 84));
+	array.set([4], new person("Rob", 54));
+	array.set([8], new person("Karl", 19));
 
 	var older = older10(array.v);
 

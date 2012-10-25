@@ -220,7 +220,7 @@ function reference() {
 	}
 
 
-	A.v[4] = 'E';
+	A.set([4], 'E');
 
 	_ = function(msg, in_, out) { return {
 		msg: msg,
@@ -241,7 +241,7 @@ function reference() {
 	}
 
 
-	slice2.v[1] = 'G';
+	slice2.set([1], 'G');
 
 	_ = function(msg, in_, out) { return {
 		msg: msg,
@@ -283,7 +283,7 @@ function resize() {
 	}
 
 
-	slice.v[1] = 2, slice.v[3] = 3;
+	slice.set([1], 2), slice.set([3], 3);
 
 	if (slice.v[0] === 0 && slice.v[1] === 2 && slice.v[2] === 0 && slice.v[3] === 3) {
 
@@ -316,7 +316,7 @@ function grow() {
 		var new_capacity = slice.cap + add;
 		var new_slice = g.MkSlice(0, slice.len, new_capacity);
 		for (var index = 0; index < slice.len; index++) {
-			new_slice.v[index] = slice.v[index];
+			new_slice.set([index], slice[index]);
 		}
 		return new_slice;
 	};
@@ -348,7 +348,7 @@ function grow() {
 
 
 	slice = g.SliceFrom(slice, 0, slice.len + 2);
-	slice.v[4] = 4, slice.v[5] = 5;
+	slice.set([4], 4), slice.set([5], 5);
 
 	if (slice.len === 6 && slice.cap === 7 && slice.v[0] === 0 && slice.v[1] === 1 && slice.v[2] === 2 && slice.v[3] === 3 && slice.v[4] === 4 && slice.v[5] === 5) {
 
