@@ -316,7 +316,7 @@ function grow() {
 		var new_capacity = slice.cap + add;
 		var new_slice = g.MkSlice(0, slice.len, new_capacity);
 		for (var index = 0; index < slice.len; index++) {
-			new_slice.set([index], slice[index]);
+			new_slice.set([index], slice.v[index]);
 		}
 		return new_slice;
 	};

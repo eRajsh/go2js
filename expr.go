@@ -712,12 +712,16 @@ func (e *expression) translate(expr ast.Expr) {
 			indexArgs += idx
 		}
 
-		if _x.addSet { // set at get the array name
+		if _x.addSet { // set at get the array ident
 			e.WriteString(fmt.Sprintf("%s.set([%s],", stripField(x), indexArgs))
 			e.addSet = true
-		} else if !e.isValue && e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {
-			e.WriteString(fmt.Sprintf("%s.set([%s],", x, indexArgs))
-			e.addSet = true
+		} else if e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {
+			if !e.isValue {
+				e.WriteString(fmt.Sprintf("%s.set([%s],", x, indexArgs))
+				e.addSet = true
+			} else {
+				e.WriteString(x + FIELD_VALUE + index)
+			}
 
 		} else if e.tr.isType(mapType, x) {
 			e.mapName = x
