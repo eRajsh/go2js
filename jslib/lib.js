@@ -40,16 +40,16 @@ function arrayType(v, len_) {
 }
 
 
-arrayType.prototype.len = function(dim) {
-	if (dim === undefined) {
+arrayType.prototype.len = function(index) {
+	if (index === undefined) {
 		return this.len_[0];
 	}
 	return this.len_[arguments.length];
 }
 
 
-arrayType.prototype.cap = function(dim) {
-	if (dim === undefined) {
+arrayType.prototype.cap = function(index) {
+	if (index === undefined) {
 		return this.len_[0];
 	}
 	return this.len_[arguments.length];
@@ -65,21 +65,21 @@ arrayType.prototype.typ = function() { return arrayT; }
 
 
 
-function MkArray(dim, zero, data) {
+function MkArray(index, zero, data) {
 	var a = new arrayType([], g.Map(0));
 
 	if (data !== undefined) {
-		if (!equalDim(dim, getDimArray(data))) {
-			a.v = initArray(dim, zero);
+		if (!equalIndex(index, indexArray(data))) {
+			a.v = initArray(index, zero);
 			mergeArray(a.v, data);
 		} else {
 			a.v = data;
 		}
 	} else {
-		a.v = initArray(dim, zero);
+		a.v = initArray(index, zero);
 	}
 
-	var v; for (var i in dim) { v = dim[i];
+	var v; for (var i in index) { v = index[i];
 		a.len_[i] = v;
 	}
 
@@ -89,12 +89,12 @@ function MkArray(dim, zero, data) {
 
 
 
-function equalDim(d1, d2) {
-	if (d1.length !== d2.length) {
+function equalIndex(index1, index2) {
+	if (index1.length !== index2.length) {
 		return false;
 	}
-	var v; for (var i in d1) { v = d1[i];
-		if (JSON.stringify(v) !== JSON.stringify(d2[i])) {
+	var v; for (var i in index1) { v = index1[i];
+		if (JSON.stringify(v) !== JSON.stringify(index2[i])) {
 			return false;
 		}
 	}
@@ -102,9 +102,9 @@ function equalDim(d1, d2) {
 }
 
 
-function getDimArray(a) { var dim = [];
+function indexArray(a) { var index = [];
 	for (;;) {
-		dim.push(a.length);
+		index.push(a.length);
 
 		if (Array.isArray(a[0])) {
 			a = a[0];
@@ -112,17 +112,17 @@ function getDimArray(a) { var dim = [];
 			break;
 		}
 	}
-	return dim;
+	return index;
 }
 
 
-function initArray(dim, zero) { var a = [];
-	if (dim.length === 0) {
+function initArray(index, zero) { var a = [];
+	if (index.length === 0) {
 		return zero;
 	}
-	var nextArray = initArray(dim.slice(1), zero);
+	var nextArray = initArray(index.slice(1), zero);
 
-	for (var i = 0; i < dim[0]; i++) {
+	for (var i = 0; i < index[0]; i++) {
 		a[i] = nextArray;
 	}
 	return a;
@@ -169,15 +169,15 @@ function sliceType(arr, v, low, high, len, cap, nil_) {
 	this.nil_=nil_
 }
 
-
-sliceType.prototype.typ = function() { return sliceT; }
-
 sliceType.prototype.isNil = function() {
 	if (this.len !== 0 || this.cap !== 0) {
 		return false;
 	}
 	return this.nil_;
 }
+
+
+sliceType.prototype.typ = function() { return sliceT; }
 
 
 function MkSlice(zero, len, cap) {
@@ -187,6 +187,12 @@ function MkSlice(zero, len, cap) {
 		s.nil_ = true;
 		return s;
 	}
+
+
+
+
+
+
 
 	var arr = new arrayType([], g.Map(0));
 	arr.len_[0] = len;
@@ -248,44 +254,35 @@ function Slice(zero, data) {
 
 function SliceFrom(src, low, high) {
 	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
-	s.set(src, low, high);
-	return s;
-}
 
-
-sliceType.prototype.set = function(src, low, high) {
 	if (low !== undefined) {
-		this.low = low;
+		s.low = low;
 	} else {
-		this.low = 0;
+		s.low = 0;
 	}
 	if (high !== undefined) {
-		this.high = high;
+		s.high = high;
 	} else {
 		if (src.arr !== undefined) {
-			this.high = src.len;
+			s.high = src.len;
 		} else {
-			this.high = src.v.length;
+			s.high = src.v.length;
 		}
 	}
 
-	this.len = this.high - this.low;
+	s.len = s.high - s.low;
 
 	if (src.arr !== undefined) {
-		this.arr = src.arr;
-		this.cap = src.cap - this.low;
-		this.low += src.low;
-		this.high += src.low;
+		s.arr = src.arr;
+		s.cap = src.cap - s.low;
+		s.low += src.low;
+		s.high += src.low;
 	} else {
-		this.arr = src;
-		this.cap = src.cap() - this.low;
+		s.arr = src;
+		s.cap = src.cap() - s.low;
 	}
+	return s;
 }
-
-
-
-
-
 
 
 sliceType.prototype.get = function() {
@@ -299,6 +296,11 @@ sliceType.prototype.get = function() {
 		}
 	}
 	return this.v;
+}
+
+
+sliceType.prototype.set = function(index, v) {
+	this.arr.v[index[0] + this.low]+ this.low]>> = v;
 }
 
 

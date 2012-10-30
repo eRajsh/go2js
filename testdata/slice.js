@@ -241,7 +241,7 @@ function reference() {
 	}
 
 
-	slice2.arr.v[slice2.low+1] = 'G';
+	slice2.set([1], 'G');
 
 	_ = function(msg, in_, out) { return {
 		msg: msg,
@@ -283,7 +283,7 @@ function resize() {
 	}
 
 
-	slice.arr.v[slice.low+1] = 2, slice.arr.v[slice.low+3] = 3;
+	slice.set([1], 2), slice.set([3], 3);
 
 	if (slice.get()[0] === 0 && slice.get()[1] === 2 && slice.get()[2] === 0 && slice.get()[3] === 3) {
 
@@ -316,7 +316,7 @@ function grow() {
 		var new_capacity = slice.cap + add;
 		var new_slice = g.MkSlice(0, slice.len, new_capacity);
 		for (var index = 0; index < slice.len; index++) {
-			new_slice.arr.v[new_slice.low+index] = slice.arr.v[slice.low+index];
+			new_slice.set([index], slice.get()[index]);
 		}
 		return new_slice;
 	};
@@ -348,7 +348,7 @@ function grow() {
 
 
 	slice = g.SliceFrom(slice, 0, slice.len + 2);
-	slice.arr.v[slice.low+4] = 4, slice.arr.v[slice.low+5] = 5;
+	slice.set([4], 4), slice.set([5], 5);
 
 	if (slice.len === 6 && slice.cap === 7 && slice.get()[0] === 0 && slice.get()[1] === 1 && slice.get()[2] === 2 && slice.get()[3] === 3 && slice.get()[4] === 4 && slice.get()[5] === 5) {
 

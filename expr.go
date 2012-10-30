@@ -50,6 +50,7 @@ type expression struct {
 	isPointer    bool
 	isMake       bool
 	isNil        bool
+	addSet       bool
 
 	arrayHasElts bool // does array has elements?
 	isEllipsis   bool
@@ -84,6 +85,7 @@ func (tr *translate) newExpression(iVar interface{}) *expression {
 		"",
 		"",
 		unknownKind,
+		false,
 		false,
 		false,
 		false,
@@ -696,13 +698,11 @@ func (e *expression) translate(expr ast.Expr) {
 
 		x := e.tr.getExpression(typ.X).String()
 		index := ""
-		sliceIndex := ""
 		indexArgs := ""
 
 		for i := len(e.index) - 1; i >= 0; i-- { // inverse order
 			idx := e.index[i]
 			index += "[" + idx + "]"
-			sliceIndex += fmt.Sprintf("[%s.low+%s]", x, idx)
 
 			if indexArgs != "" {
 				indexArgs += "," + SP
@@ -718,8 +718,15 @@ func (e *expression) translate(expr ast.Expr) {
 			} else {
 				e.WriteString(x + ".get(" + indexArgs + ")[0]")
 			}
+
 		} else if e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {
-			e.WriteString(x + ".arr" + FIELD_VALUE + sliceIndex)
+			if !e.isValue {
+				e.WriteString(fmt.Sprintf("%s.set([%s],", x, indexArgs))
+				e.addSet = true
+			} else {
+				e.WriteString(x + FIELD_GET + index)
+			}
+
 		} else {
 			e.WriteString(x + index)
 		}
