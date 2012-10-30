@@ -496,7 +496,7 @@ _noFunc:
 			nameExpr += "," + SP + name
 		}
 
-		if !signIsDefine {
+		if !signIsDefine && len(name_expr[idxName].index) == 0 {
 			nameExpr += tagPointer(false, 'P', tr.funcId, tr.blockId, name)
 		}
 

@@ -297,7 +297,7 @@ sliceType.prototype.get = function() {
 
 
 sliceType.prototype.set = function(index, v) {
-	this.arr.v[index[0] + this.low]+ this.low]>> = v;
+	this.arr.v[index[0] + this.low] = v;
 }
 
 
