@@ -33,24 +33,23 @@ sliceT = 3;
 
 
 
-function arrayType(v, referTo, len_) {
+function arrayType(v, len_) {
 	this.v=v;
-	this.referTo=referTo;
 
 	this.len_=len_
 }
 
 
-arrayType.prototype.len = function(index) {
-	if (index === undefined) {
+arrayType.prototype.len = function(dim) {
+	if (dim === undefined) {
 		return this.len_[0];
 	}
 	return this.len_[arguments.length];
 }
 
 
-arrayType.prototype.cap = function(index) {
-	if (index === undefined) {
+arrayType.prototype.cap = function(dim) {
+	if (dim === undefined) {
 		return this.len_[0];
 	}
 	return this.len_[arguments.length];
@@ -66,21 +65,21 @@ arrayType.prototype.typ = function() { return arrayT; }
 
 
 
-function MkArray(index, zero, data) {
-	var a = new arrayType([], [], g.Map(0));
+function MkArray(dim, zero, data) {
+	var a = new arrayType([], g.Map(0));
 
 	if (data !== undefined) {
-		if (!equalIndex(index, indexArray(data))) {
-			a.v = initArray(index, zero);
+		if (!equalDim(dim, getDimArray(data))) {
+			a.v = initArray(dim, zero);
 			mergeArray(a.v, data);
 		} else {
 			a.v = data;
 		}
 	} else {
-		a.v = initArray(index, zero);
+		a.v = initArray(dim, zero);
 	}
 
-	var v; for (var i in index) { v = index[i];
+	var v; for (var i in dim) { v = dim[i];
 		a.len_[i] = v;
 	}
 
@@ -89,33 +88,13 @@ function MkArray(index, zero, data) {
 
 
 
-arrayType.prototype.set = function(index, v) {
-	for (var i = 0; i < index.length - 1; i++) {
-		this.v = this.v[index[i]];
-	}
-	this.v[index[i]] = v;
 
-	if (this.referTo !== undefined) {
-		var r; for (var _ in this.referTo) { r = this.referTo[_];
-			if (index[i] >= r.low && index[i] <= r.high) {
-				r.v[index[i] - r.low] = v;
-			}
-			if (r.referTo !== undefined) {
-				r.setRefer(index[i], v);
-			}
-		}
-	}
-}
-
-
-
-
-function equalIndex(index1, index2) {
-	if (index1.length !== index2.length) {
+function equalDim(d1, d2) {
+	if (d1.length !== d2.length) {
 		return false;
 	}
-	var v; for (var i in index1) { v = index1[i];
-		if (JSON.stringify(v) !== JSON.stringify(index2[i])) {
+	var v; for (var i in d1) { v = d1[i];
+		if (JSON.stringify(v) !== JSON.stringify(d2[i])) {
 			return false;
 		}
 	}
@@ -123,9 +102,9 @@ function equalIndex(index1, index2) {
 }
 
 
-function indexArray(a) { var index = [];
+function getDimArray(a) { var dim = [];
 	for (;;) {
-		index.push(a.length);
+		dim.push(a.length);
 
 		if (Array.isArray(a[0])) {
 			a = a[0];
@@ -133,17 +112,17 @@ function indexArray(a) { var index = [];
 			break;
 		}
 	}
-	return index;
+	return dim;
 }
 
 
-function initArray(index, zero) { var a = [];
-	if (index.length === 0) {
+function initArray(dim, zero) { var a = [];
+	if (dim.length === 0) {
 		return zero;
 	}
-	var nextArray = initArray(index.slice(1), zero);
+	var nextArray = initArray(dim.slice(1), zero);
 
-	for (var i = 0; i < index[0]; i++) {
+	for (var i = 0; i < dim[0]; i++) {
 		a[i] = nextArray;
 	}
 	return a;
@@ -178,10 +157,9 @@ function mergeArray(dst, src) {
 
 
 
-function sliceType(v, referTo, referFrom, low, high, len, cap, nil_) {
+function sliceType(arr, v, low, high, len, cap, nil_) {
+	this.arr=arr;
 	this.v=v;
-	this.referTo=referTo;
-	this.referFrom=referFrom;
 
 	this.low=low;
 	this.high=high;
@@ -191,6 +169,9 @@ function sliceType(v, referTo, referFrom, low, high, len, cap, nil_) {
 	this.nil_=nil_
 }
 
+
+sliceType.prototype.typ = function() { return sliceT; }
+
 sliceType.prototype.isNil = function() {
 	if (this.len !== 0 || this.cap !== 0) {
 		return false;
@@ -199,27 +180,20 @@ sliceType.prototype.isNil = function() {
 }
 
 
-sliceType.prototype.str = function() {
-	return this.v.join("");
-}
-
-
-sliceType.prototype.typ = function() { return sliceT; }
-
-
 function MkSlice(zero, len, cap) {
-	var s = new sliceType([], [], undefined, 0, 0, 0, 0, false);
+	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
 	if (zero === undefined) {
 		s.nil_ = true;
 		return s;
 	}
 
-
-	s.v = Array(len);
+	var arr = new arrayType([], g.Map(0));
+	arr.len_[0] = len;
 	for (var i = 0; i < len; i++) {
-		s.v[i] = zero;
+		arr.v[i] = zero;
 	}
+	s.arr = arr;
 
 	if (cap !== undefined) {
 		s.cap = cap;
@@ -228,18 +202,20 @@ function MkSlice(zero, len, cap) {
 	}
 
 	s.len = len;
+	s.high = len;
 	return s;
 }
 
 
 function Slice(zero, data) {
-	var s = new sliceType([], [], undefined, 0, 0, 0, 0, false);
+	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
 	if (zero === undefined) {
 		s.nil_ = true;
 		return s;
 	}
 
+	var arr = new arrayType([], g.Map(0));
 	var srcVal; for (var i in data) { srcVal = data[i];
 		var isHashMap = false;
 
@@ -250,93 +226,91 @@ function Slice(zero, data) {
 					isHashMap = true;
 
 					for (i; i < k; i++) {
-						s.v[i] = zero;
+						arr.v[i] = zero;
 					}
-					s.v[i] = v;
+					arr.v[i] = v;
 				}
 			}
 		}
 		if (!isHashMap) {
-			s.v[i] = srcVal;
+			arr.v[i] = srcVal;
 		}
 	}
+	s.len = arr.v.length;
+	arr.len_[0] = s.len;
+	s.arr = arr;
 
-	s.len = s.v.length;
 	s.cap = s.len;
+	s.high = s.len;
 	return s;
 }
 
 
 function SliceFrom(src, low, high) {
-	var s = new sliceType([], [], undefined, 0, 0, 0, 0, false);
-
-	if (low !== undefined) {
-		s.low = low;
-	} else {
-		s.low = 0;
-	}
-	if (high !== undefined) {
-		s.high = high;
-	} else {
-		if (src.nil_ !== undefined) {
-			s.high = src.len;
-		} else {
-			s.high = src.v.length;
-		}
-	}
-
-	s.len = s.high - s.low;
-	s.v = src.v.slice(s.low, s.high);
-
-	if (src.nil_ !== undefined) {
-		s.cap = src.cap - s.low;
-		s.low += src.low;
-		s.high += src.low;
-	} else {
-		s.cap = src.cap() - s.low;
-	}
-
-	s.referFrom = src;
-	src.referTo.push(s);
+	var s = new sliceType(undefined, [], 0, 0, 0, 0, false);
+	s.set(src, low, high);
 	return s;
 }
 
 
-
-sliceType.prototype.set = function(index, v) {
-
-
-
-
-
-	var src = this;
-	for (; src.referFrom !== undefined;) {
-		src = src.referFrom;
-	}
-
-	if (src.len_ !== undefined) {
-		src.set(index, v);
+sliceType.prototype.set = function(src, low, high) {
+	if (low !== undefined) {
+		this.low = low;
 	} else {
-		src.setRefer(index[index.length - 1], v);
+		this.low = 0;
 	}
-}
-
-
-sliceType.prototype.setRefer = function(idx, v) {
-	if (idx >= this.low && idx <= this.high) {
-		this.v[idx - this.low] = v;
-	}
-	var r; for (var _ in this.referTo) { r = this.referTo[_];
-		if (r.referTo !== undefined) {
-			r.setRefer(idx, v);
+	if (high !== undefined) {
+		this.high = high;
+	} else {
+		if (src.arr !== undefined) {
+			this.high = src.len;
+		} else {
+			this.high = src.v.length;
 		}
 	}
+
+	this.len = this.high - this.low;
+
+	if (src.arr !== undefined) {
+		this.arr = src.arr;
+		this.cap = src.cap - this.low;
+		this.low += src.low;
+		this.high += src.low;
+	} else {
+		this.arr = src;
+		this.cap = src.cap() - this.low;
+	}
 }
 
 
 
 
-function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = new sliceType([], [], undefined, 0, 0, 0, 0, false);
+
+
+
+sliceType.prototype.get = function() {
+	if (this.arr !== undefined) {
+		var arr = this.arr.v.slice(this.low, this.high);
+
+		if (this.v.length !== 0) {
+			return arr.concat(this.v);
+		} else {
+			return arr;
+		}
+	}
+	return this.v;
+}
+
+
+sliceType.prototype.str = function() {
+	var _s = this.get();
+	return _s.join("");
+}
+
+
+
+
+function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = new sliceType(undefined, [], 0, 0, 0, 0, false);
 
 	dst.low = src.low;
 	dst.high = src.high;
@@ -344,9 +318,15 @@ function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = ne
 	dst.cap = src.cap;
 	dst.nil_ = src.nil_;
 
-	dst.v = Array(src.len);
-	var v; for (var i in src.v) { v = src.v[i];
-		dst.v[i] = v;
+	var arr = new arrayType([], g.Map(0));
+	arr.len_[0] = src.arr.len_[0];
+	var v; for (var _ in src.arr.v) { v = src.arr.v[_];
+		arr.v.push(v);
+	}
+	dst.arr = arr;
+
+	var v; for (var _ in src.v) { v = src.v[_];
+		dst.v.push(v);
 	}
 
 
@@ -377,19 +357,21 @@ function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = ne
 
 function Copy(dst, src) { var n = 0;
 
-	if (src.nil_ !== undefined) {
-		for (; n < src.len; n++) {
+	if (src.arr !== undefined) {
+		for (var i = src.low; i < src.high; i++) {
 			if (JSON.stringify(n) === JSON.stringify(dst.len)) {
 				return n;
 			}
-			dst.v[n] = src.v[n];
+			dst.arr.v[n] = src.arr.v[i];
+			n++;
 		}
-
-
-
-
-
-
+		var v; for (var _ in src.v) { v = src.v[_];
+			if (JSON.stringify(n) === JSON.stringify(dst.len)) {
+				return n;
+			}
+			dst.v.push(v);
+			n++;
+		}
 		return n;
 	}
 
@@ -398,7 +380,7 @@ function Copy(dst, src) { var n = 0;
 		if (JSON.stringify(n) === JSON.stringify(dst.len)) {
 			break;
 		}
-		dst.v[n] = src[n];
+		dst.arr.v[n] = src[n];
 	}
 	return n;
 }

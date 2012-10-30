@@ -40,6 +40,7 @@ const (
 )
 
 const (
+	FIELD_GET     = ".get()"
 	FIELD_POINTER = ".p"
 	FIELD_TYPE    = ".t"
 	FIELD_VALUE   = ".v"

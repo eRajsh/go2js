@@ -117,7 +117,7 @@ function keyNoExistent() {
 	var _ = rating.get("C#"), csharp_rating2 = _[0], found = _[1];
 
 	var multiDim = g.Map(0, {1: {1: 1.1}, 2: {2: 2.2}});
-	var k_multiDim = multiDim.get(1,2)[0];
+	var k_multiDim = multiDim.get(1, 2)[0];
 
 	var _ = function(msg, in_, out) { return {
 		msg: msg,
@@ -219,18 +219,18 @@ function blankIdInRange() {
 	var A3 = g.MkArray([1], 0, [1]);
 
 	slice = g.SliceFrom(A1, 0);
-	if (Max(slice.v) !== 9) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.v) + ", want 9<br>");
+	if (Max(slice.get()) !== 9) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.get()) + ", want 9<br>");
 		pass = false, PASS = false;
 	}
 	slice = g.SliceFrom(A2, 0);
-	if (Max(slice.v) !== 4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.v) + ", want 4<br>");
+	if (Max(slice.get()) !== 4) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.get()) + ", want 4<br>");
 		pass = false, PASS = false;
 	}
 	slice = g.SliceFrom(A3, 0);
-	if (Max(slice.v) !== 1) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.v) + ", want 1<br>");
+	if (Max(slice.get()) !== 1) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.get()) + ", want 1<br>");
 		pass = false, PASS = false;
 	}
 

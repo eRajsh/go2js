@@ -50,7 +50,6 @@ type expression struct {
 	isPointer    bool
 	isMake       bool
 	isNil        bool
-	addSet       bool
 
 	arrayHasElts bool // does array has elements?
 	isEllipsis   bool
@@ -85,7 +84,6 @@ func (tr *translate) newExpression(iVar interface{}) *expression {
 		"",
 		"",
 		unknownKind,
-		false,
 		false,
 		false,
 		false,
@@ -406,7 +404,7 @@ func (e *expression) translate(expr ast.Expr) {
 			argNoIndex, index := splitIndex(arg)
 
 			if e.tr.isType(sliceType, argNoField) {
-				if strings.HasSuffix(arg, FIELD_VALUE) {
+				if strings.HasSuffix(arg, FIELD_VALUE) || strings.HasSuffix(arg, FIELD_GET) {
 					e.WriteString(argNoField + ".cap")
 				} else {
 					e.WriteString(arg + ".cap")
@@ -428,7 +426,7 @@ func (e *expression) translate(expr ast.Expr) {
 				src += e.tr.getExpression(v).String()
 			}
 			if typ.Ellipsis != 0 { // last argument is an ellipsis
-				src += FIELD_VALUE
+				src += FIELD_GET
 			}
 
 			e.WriteString(fmt.Sprintf("g.Append(%s,%s%s)",
@@ -661,7 +659,7 @@ func (e *expression) translate(expr ast.Expr) {
 					}
 					if e.tr.isType(sliceType, name) && /*!e.tr.isFunc &&*/
 						!e.tr.wasReturn && !e.tr.isType(structType, name) {
-						name += FIELD_VALUE
+						name += FIELD_GET
 					}
 
 					if _, ok := e.tr.vars[e.tr.funcId][e.tr.blockId][name]; ok {
@@ -672,7 +670,6 @@ func (e *expression) translate(expr ast.Expr) {
 
 					if !e.tr.returnBasicLit && e.tr.isType(arrayType, name) {
 						name += FIELD_VALUE
-						e.addSet = true
 					}
 				}
 			}
@@ -697,33 +694,23 @@ func (e *expression) translate(expr ast.Expr) {
 		}
 		// ==
 
-		_x := e.tr.getExpression(typ.X)
-		x := _x.String()
+		x := e.tr.getExpression(typ.X).String()
 		index := ""
+		sliceIndex := ""
 		indexArgs := ""
 
 		for i := len(e.index) - 1; i >= 0; i-- { // inverse order
 			idx := e.index[i]
 			index += "[" + idx + "]"
+			sliceIndex += fmt.Sprintf("[%s.low+%s]", x, idx)
 
 			if indexArgs != "" {
-				indexArgs += ","
+				indexArgs += "," + SP
 			}
 			indexArgs += idx
 		}
 
-		if _x.addSet {
-			e.WriteString(fmt.Sprintf("%s.set([%s],", stripField(x), indexArgs))
-			e.addSet = true
-		} else if e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {
-			if !e.isValue {
-				e.WriteString(fmt.Sprintf("%s.set([%s],", x, indexArgs))
-				e.addSet = true
-			} else {
-				e.WriteString(x + FIELD_VALUE + index)
-			}
-
-		} else if e.tr.isType(mapType, x) {
+		if e.tr.isType(mapType, x) {
 			e.mapName = x
 
 			if e.tr.isVar && !e.isValue {
@@ -731,7 +718,8 @@ func (e *expression) translate(expr ast.Expr) {
 			} else {
 				e.WriteString(x + ".get(" + indexArgs + ")[0]")
 			}
-
+		} else if e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {
+			e.WriteString(x + ".arr" + FIELD_VALUE + sliceIndex)
 		} else {
 			e.WriteString(x + index)
 		}
@@ -1005,10 +993,13 @@ func (e *expression) writeTypeElts(elts []ast.Expr, Lbrace token.Pos) {
 
 // * * *
 
-// stripField strips the field name FIELD_VALUE, if any.
+// stripField strips the field name FIELD_VALUE or FIELD_GET, if any.
 func stripField(name string) string {
 	if strings.HasSuffix(name, FIELD_VALUE) {
 		return name[:len(name)-len(FIELD_VALUE)]
+	}
+	if strings.HasSuffix(name, FIELD_GET) {
+		return name[:len(name)-len(FIELD_GET)]
 	}
 	return name
 }
