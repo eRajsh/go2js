@@ -34,8 +34,8 @@ func init() {
 
 // arrayType represents a fixed array type.
 type arrayType struct {
-	v     []interface{} // array's value
-	refer []interface{} // references from slices
+	v       []interface{} // array's value
+	referTo []interface{} // references to slices
 
 	len_ map[int]int
 }
@@ -95,8 +95,15 @@ func (a arrayType) set(index []int, v interface{}) {
 	}
 	a.v[index[i]] = v
 
-	for _, r := range a.refer {
-		r.v[index[i]] = v
+	if a.referTo != nil {
+		for _, r := range a.referTo {
+			if index[i] >= r.low && index[i] <= r.high {
+				r.v[index[i]-r.low] = v
+			}
+			if r.referTo != nil {
+				r.setRefer(index[i], v)
+			}
+		}
 	}
 }
 
@@ -172,8 +179,9 @@ func mergeArray(dst, src []interface{}) {
 
 // sliceType represents a slice type.
 type sliceType struct {
-	v     []interface{} // slice's value
-	refer []interface{} // references from other slices
+	v         []interface{} // slice's value
+	referTo   []interface{} // references to other slices
+	referFrom interface{}   // references from other slice or array
 
 	low  int // indexes for the array
 	high int
@@ -270,7 +278,7 @@ func SliceFrom(src interface{}, low, high int) *sliceType {
 	if high != nil {
 		s.high = high
 	} else {
-		if src.arr != nil { // slice
+		if src.nil_ != nil { // slice
 			s.high = src.len
 		} else {
 			s.high = len(src.v)
@@ -278,32 +286,50 @@ func SliceFrom(src interface{}, low, high int) *sliceType {
 	}
 
 	s.len = s.high - s.low
+	s.v = src.v.slice(s.low, s.high)
 
 	if src.nil_ != nil { // slice
 		s.cap = src.cap - s.low
-//		s.low += src.low
-//		s.high += src.low
+		s.low += src.low
+		s.high += src.low
 	} else { // array
 		s.cap = src.cap() - s.low
 	}
 
-	s.v = src.v.slice(s.low, s.high)
-//	s.v = src.v.slice(low, high)
-
-	src.refer.push(s)
+	s.referFrom = src
+	src.referTo.push(s)
 	return s
 }
 
 // set sets the value v in the index, and updates the slices that are
 // referencing to this slice (if any).
 func (s sliceType) set(index []int, v interface{}) {
-	for i := 0; i < len(index)-1; i++ {
+	/*for i := 0; i < len(index)-1; i++ {
 		s.v = s.v[index[i]]
 	}
-	s.v[index[i]] = v
+	s.v[index[i]] = v*/
 
-	for _, r := range s.refer {
-		r.v[index[i]] = v
+	src := s
+	for ; src.referFrom != nil; {
+		src = src.referFrom
+	}
+
+	if src.len_ != nil { // array
+		src.set(index, v)
+	} else {
+		src.setRefer(index[len(index)-1], v)
+	}
+}
+
+// setRefer sets the value in slice referenced.
+func (s sliceType) setRefer(idx int, v interface{}) {
+	if idx >= s.low && idx <= s.high {
+		s.v[idx-s.low] = v
+	}
+	for _, r := range s.referTo {
+		if r.referTo != nil {
+			r.setRefer(idx, v)
+		}
 	}
 }
 

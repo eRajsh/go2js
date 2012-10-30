@@ -712,7 +712,7 @@ func (e *expression) translate(expr ast.Expr) {
 			indexArgs += idx
 		}
 
-		if _x.addSet { // set at get the array ident
+		if _x.addSet {
 			e.WriteString(fmt.Sprintf("%s.set([%s],", stripField(x), indexArgs))
 			e.addSet = true
 		} else if e.tr.isType(sliceType, x) && !e.tr.isType(structType, x) {

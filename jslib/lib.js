@@ -33,9 +33,9 @@ sliceT = 3;
 
 
 
-function arrayType(v, refer, len_) {
+function arrayType(v, referTo, len_) {
 	this.v=v;
-	this.refer=refer;
+	this.referTo=referTo;
 
 	this.len_=len_
 }
@@ -95,8 +95,15 @@ arrayType.prototype.set = function(index, v) {
 	}
 	this.v[index[i]] = v;
 
-	var r; for (var _ in this.refer) { r = this.refer[_];
-		r.v[index[i]] = v;
+	if (this.referTo !== undefined) {
+		var r; for (var _ in this.referTo) { r = this.referTo[_];
+			if (index[i] >= r.low && index[i] <= r.high) {
+				r.v[index[i] - r.low] = v;
+			}
+			if (r.referTo !== undefined) {
+				r.setRefer(index[i], v);
+			}
+		}
 	}
 }
 
@@ -171,9 +178,10 @@ function mergeArray(dst, src) {
 
 
 
-function sliceType(v, refer, low, high, len, cap, nil_) {
+function sliceType(v, referTo, referFrom, low, high, len, cap, nil_) {
 	this.v=v;
-	this.refer=refer;
+	this.referTo=referTo;
+	this.referFrom=referFrom;
 
 	this.low=low;
 	this.high=high;
@@ -200,7 +208,7 @@ sliceType.prototype.typ = function() { return sliceT; }
 
 
 function MkSlice(zero, len, cap) {
-	var s = new sliceType([], [], 0, 0, 0, 0, false);
+	var s = new sliceType([], [], undefined, 0, 0, 0, 0, false);
 
 	if (zero === undefined) {
 		s.nil_ = true;
@@ -225,7 +233,7 @@ function MkSlice(zero, len, cap) {
 
 
 function Slice(zero, data) {
-	var s = new sliceType([], [], 0, 0, 0, 0, false);
+	var s = new sliceType([], [], undefined, 0, 0, 0, 0, false);
 
 	if (zero === undefined) {
 		s.nil_ = true;
@@ -260,7 +268,7 @@ function Slice(zero, data) {
 
 
 function SliceFrom(src, low, high) {
-	var s = new sliceType([], [], 0, 0, 0, 0, false);
+	var s = new sliceType([], [], undefined, 0, 0, 0, 0, false);
 
 	if (low !== undefined) {
 		s.low = low;
@@ -270,7 +278,7 @@ function SliceFrom(src, low, high) {
 	if (high !== undefined) {
 		s.high = high;
 	} else {
-		if (src.arr !== undefined) {
+		if (src.nil_ !== undefined) {
 			s.high = src.len;
 		} else {
 			s.high = src.v.length;
@@ -278,39 +286,57 @@ function SliceFrom(src, low, high) {
 	}
 
 	s.len = s.high - s.low;
+	s.v = src.v.slice(s.low, s.high);
 
 	if (src.nil_ !== undefined) {
 		s.cap = src.cap - s.low;
-
-
+		s.low += src.low;
+		s.high += src.low;
 	} else {
 		s.cap = src.cap() - s.low;
 	}
 
-	s.v = src.v.slice(s.low, s.high);
-
-
-	src.refer.push(s);
+	s.referFrom = src;
+	src.referTo.push(s);
 	return s;
 }
 
 
 
 sliceType.prototype.set = function(index, v) {
-	for (var i = 0; i < index.length - 1; i++) {
-		this.v = this.v[index[i]];
-	}
-	this.v[index[i]] = v;
 
-	var r; for (var _ in this.refer) { r = this.refer[_];
-		r.v[index[i]] = v;
+
+
+
+
+	var src = this;
+	for (; src.referFrom !== undefined;) {
+		src = src.referFrom;
+	}
+
+	if (src.len_ !== undefined) {
+		src.set(index, v);
+	} else {
+		src.setRefer(index[index.length - 1], v);
+	}
+}
+
+
+sliceType.prototype.setRefer = function(idx, v) {
+	if (idx >= this.low && idx <= this.high) {
+		this.v[idx - this.low] = v;
+	}
+	var r; for (var _ in this.referTo) { r = this.referTo[_];
+		if (r.referTo !== undefined) {
+			r.setRefer(idx, v);
+		}
 	}
 }
 
 
 
 
-function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = new sliceType([], [], 0, 0, 0, 0, false);
+function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = new sliceType([], [], undefined, 0, 0, 0, 0, false);
 
 	dst.low = src.low;
 	dst.high = src.high;
