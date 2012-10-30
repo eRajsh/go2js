@@ -125,7 +125,7 @@ var Char = map[int]string{'\n': "\\n", '\t': "\\t"}
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/import
 
 // getImport translates an import sentence.
-func (tr *translate) getImport(spec []ast.Spec) {
+func (tr *translation) getImport(spec []ast.Spec) {
 
 	// godoc go/ast ImportSpec
 	//  Doc     *CommentGroup // associated documentation; or nil
@@ -159,7 +159,7 @@ func (tr *translate) getImport(spec []ast.Spec) {
 }
 
 // GetArgs returns the arguments of a Go function, formatted for JS.
-func (tr *translate) GetArgs(funcName string, args []ast.Expr) string {
+func (tr *translation) GetArgs(funcName string, args []ast.Expr) string {
 	var jsArgs string
 
 	switch funcName {
@@ -200,7 +200,7 @@ func validIdent(name interface{}) string {
 }
 
 // joinArgsPrint returns arguments of Print, Println.
-func (tr *translate) joinArgsPrint(args []ast.Expr, addLine bool) string {
+func (tr *translation) joinArgsPrint(args []ast.Expr, addLine bool) string {
 	var jsArgs string
 	lenArgs := len(args) - 1
 
@@ -243,7 +243,7 @@ var (
 )
 
 // joinArgsPrintf returns arguments of Printf.
-func (tr *translate) joinArgsPrintf(args []ast.Expr) string {
+func (tr *translation) joinArgsPrintf(args []ast.Expr) string {
 	result := ""
 
 	// == Format

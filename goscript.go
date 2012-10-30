@@ -53,8 +53,8 @@ var (
 	MaxMessage = 10 // maximum number of errors and warnings to show.
 )
 
-// translate represents information about code being translated to JavaScript.
-type translate struct {
+// translation represents information about code being translated to JavaScript.
+type translation struct {
 	line     int // actual line
 	hasError bool
 
@@ -83,8 +83,8 @@ type translate struct {
 	zeroType map[int]map[int]map[string]string
 }
 
-func newTransform() *translate {
-	tr := &translate{
+func newTranslation() *translation {
+	tr := &translation{
 		0,
 		false,
 
@@ -110,8 +110,8 @@ func newTransform() *translate {
 
 	// == Global variables
 	// Ones related to local variables are set in:
-	// file func: *translate.getFunc()
-	// file stmt: *translate.getStatement() (case: *ast.BlockStmt)
+	// file func: *translation.getFunc()
+	// file stmt: *translation.getStatement() (case: *ast.BlockStmt)
 
 	// funcId = 0
 	tr.vars[0] = make(map[int]map[string]bool)
@@ -135,14 +135,13 @@ func newTransform() *translate {
 }
 
 // getLine returns the line number.
-func (tr *translate) getLine(pos token.Pos) int {
-	// -1 because it was inserted a line (the header)
+func (tr *translation) getLine(pos token.Pos) int {
 	return tr.fset.Position(pos).Line - 1
 }
 
 // addLine appends new lines according to the position.
 // Returns a boolean to indicate if have been added.
-func (tr *translate) addLine(pos token.Pos) bool {
+func (tr *translation) addLine(pos token.Pos) bool {
 	var s string
 
 	new := tr.getLine(pos)
@@ -162,7 +161,7 @@ func (tr *translate) addLine(pos token.Pos) bool {
 }
 
 // addError appends an error.
-func (tr *translate) addError(value interface{}, a ...interface{}) {
+func (tr *translation) addError(value interface{}, a ...interface{}) {
 	if len(tr.err) == MaxMessage {
 		return
 	}
@@ -182,7 +181,7 @@ func (tr *translate) addError(value interface{}, a ...interface{}) {
 }
 
 // addWarning appends a warning message.
-func (tr *translate) addWarning(format string, a ...interface{}) {
+func (tr *translation) addWarning(format string, a ...interface{}) {
 	if len(tr.warn) == MaxMessage {
 		return
 	}
@@ -190,7 +189,7 @@ func (tr *translate) addWarning(format string, a ...interface{}) {
 }
 
 // addIfExported appends the declaration name if it is exported.
-func (tr *translate) addIfExported(iName interface{}) {
+func (tr *translation) addIfExported(iName interface{}) {
 	var name = ""
 
 	switch typ := iName.(type) {
@@ -207,10 +206,10 @@ func (tr *translate) addIfExported(iName interface{}) {
 
 // * * *
 
-// Compile compiles a Go source file into JavaScript.
+// Translate translates a Go source file into JavaScript.
 // If write is true, writes the output in "filename" but with extension ".js".
-func Compile(filename string, write bool) error {
-	trans := newTransform()
+func Translate(filename string, write bool) error {
+	trans := newTranslation()
 	pkgName := ""
 
 	/* Parse several files
@@ -377,7 +376,7 @@ var (
 
 func usage() {
 	fmt.Fprintf(os.Stderr, `Usage: goscript [-min -w] file...
-Compile translating Go to JavaScript.
+Translate Go to JavaScript.
 
 `)
 	flag.PrintDefaults()
@@ -396,7 +395,7 @@ func main() {
 	log.SetPrefix("FAIL! ")
 
 	for _, filename := range flag.Args() {
-		if err := Compile(filename, *fWrite); err != nil {
+		if err := Translate(filename, *fWrite); err != nil {
 			log.Printf("%s: %s\n", filename, err)
 		}
 	}

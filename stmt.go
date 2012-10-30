@@ -41,7 +41,7 @@ type dataStmt struct {
 }
 
 // getStatement translates the Go statement.
-func (tr *translate) getStatement(stmt ast.Stmt) {
+func (tr *translation) getStatement(stmt ast.Stmt) {
 	switch typ := stmt.(type) {
 
 	// http://golang.org/doc/go_spec.html#Arithmetic_operators

@@ -5,7 +5,7 @@
 // http://mozilla.org/MPL/2.0/.
 
 /*
-Package goscript translates Go into JavaScript so you can continue using a
+Command GoScript translates Go into JavaScript so you can continue using a
 clean and concise sintaxis.
 
 Really, it is used a subset of Go since JavaScript has not native way to

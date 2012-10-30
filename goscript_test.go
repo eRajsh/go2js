@@ -28,22 +28,22 @@ func init() {
 	Char['\t'] = "&nbsp;&nbsp;&nbsp;&nbsp;"
 }
 
-func TestConst(t *testing.T)    { compile('t', "decl_const.go", t) }
-func TestVar(t *testing.T)      { compile('t', "decl_var.go", t) }
-func TestStruct(t *testing.T)   { compile('t', "decl_struct.go", t) }
-func TestReserved(t *testing.T) { compile('t', "decl_reserved.go", t) }
-func TestOp(t *testing.T)       { compile('t', "operator.go", t) }
-func TestPointer(t *testing.T)  { compile('t', "pointer.go", t) }
+func TestConst(t *testing.T)    { translate('t', "decl_const.go", t) }
+func TestVar(t *testing.T)      { translate('t', "decl_var.go", t) }
+func TestStruct(t *testing.T)   { translate('t', "decl_struct.go", t) }
+func TestReserved(t *testing.T) { translate('t', "decl_reserved.go", t) }
+func TestOp(t *testing.T)       { translate('t', "operator.go", t) }
+func TestPointer(t *testing.T)  { translate('t', "pointer.go", t) }
 
-func TestFunc(t *testing.T)  { compile('t', "func.go", t) }
-func TestCompo(t *testing.T) { compile('t', "composite.go", t) }
-func TestSlice(t *testing.T) { compile('t', "slice.go", t) }
-func TestMap(t *testing.T)   { compile('t', "map.go", t) }
+func TestFunc(t *testing.T)  { translate('t', "func.go", t) }
+func TestCompo(t *testing.T) { translate('t', "composite.go", t) }
+func TestSlice(t *testing.T) { translate('t', "slice.go", t) }
+func TestMap(t *testing.T)   { translate('t', "map.go", t) }
 
-func TestMethod(t *testing.T) { compile('t', "method.go", t) }
+func TestMethod(t *testing.T) { translate('t', "method.go", t) }
 
 func ExampleControl() {
-	Compile(DIR_TEST+"control.go", true)
+	Translate(DIR_TEST+"control.go", true)
 
 	// Output:
 	// == Warnings
@@ -52,7 +52,7 @@ func ExampleControl() {
 }
 
 func ExampleDecl() {
-	Compile(DIR_TEST+"error_decl.go", true)
+	Translate(DIR_TEST+"error_decl.go", true)
 
 	// Output:
 	// == Errors
@@ -82,7 +82,7 @@ func ExampleDecl() {
 }
 
 func ExampleStmt() {
-	Compile(DIR_TEST+"error_stmt.go", true)
+	Translate(DIR_TEST+"error_stmt.go", true)
 
 	// Output:
 	// == Errors
@@ -97,12 +97,12 @@ func ExampleStmt() {
 
 // == JavaScript library
 
-func TestLib(t *testing.T) { compile('p', "lib.go", t) }
+func TestLib(t *testing.T) { translate('p', "lib.go", t) }
 
 // == Utility
 //
 
-func compile(kind rune, filename string, t *testing.T) {
+func translate(kind rune, filename string, t *testing.T) {
 	dir := ""
 
 	if kind == 't' {
@@ -115,7 +115,7 @@ func compile(kind rune, filename string, t *testing.T) {
 		panic("Wrong kind")
 	}
 
-	if err := Compile(dir+filename, true); err != nil {
+	if err := Translate(dir+filename, true); err != nil {
 		t.Fatalf("expected parse file: %s", err)
 	}
 }

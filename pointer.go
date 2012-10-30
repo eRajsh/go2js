@@ -51,7 +51,7 @@ func tagPointer(zero bool, typ rune, funcId, blockId int, name string) string {
 }
 
 // addPointer searches the point where the variable was declared for tag it as pointer.
-func (tr *translate) addPointer(name string) {
+func (tr *translation) addPointer(name string) {
 	// In the actual function
 	if tr.funcId != 0 {
 		for block := tr.blockId; block >= 1; block-- {
@@ -74,7 +74,7 @@ func (tr *translate) addPointer(name string) {
 }
 
 // replacePointers replaces tags related to variables addressed.
-func (tr *translate) replacePointers(str *string) {
+func (tr *translation) replacePointers(str *string) {
 	// Replaces tags in variables that access to pointers.
 	replaceLocal := func(funcId, startBlock, endBlock int, varName string) {
 		for block := startBlock; block <= endBlock; block++ {

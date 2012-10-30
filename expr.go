@@ -28,7 +28,7 @@ const (
 
 // expression represents a Go expression.
 type expression struct {
-	tr            *translate
+	tr            *translation
 	*bytes.Buffer // sintaxis translated
 
 	varName  string
@@ -65,7 +65,7 @@ type expression struct {
 }
 
 // newExpression initializes a new expression.
-func (tr *translate) newExpression(iVar interface{}) *expression {
+func (tr *translation) newExpression(iVar interface{}) *expression {
 	var id string
 
 	if iVar != nil {
@@ -106,7 +106,7 @@ func (tr *translate) newExpression(iVar interface{}) *expression {
 }
 
 // getExpression returns the Go expression translated to JavaScript.
-func (tr *translate) getExpression(expr ast.Expr) *expression {
+func (tr *translation) getExpression(expr ast.Expr) *expression {
 	e := tr.newExpression(nil)
 
 	e.translate(expr)

@@ -20,7 +20,7 @@ import (
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/const
 
 // getConst translates a constant.
-func (tr *translate) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
+func (tr *translation) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
 	iotaExpr := make([]string, 0) // iota expressions
 	isMultipleLine := false
 	tr.isConst = true
@@ -126,7 +126,7 @@ func (tr *translate) getConst(pos token.Pos, spec []ast.Spec, isGlobal bool) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Statements/let
 
 // getVar translates a variable.
-func (tr *translate) getVar(spec []ast.Spec, isGlobal bool) {
+func (tr *translation) getVar(spec []ast.Spec, isGlobal bool) {
 	isMultipleLine := false
 
 	if len(spec) > 1 {
@@ -157,7 +157,7 @@ func (tr *translate) getVar(spec []ast.Spec, isGlobal bool) {
 // http://golang.org/doc/go_spec.html#Type_declarations
 
 // getType translates a custom type.
-func (tr *translate) getType(spec []ast.Spec, isGlobal bool) {
+func (tr *translation) getType(spec []ast.Spec, isGlobal bool) {
 	// godoc go/ast TypeSpec
 	//  Doc     *CommentGroup // associated documentation; or nil
 	//  Name    *Ident        // type name
@@ -200,7 +200,7 @@ func (tr *translate) getType(spec []ast.Spec, isGlobal bool) {
 //
 
 // getStruct translates a custom struct.
-func (tr *translate) getStruct(typ *ast.StructType, name string, isGlobal bool) {
+func (tr *translation) getStruct(typ *ast.StructType, name string, isGlobal bool) {
 	// godoc go/ast StructType
 	//  Struct     token.Pos  // position of "struct" keyword
 	//  Fields     *FieldList // list of field declarations
@@ -344,7 +344,7 @@ func (tr *translate) getStruct(typ *ast.StructType, name string, isGlobal bool) 
 //
 
 // writeVar translates variables for both declarations and assignments.
-func (tr *translate) writeVar(names interface{}, values []ast.Expr, type_ interface{}, operator token.Token, isGlobal, isMultipleLine bool) {
+func (tr *translation) writeVar(names interface{}, values []ast.Expr, type_ interface{}, operator token.Token, isGlobal, isMultipleLine bool) {
 	var sign string
 	var signIsAssign, signIsDefine, isBitClear bool
 
@@ -649,7 +649,7 @@ _noFunc:
 }
 
 // getTypeFields returns the fields of a custom type.
-func (tr *translate) getTypeFields(fields []string) (args, allFields string) {
+func (tr *translation) getTypeFields(fields []string) (args, allFields string) {
 	for i, f := range fields {
 		if i == 0 {
 			args = f
@@ -679,7 +679,7 @@ const (
 
 // zeroValue returns the zero value of the value type if "init", and a boolean
 // indicating if it is a pointer.
-func (tr *translate) zeroValue(init bool, typ interface{}) (value string, dt dataType) {
+func (tr *translation) zeroValue(init bool, typ interface{}) (value string, dt dataType) {
 	var ident *ast.Ident
 
 	switch t := typ.(type) {
@@ -750,7 +750,7 @@ func (tr *translate) zeroValue(init bool, typ interface{}) (value string, dt dat
 }
 
 // zeroOfMap returns the zero value of a map.
-func (tr *translate) zeroOfMap(m *ast.MapType) string {
+func (tr *translation) zeroOfMap(m *ast.MapType) string {
 	if mapT, ok := m.Value.(*ast.MapType); ok { // nested map
 		return tr.zeroOfMap(mapT)
 	}
@@ -759,7 +759,7 @@ func (tr *translate) zeroOfMap(m *ast.MapType) string {
 }
 
 // zeroOfType returns the zero value of a custom type.
-func (tr *translate) zeroOfType(name string) string {
+func (tr *translation) zeroOfType(name string) string {
 	// In the actual function
 	if tr.funcId != 0 {
 		for block := tr.blockId; block >= 1; block-- {
@@ -783,7 +783,7 @@ func (tr *translate) zeroOfType(name string) string {
 //
 
 // isType checks if a variable name is of a specific data type.
-func (tr *translate) isType(t dataType, name string) bool {
+func (tr *translation) isType(t dataType, name string) bool {
 	if name == "" {
 		return false
 	}
