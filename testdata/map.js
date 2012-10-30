@@ -117,7 +117,7 @@ function keyNoExistent() {
 	var _ = rating.get("C#"), csharp_rating2 = _[0], found = _[1];
 
 	var multiDim = g.Map(0, {1: {1: 1.1}, 2: {2: 2.2}});
-	var k_multiDim = multiDim.get(1, 2)[0];
+	var k_multiDim = multiDim.get(1,2)[0];
 
 	var _ = function(msg, in_, out) { return {
 		msg: msg,

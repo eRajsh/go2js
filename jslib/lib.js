@@ -188,18 +188,13 @@ function MkSlice(zero, len, cap) {
 		return s;
 	}
 
-
-
-
-
-
-
 	var arr = new arrayType([], g.Map(0));
 	arr.len_[0] = len;
+
+	arr.v = Array(len);
 	for (var i = 0; i < len; i++) {
 		arr.v[i] = zero;
 	}
-	s.arr = arr;
 
 	if (cap !== undefined) {
 		s.cap = cap;
@@ -207,8 +202,10 @@ function MkSlice(zero, len, cap) {
 		s.cap = len;
 	}
 
+	s.arr = arr;
 	s.len = len;
 	s.high = len;
+
 	return s;
 }
 

@@ -159,7 +159,7 @@ func mergeArray(dst, src []interface{}) {
 // sliceType represents a slice type.
 type sliceType struct {
 	arr interface{}   // the array where data is got or created from scratch using make
-	v   []interface{} // slice's value
+	v   []interface{} // elements appended
 
 	low  int // indexes for the array
 	high int
@@ -188,18 +188,13 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 		return s
 	}
 
-	/*// The fastest way of fill in an array is when array length is specified first.
-	s.v = Array(len)
-	for i := 0; i < len; i++ {
-		s.v[i] = zero
-	}*/
-
 	arr := new(arrayType)
 	arr.len_[0] = len
+	// The fastest way of fill in an array is when array length is specified first.
+	arr.v = Array(len)
 	for i := 0; i < len; i++ {
 		arr.v[i] = zero
 	}
-	s.arr = arr
 
 	if cap != nil {
 		s.cap = cap
@@ -207,8 +202,10 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 		s.cap = len
 	}
 
+	s.arr = arr
 	s.len = len
 	s.high = len
+
 	return s
 }
 

@@ -705,7 +705,7 @@ func (e *expression) translate(expr ast.Expr) {
 			index += "[" + idx + "]"
 
 			if indexArgs != "" {
-				indexArgs += "," + SP
+				indexArgs += ","
 			}
 			indexArgs += idx
 		}
