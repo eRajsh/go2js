@@ -659,9 +659,13 @@ func (e *expression) translate(expr ast.Expr) {
 					if name == e.tr.recvVar {
 						name = "this" + FIELD_TYPE
 					}
-					if e.tr.isType(sliceType, name) && /*!e.tr.isFunc &&*/
-						!e.tr.wasReturn && !e.tr.isType(structType, name) {
-						name += FIELD_GET
+					if !e.tr.isFunc && !e.tr.wasReturn {
+						if e.tr.isType(arrayType, name) {
+							name += FIELD_VALUE
+						} else if e.tr.isType(sliceType, name) &&
+							!e.tr.isType(structType, name) {
+							name += FIELD_GET
+						}
 					}
 
 					if _, ok := e.tr.vars[e.tr.funcId][e.tr.blockId][name]; ok {
@@ -670,7 +674,8 @@ func (e *expression) translate(expr ast.Expr) {
 				} else {
 					e.isIdent = true
 
-					if !e.tr.returnBasicLit && e.tr.isType(arrayType, name) {
+					if !e.tr.isFunc && !e.tr.wasReturn && !e.tr.returnBasicLit &&
+						e.tr.isType(arrayType, name) {
 						name += FIELD_VALUE
 					}
 				}

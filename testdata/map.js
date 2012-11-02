@@ -203,8 +203,8 @@ function blankIdInRange() {
 
 
 	var Max = function(slice) {
-		var max = slice[0];
-		var value; for (var _ in slice) { value = slice[_];
+		var max = slice.get()[0];
+		var value; for (var _ in slice.get()) { value = slice.get()[_];
 			if (value > max) {
 				max = value;
 			}
@@ -219,18 +219,18 @@ function blankIdInRange() {
 	var A3 = g.MkArray([1], 0, [1]);
 
 	slice = g.SliceFrom(A1, 0);
-	if (Max(slice.get()) !== 9) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.get()) + ", want 9<br>");
+	if (Max(slice) !== 9) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice) + ", want 9<br>");
 		pass = false, PASS = false;
 	}
 	slice = g.SliceFrom(A2, 0);
-	if (Max(slice.get()) !== 4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.get()) + ", want 4<br>");
+	if (Max(slice) !== 4) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice) + ", want 4<br>");
 		pass = false, PASS = false;
 	}
 	slice = g.SliceFrom(A3, 0);
-	if (Max(slice.get()) !== 1) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.get()) + ", want 1<br>");
+	if (Max(slice) !== 1) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice) + ", want 1<br>");
 		pass = false, PASS = false;
 	}
 

@@ -153,10 +153,10 @@ function useFunc() {
 
 
 	var Max = function(slice) {
-		var max = slice[0];
-		for (var index = 1; index < slice.length; index++) {
-			if (slice[index] > max) {
-				max = slice[index];
+		var max = slice.get()[0];
+		for (var index = 1; index < slice.len; index++) {
+			if (slice.get()[index] > max) {
+				max = slice.get()[index];
 			}
 		}
 		return max;
@@ -169,20 +169,20 @@ function useFunc() {
 	var slice = g.MkSlice();
 
 	slice = g.SliceFrom(A1, 0);
-	if (Max(slice.get()) !== 9) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice.get()) + ", want 9<br>");
+	if (Max(slice) !== 9) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice) + ", want 9<br>");
 		pass = false, PASS = false;
 	}
 
 	slice = g.SliceFrom(A2, 0);
-	if (Max(slice.get()) !== 4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice.get()) + ", want 4<br>");
+	if (Max(slice) !== 4) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice) + ", want 4<br>");
 		pass = false, PASS = false;
 	}
 
 	slice = g.SliceFrom(A3, 0);
-	if (Max(slice.get()) !== 1) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice.get()) + ", want 1<br>");
+	if (Max(slice) !== 1) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice) + ", want 1<br>");
 		pass = false, PASS = false;
 	}
 

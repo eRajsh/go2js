@@ -276,11 +276,11 @@ function variadic() {
 }
 
 function Max(slice) {
-	if (slice.length === 1) {
-		return slice[0];
+	if (slice.len === 1) {
+		return slice.set([0],;
 	}
 
-	var middle = slice.length / 2;
+	var middle = slice.len / 2;
 	var m1 = Max(g.SliceFrom(slice, 0, middle));
 	var m2 = Max(g.SliceFrom(slice, middle));
 
@@ -295,8 +295,8 @@ function recursive() {
 
 	var s = g.Slice(0, [1, 2, 3, 4, 6, 8]);
 
-	if (Max(s.get()) !== 8) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. => got " + Max(s.get()) + ", want 8<br>");
+	if (Max(s) !== 8) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. => got " + Max(s) + ", want 8<br>");
 		pass = false, PASS = false;
 	}
 
@@ -322,8 +322,8 @@ function main() {
 	_return();
 	document.write("=== RUN variadic<br>");
 	variadic();
-
-
+	document.write("=== RUN recursive<br>");
+	recursive();
 
 	if (PASS) {
 		document.write("PASS<br>");

@@ -322,8 +322,8 @@ func main() {
 	_return()
 	fmt.Println("=== RUN variadic")
 	variadic()
-	//fmt.Println("=== RUN recursive")
-	//recursive()
+	fmt.Println("=== RUN recursive")
+	recursive()
 
 	if PASS {
 		fmt.Println("PASS")

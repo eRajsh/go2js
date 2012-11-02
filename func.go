@@ -34,7 +34,7 @@ func (tr *translation) getFunc(decl *ast.FuncDecl) {
 	isFuncInit := false // function init()
 
 	// == Initialization to save variables created on this function
-	if decl.Name != nil { // discard literal functions
+	//if decl.Name != nil { // discard literal functions //TODO: remove
 		tr.funcTotal++
 		tr.funcId = tr.funcTotal
 		tr.blockId = 0
@@ -46,7 +46,13 @@ func (tr *translation) getFunc(decl *ast.FuncDecl) {
 		tr.slices[tr.funcId] = make(map[int]map[string]struct{})
 		tr.structSlices[tr.funcId] = make(map[int]map[string]struct{})
 		tr.zeroType[tr.funcId] = make(map[int]map[string]string)
-	}
+
+		// The blockId 0 holds variables of functions arguments
+		tr.vars[tr.funcId][tr.blockId] = make(map[string]bool)
+		tr.maps[tr.funcId][tr.blockId] = make(map[string]struct{})
+		tr.arrays[tr.funcId][tr.blockId] = make(map[string]struct{})
+		tr.slices[tr.funcId][tr.blockId] = make(map[string]struct{})
+	//}
 	// ==
 
 	tr.addLine(decl.Pos())
@@ -118,7 +124,7 @@ func (tr *translation) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.
 	}
 
 	// Get the parameters
-	paramFix, paramVar := joinParams(typ)
+	paramFix, paramVar := tr.joinParams(typ)
 
 	tr.WriteString(fmt.Sprintf("(%s)%s", paramFix, SP))
 
@@ -143,16 +149,19 @@ func (tr *translation) writeFunc(recv *ast.FieldList, name *ast.Ident, typ *ast.
 }
 
 // joinParams gets the parameters.
-func joinParams(f *ast.FuncType) (paramFix, paramVar string) {
-	isFirst := true
+func (tr *translation) joinParams(f *ast.FuncType) (paramFix, paramVar string) {
+	if f.Params == nil {
+		return
+	}
 	i := 0
+	isFirst := true
 
-	//if f.Params == nil {
-	//return
-	//}
-
+L:
 	for _, list := range f.Params.List {
-		if _, ok := list.Type.(*ast.Ellipsis); ok {
+		typ := otherType
+
+		switch t := list.Type.(type) {
+		case *ast.Ellipsis:
 			paramVar = fmt.Sprintf("var %s=%s",
 				validIdent(list.Names[0].Name)+SP, SP)
 
@@ -161,7 +170,16 @@ func joinParams(f *ast.FuncType) (paramFix, paramVar string) {
 			} else {
 				paramVar += "arguments;"
 			}
-			break // since it is the last parameter
+			break L // an ellipsis is the last parameter
+
+		case *ast.ArrayType:
+			if t.Len != nil {
+				typ = arrayType
+			} else {
+				typ = sliceType
+			}
+		case *ast.MapType:
+			typ = mapType
 		}
 
 		for _, v := range list.Names {
@@ -169,8 +187,21 @@ func joinParams(f *ast.FuncType) (paramFix, paramVar string) {
 				paramFix += "," + SP
 			}
 			i++
-			paramFix += validIdent(v.Name)
+			_name := validIdent(v.Name)
+			paramFix += _name
 
+			if typ != otherType {
+				tr.vars[tr.funcId][tr.blockId][_name] = false
+
+				switch typ {
+				case sliceType:
+					tr.slices[tr.funcId][tr.blockId][_name] = void
+				case arrayType:
+					tr.arrays[tr.funcId][tr.blockId][_name] = void
+				case mapType:
+					tr.maps[tr.funcId][tr.blockId][_name] = void
+				}
+			}
 			if isFirst {
 				isFirst = false
 			}
@@ -181,12 +212,11 @@ func joinParams(f *ast.FuncType) (paramFix, paramVar string) {
 
 // joinResults gets the results to use both in the declaration and in its return.
 func (tr *translation) joinResults(f *ast.FuncType) (decl, ret string) {
-	isFirst := true
-	isMultiple := false
-
 	if f.Results == nil {
 		return
 	}
+	isFirst := true
+	isMultiple := false
 
 	for _, list := range f.Results.List {
 		if list.Names == nil {

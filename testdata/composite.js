@@ -25,12 +25,12 @@ function older(p1, p2) {
 
 
 function older10(people) {
-	var older = people[0];
+	var older = people.v[0];
 
 
 	for (var index = 1; index < 10; index++) {
-		if (people[index].age > older.age) {
-			older = people[index];
+		if (people.v[index].age > older.age) {
+			older = people.v[index];
 		}
 	}
 	return older;
@@ -163,7 +163,7 @@ function _array() {
 	array.v[4] = new person("Rob", 54);
 	array.v[8] = new person("Karl", 19);
 
-	var older = older10(array.v);
+	var older = older10(array);
 
 	if (older.name === "Sam") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
@@ -187,7 +187,7 @@ function multiArray() {
 		[5, 6, 7, 8]
 	]);
 
-	if (JSON.stringify(doubleArray_1) === JSON.stringify(doubleArray_2) && JSON.stringify(doubleArray_2) === JSON.stringify(doubleArray_3)) {
+	if (JSON.stringify(doubleArray_1.v) === JSON.stringify(doubleArray_2.v) && JSON.stringify(doubleArray_2.v) === JSON.stringify(doubleArray_3.v)) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: got different arraies<br>");

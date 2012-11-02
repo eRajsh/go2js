@@ -791,6 +791,10 @@ func (tr *translation) isType(t dataType, name string) bool {
 
 	for funcId := tr.funcId; funcId >= 0; funcId-- {
 		for blockId := tr.blockId; blockId >= 0; blockId-- {
+			// Avoid translation to Go types in functions parameters during bootstrap.
+			if Bootstrap && blockId == 0 {
+				return false
+			}
 			if _, ok := tr.vars[funcId][blockId][name]; ok { // variable found
 				switch t {
 				case arrayType:
