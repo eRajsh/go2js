@@ -90,7 +90,7 @@ func newTranslation() *translation {
 
 		token.NewFileSet(),
 		new(bytes.Buffer),
-		&dataStmt{},
+		&dataStmt{resultUseFunc: make(map[int]bool)},
 
 		make([]error, 0, MaxMessage),
 		make([]string, 0, MaxMessage),

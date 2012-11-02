@@ -653,24 +653,32 @@ func (e *expression) translate(expr ast.Expr) {
 				name += FIELD_POINTER
 			} else if e.isVarAddress { // `&x` => `x`
 				e.tr.addPointer(name)
+
 			} else {
 				if !e.tr.isVar {
-
 					if name == e.tr.recvVar {
 						name = "this" + FIELD_TYPE
 					}
-					if !e.tr.isFunc && !e.tr.wasReturn {
-						if e.tr.isType(arrayType, name) {
-							name += FIELD_VALUE
-						} else if e.tr.isType(sliceType, name) &&
-							!e.tr.isType(structType, name) {
-							name += FIELD_GET
+					if !e.tr.isFunc {
+						if !e.tr.wasReturn {
+							if e.tr.isType(arrayType, name) {
+								name += FIELD_VALUE
+							} else if e.tr.isType(sliceType, name) &&
+								!e.tr.isType(structType, name) {
+								name += FIELD_GET
+							}
+						} else if !e.tr.resultUseFunc[e.tr.idxResult] { // can return a literal from a composite type
+							if e.tr.isType(arrayType, name) {
+								name += FIELD_VALUE
+							} else if e.tr.isType(sliceType, name) {
+								name += FIELD_GET
+							}
 						}
 					}
-
 					if _, ok := e.tr.vars[e.tr.funcId][e.tr.blockId][name]; ok {
 						name += tagPointer(false, 'P', e.tr.funcId, e.tr.blockId, name)
 					}
+
 				} else {
 					e.isIdent = true
 

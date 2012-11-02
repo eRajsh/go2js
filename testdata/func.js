@@ -277,7 +277,7 @@ function variadic() {
 
 function Max(slice) {
 	if (slice.len === 1) {
-		return slice.set([0],;
+		return slice.get()[0];
 	}
 
 	var middle = slice.len / 2;
@@ -290,13 +290,29 @@ function Max(slice) {
 	return m2;
 }
 
+function Invert(slice) {
+	var length = slice.len;
+	if (length > 1) {
+		slice.set([0], slice.get()[length - 1]), slice.set([length - 1], slice.get()[0]);
+		Invert(g.SliceFrom(slice, 1, length - 1));
+	}
+}
+
 function recursive() {
 	var pass = true;
 
 	var s = g.Slice(0, [1, 2, 3, 4, 6, 8]);
 
 	if (Max(s) !== 8) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. => got " + Max(s) + ", want 8<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: Max => got " + Max(s) + ", want 8<br>");
+		pass = false, PASS = false;
+	}
+
+	var slice = g.Slice(0, ['1', '2', '3', '4', '5']);
+	Invert(slice);
+
+	if (slice.str() !== "54321") {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: Invert => got " + slice.str() + ", want \"54321\"<br>");
 		pass = false, PASS = false;
 	}
 

@@ -290,13 +290,29 @@ func Max(slice []int) int {
 	return m2
 }
 
+func Invert(slice []byte) {
+	length := len(slice)
+	if length > 1 {
+		slice[0], slice[length-1] = slice[length-1], slice[0] // Swap first and last ones
+		Invert(slice[1 : length-1])
+	}
+}
+
 func recursive() {
 	pass := true
 
 	s := []int{1, 2, 3, 4, 6, 8}
 
 	if Max(s) != 8 {
-		fmt.Printf("\tFAIL: 1. => got %d, want 8\n", Max(s))
+		fmt.Printf("\tFAIL: Max => got %d, want 8\n", Max(s))
+		pass, PASS = false, false
+	}
+
+	slice := []byte{'1', '2', '3', '4', '5'}
+	Invert(slice)
+
+	if string(slice) != "54321" {
+		fmt.Printf("\tFAIL: Invert => got %v, want \"54321\"\n", string(slice))
 		pass, PASS = false, false
 	}
 

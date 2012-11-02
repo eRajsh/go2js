@@ -153,8 +153,8 @@ func (tr *translation) joinParams(f *ast.FuncType) (paramFix, paramVar string) {
 	if f.Params == nil {
 		return
 	}
-	i := 0
 	isFirst := true
+	i := 0
 
 L:
 	for _, list := range f.Params.List {
@@ -217,9 +217,20 @@ func (tr *translation) joinResults(f *ast.FuncType) (decl, ret string) {
 	}
 	isFirst := true
 	isMultiple := false
+	typeUseFunc := false
+	i := 0
 
 	for _, list := range f.Results.List {
+		switch list.Type.(type) {
+		case *ast.ArrayType, *ast.MapType, *ast.Ellipsis:
+			typeUseFunc = true
+		default:
+			typeUseFunc = false
+		}
+
 		if list.Names == nil {
+			tr.resultUseFunc[i] = typeUseFunc
+			i++
 			continue
 		}
 
@@ -233,9 +244,11 @@ func (tr *translation) joinResults(f *ast.FuncType) (decl, ret string) {
 			} else {
 				isFirst = false
 			}
-
 			decl += fmt.Sprintf("%s=%s", validIdent(v.Name)+SP, SP+value)
 			ret += v.Name
+
+			tr.resultUseFunc[i] = typeUseFunc
+			i++
 		}
 	}
 

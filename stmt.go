@@ -19,9 +19,10 @@ type dataStmt struct {
 	funcId    int // number of function
 	blockId   int // number of block
 	tabLevel  int // tabulation level
+	idxResult int // for then be used in resultUseFunc
 
 	lenCase int // number of "case" statements
-	iCase   int // index in "case" statements
+	idxCase int // index in "case" statements
 
 	initIsPointer  bool // the value initialized is a pointer?
 	insertVar      bool
@@ -36,8 +37,10 @@ type dataStmt struct {
 	wasReturn      bool // the last statement was "return"?
 
 	lastVarName string // for composite types
-	results     string // variables names that return must use
 	recvVar     string // receiver variable (in methods)
+	results     string // variables names that return must use
+
+	resultUseFunc map[int]bool // for JS types: array, slice, map
 }
 
 // getStatement translates the Go statement.
@@ -152,7 +155,7 @@ func (tr *translation) getStatement(stmt ast.Stmt) {
 		tr.wasReturn = false
 		tr.wasFallthrough = false
 
-		tr.iCase++
+		tr.idxCase++
 		tr.addLine(typ.Case)
 
 		if typ.List != nil {
@@ -165,7 +168,7 @@ func (tr *translation) getStatement(stmt ast.Stmt) {
 		} else {
 			tr.WriteString("default:")
 
-			if tr.iCase != tr.lenCase {
+			if tr.idxCase != tr.lenCase {
 				tr.addWarning("%s: 'default' clause above 'case' clause in switch statement",
 					tr.fset.Position(typ.Pos()))
 			}
@@ -182,7 +185,7 @@ func (tr *translation) getStatement(stmt ast.Stmt) {
 			}
 		}
 
-		if !tr.wasFallthrough && !tr.wasReturn && tr.iCase != tr.lenCase {
+		if !tr.wasFallthrough && !tr.wasReturn && tr.idxCase != tr.lenCase {
 			tr.WriteString(SP + "break;")
 		}
 
@@ -361,11 +364,13 @@ func (tr *translation) getStatement(stmt ast.Stmt) {
 				if i != 0 {
 					results += "," + SP
 				}
+				tr.idxResult = i
 				results += tr.getExpression(v).String()
 			}
 
 			tr.WriteString("return [" + results + "];")
 		} else {
+			tr.idxResult = 0
 			tr.WriteString("return " + tr.getExpression(typ.Results[0]).String() + ";")
 		}
 		tr.wasReturn = false
@@ -381,7 +386,7 @@ func (tr *translation) getStatement(stmt ast.Stmt) {
 	case *ast.SwitchStmt:
 		tag := "true"
 		tr.lenCase = len(typ.Body.List)
-		tr.iCase = 0
+		tr.idxCase = 0
 
 		if typ.Tag != nil {
 			tag = tr.getExpression(typ.Tag).String()
