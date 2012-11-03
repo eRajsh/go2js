@@ -86,6 +86,30 @@ address. Instead, in JavaScript with this emulation, it prints the value.
 Warning: due to JavaScript design, it cann't be guaranteed that the
 emulation of pointers can work in other scenes that are not in the test file.
 
+#### Numbers
+
+JavaScript doesn't have an integer division operator like some languages do, so
+there is to get the number by rounding down the result:
+
++ Math.floor() will give the wrong result if the result of the division is a
+negative number
+
+	>>> Math.floor(-3/2)
+	-2
+
++ For a 32-bit signed integer, can be used ">>0"
+
+	>>> -3/2 >>0
+	-1
+
++ Using bitwise operations:
+
+	>>> ~~(-3/2)
+	-1
+
+	>>> -3/2 |0
+	-1
+
 #### Comparison
 
 In JavaScript, when objects are compared then the identity is checked, no

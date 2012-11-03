@@ -267,7 +267,7 @@ function SliceFrom(src, low, high) {
 		}
 	}
 
-	s.len = s.high - s.low;
+	s.len = s.high - s.low | 0;
 
 	if (src.arr !== undefined) {
 		s.arr = src.arr;

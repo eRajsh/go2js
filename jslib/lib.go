@@ -267,7 +267,7 @@ func SliceFrom(src interface{}, low, high int) *sliceType {
 		}
 	}
 
-	s.len = s.high - s.low
+	s.len = s.high - s.low | 0 // get an integer
 
 	if src.arr != nil { // slice
 		s.arr = src.arr
