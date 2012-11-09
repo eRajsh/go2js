@@ -42,6 +42,8 @@ func TestMap(t *testing.T)   { translate('t', "map.go", t) }
 
 func TestMethod(t *testing.T) { translate('t', "method.go", t) }
 
+func TestMisc(t *testing.T) { translate('t', "misc.go", t) }
+
 func ExampleControl() {
 	Translate(DIR_TEST+"control.go", true)
 

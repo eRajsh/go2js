@@ -153,9 +153,7 @@ func (e *expression) translate(expr ast.Expr) {
 			e.translate(typ.Elt)
 		case *ast.Ident, *ast.StarExpr: // the type is initialized
 			e.zero, _ = e.tr.zeroValue(true, typ.Elt)
-
 			e.WriteString(fmt.Sprintf("],%s", SP+e.zero))
-
 		default:
 			panic(fmt.Sprintf("*expression.translate: type unimplemented: %T", t))
 		}
@@ -428,8 +426,8 @@ S:
 					e.WriteString(arg + ".cap")
 				}
 
-			} else if e.tr.isType(arrayType, arg) {
-				e.WriteString(arg + ".cap()")
+			} else if e.tr.isType(arrayType, argNoField) {
+				e.WriteString(argNoField + ".cap()")
 			} else if argNoIndex != arg && e.tr.isType(arrayType, argNoIndex) {
 				e.WriteString(argNoIndex + ".cap(" + index + ")")
 			}
@@ -494,7 +492,12 @@ S:
 				if i != 0 {
 					args += "," + SP
 				}
-				args += e.tr.getExpression(v).String()
+				_arg := e.tr.getExpression(v)
+
+				if _arg.kind == sliceKind {
+					args += "g.Slice("
+				}
+				args += _arg.String()
 			}
 
 			e.WriteString(fmt.Sprintf("%s(%s)", callName, args))
@@ -529,6 +532,8 @@ S:
 				e.WriteString("[")
 				e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
 				e.WriteString("])")
+
+				e.tr.isArray = false // don't add extra ')'
 				break
 			}
 
@@ -559,6 +564,9 @@ S:
 				e.writeElts(typ.Elts, typ.Lbrace, typ.Rbrace)
 				e.WriteString("]")
 
+				if e.tr.isFunc {
+					e.WriteString(")")
+				}
 			} /*else if e.kind == sliceKind {
 				e.WriteString("[]")
 			}*/
