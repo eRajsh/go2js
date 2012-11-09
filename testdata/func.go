@@ -321,6 +321,28 @@ func recursive() {
 	}
 }
 
+func A() {
+	fmt.Println("\tRunning function A")
+}
+
+func B(name string) {
+	fmt.Println("\tRunning function " + name)
+}
+
+/*func _defer() {
+	defer A()
+
+	defer func(){
+		fmt.Println("\tRunning in-line function first")
+	}()
+
+	defer func(s string){
+		fmt.Println("\tRunning in-line function " + s)
+	}("second")
+
+	defer B("B")
+}*/
+
 func main() {
 	fmt.Print("\n\n== Functions\n\n")
 
@@ -340,6 +362,8 @@ func main() {
 	variadic()
 	fmt.Println("=== RUN recursive")
 	recursive()
+	//fmt.Println("=== RUN defer")
+	//_defer()
 
 	if PASS {
 		fmt.Println("PASS")

@@ -48,6 +48,18 @@ There are two ways to get an slice in JS:
 
 Ideas? Thoughts?
 
+## No implemented
+
++ The multiple assignment has different order of preference than in JS
+ (functionInverse in "testdata/func.go" fails due this issue).
++ Check arithmetic, since that in JS all numbers are handled like floats.
++ More tests where functions have parameters with custom types (jslib), and return
+ those custom types.
++ Evaluation of constants.
++ Shadow variables in Js.
++ Goroutines.
++ Types int64 and complex.
+
 ## License
 
 The source files are distributed under the [Mozilla Public License, version 2.0](http://mozilla.org/MPL/2.0/),

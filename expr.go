@@ -277,8 +277,15 @@ func (e *expression) translate(expr ast.Expr) {
 	//  Fun      Expr      // function expression
 	//  Args     []Expr    // function arguments; or nil
 	case *ast.CallExpr:
-		// == Library
-		if call, ok := typ.Fun.(*ast.SelectorExpr); ok {
+		callName := ""
+S:
+		switch call := typ.Fun.(type) {
+		// Built-in function
+		case *ast.Ident:
+			callName = call.Name
+
+		// Library
+		case *ast.SelectorExpr:
 			e.translate(call)
 
 			str := fmt.Sprintf("%s", e.tr.GetArgs(e.funcName, typ.Args))
@@ -287,23 +294,32 @@ func (e *expression) translate(expr ast.Expr) {
 			}
 
 			e.WriteString(str)
-			break
-		}
+			break S
 
-		// == Conversion: []byte()
-		if call, ok := typ.Fun.(*ast.ArrayType); ok {
+		// Conversion: []byte()
+		case *ast.ArrayType:
 			if call.Elt.(*ast.Ident).Name == "byte" {
 				e.translate(typ.Args[0])
 			} else {
 				panic(fmt.Sprintf("call of conversion unimplemented: []%T()", call))
 			}
+			break S
+
+		// Anonymous function
+		/*case *ast.FuncLit:
+			//fmt.Println(typ.Args)
+			e.translate(typ.Fun)
+			break S*/
+
+		default:
+			panic(fmt.Sprintf("call unimplemented: %T()", call))
+		}
+		if callName == "" {
 			break
 		}
 
 		// == Built-in functions - golang.org/pkg/builtin/
-		call := typ.Fun.(*ast.Ident).Name
-
-		switch call {
+		switch callName {
 		case "make":
 			// Type checking
 			if e.tr.getExpression(typ.Args[0]).hasError {
@@ -447,7 +463,7 @@ func (e *expression) translate(expr ast.Expr) {
 
 		case "print", "println":
 			e.WriteString(fmt.Sprintf("%s(%s)",
-				Function[call], e.tr.GetArgs(call, typ.Args)))
+				Function[callName], e.tr.GetArgs(callName, typ.Args)))
 
 		case "panic":
 			e.WriteString(fmt.Sprintf("throw new Error(%s)",
@@ -456,18 +472,18 @@ func (e *expression) translate(expr ast.Expr) {
 		// == Not supported
 		case "recover", "complex":
 			e.tr.addError("%s: built-in function %s()",
-				e.tr.fset.Position(typ.Fun.Pos()), call)
+				e.tr.fset.Position(typ.Fun.Pos()), callName)
 			e.tr.hasError = true
 			return
 		case "int64", "uint64":
 			e.tr.addError("%s: conversion of type %s",
-				e.tr.fset.Position(typ.Fun.Pos()), call)
+				e.tr.fset.Position(typ.Fun.Pos()), callName)
 			e.tr.hasError = true
 			return
 
 		// == Not implemented
 		case "close", "uintptr":
-			panic(fmt.Sprintf("built-in call unimplemented: %s", call))
+			panic(fmt.Sprintf("built-in call unimplemented: %s", callName))
 
 		// Defined functions
 		default:
@@ -481,7 +497,7 @@ func (e *expression) translate(expr ast.Expr) {
 				args += e.tr.getExpression(v).String()
 			}
 
-			e.WriteString(fmt.Sprintf("%s(%s)", call, args))
+			e.WriteString(fmt.Sprintf("%s(%s)", callName, args))
 			e.tr.isFunc = false
 		}
 

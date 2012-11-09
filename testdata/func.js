@@ -321,6 +321,28 @@ function recursive() {
 	}
 }
 
+function A() {
+	document.write("&nbsp;&nbsp;&nbsp;&nbsp;Running function A<br>");
+}
+
+function B(name) {
+	document.write("&nbsp;&nbsp;&nbsp;&nbsp;Running function " + name + "<br>");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function main() {
 	document.write("<br><br>== Functions<br><br>");
 
@@ -340,6 +362,8 @@ function main() {
 	variadic();
 	document.write("=== RUN recursive<br>");
 	recursive();
+
+
 
 	if (PASS) {
 		document.write("PASS<br>");
