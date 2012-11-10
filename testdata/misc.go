@@ -10,7 +10,9 @@ import "fmt"
 
 var PASS = true
 
-func argArray(arr [3]int) {
+// Functions using arguments of custom types in JS.
+
+func argArray(arr [3]int) [3]int {
 	pass := true
 
 	if len(arr) == 3 && cap(arr) == 3 && arr[0] == 1 && arr[1] == 2 && arr[2] == 3 {
@@ -22,11 +24,10 @@ func argArray(arr [3]int) {
 	if pass {
 		fmt.Println("\tpass")
 	}
+	return arr
 }
 
-// * * *
-
-func argEllipsis(arr [2]int) {
+func argEllipsis(arr [2]int) [2]int {
 	pass := true
 
 	if len(arr) == 2 && cap(arr) == 2 && arr[0] == 5 && arr[1] == 6 {
@@ -38,11 +39,10 @@ func argEllipsis(arr [2]int) {
 	if pass {
 		fmt.Println("\tpass")
 	}
+	return arr
 }
 
-// * * *
-
-func argSlice(s []byte) {
+func argSlice(s []byte) []byte {
 	pass := true
 
 	if len(s) == 2 && cap(s) == 2 && string(s) == "89" && s[0] == '8' && s[1] == '9' {
@@ -54,11 +54,10 @@ func argSlice(s []byte) {
 	if pass {
 		fmt.Println("\tpass")
 	}
+	return s
 }
 
-// * * *
-
-func argMap(m map[int]string) {
+func argMap(m map[int]string) map[int]string {
 	pass := true
 
 	if len(m) == 2 && m[1] == "foo" && m[2] == "bar" {
@@ -70,31 +69,30 @@ func argMap(m map[int]string) {
 	if pass {
 		fmt.Println("\tpass")
 	}
+	return m
 }
-
-// * * *
 
 func main() {
 	fmt.Print("\n\n== Miscellaneous\n\n")
 
 	fmt.Println("=== RUN argArray")
 	a := [3]int{1, 2, 3}
-	argArray(a)
+	a = argArray(a)
 	argArray([3]int{1, 2, 3})
 
 	fmt.Println("=== RUN argEllipsis")
 	ell := [...]int{5, 6}
-	argEllipsis(ell)
+	ell = argEllipsis(ell)
 	argEllipsis([...]int{5, 6})
 
 	fmt.Println("=== RUN argSlice")
 	s := []byte{'8', '9'}
-	argSlice(s)
+	s = argSlice(s)
 	argSlice([]byte{'8', '9'})
 
 	fmt.Println("=== RUN argMap")
 	m := map[int]string{1: "foo", 2: "bar"}
-	argMap(m)
+	m = argMap(m)
 	argMap(map[int]string{1: "foo", 2: "bar"})
 
 	if PASS {

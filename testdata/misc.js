@@ -10,6 +10,8 @@
 
 var PASS = true;
 
+
+
 function argArray(arr) {
 	var pass = true;
 
@@ -22,9 +24,8 @@ function argArray(arr) {
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
+	return arr;
 }
-
-
 
 function argEllipsis(arr) {
 	var pass = true;
@@ -38,9 +39,8 @@ function argEllipsis(arr) {
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
+	return arr;
 }
-
-
 
 function argSlice(s) {
 	var pass = true;
@@ -54,9 +54,8 @@ function argSlice(s) {
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
+	return s;
 }
-
-
 
 function argMap(m) {
 	var pass = true;
@@ -70,31 +69,30 @@ function argMap(m) {
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
+	return m;
 }
-
-
 
 function main() {
 	document.write("<br><br>== Miscellaneous<br><br>");
 
 	document.write("=== RUN argArray<br>");
 	var a = g.MkArray([3], 0, [1, 2, 3]);
-	argArray(a);
+	a = argArray(a);
 	argArray(g.MkArray([3], 0, [1, 2, 3]));
 
 	document.write("=== RUN argEllipsis<br>");
 	var ell = g.MkArray([2], 0, [5, 6]);
-	argEllipsis(ell);
+	ell = argEllipsis(ell);
 	argEllipsis(g.MkArray([2], 0, [5, 6]));
 
 	document.write("=== RUN argSlice<br>");
 	var s = g.Slice(0, ['8', '9']);
-	argSlice(s);
+	s = argSlice(s);
 	argSlice(g.Slice(0, ['8', '9']));
 
 	document.write("=== RUN argMap<br>");
 	var m = g.Map("", {1: "foo", 2: "bar"});
-	argMap(m);
+	m = argMap(m);
 	argMap(g.Map("", {1: "foo", 2: "bar"}));
 
 	if (PASS) {

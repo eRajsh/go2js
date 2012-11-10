@@ -448,12 +448,18 @@ func (tr *translation) writeVar(names interface{}, values []ast.Expr, type_ inte
 			fun = tr.getExpression(call).String()
 
 			if len(_names) == 1 {
+				if !Bootstrap {
+					_names[0] = stripField(_names[0])
+				}
 				tr.WriteString(_names[0] + SP + sign + SP + fun + ";")
 				return
 			}
 			if len(idxValidNames) == 1 {
 				i := idxValidNames[0]
-				tr.WriteString(fmt.Sprintf("%s[%d];", _names[i]+SP+sign+SP+fun, i))
+				if !Bootstrap {
+					_names[i] = stripField(_names[i])
+				}
+				tr.WriteString(fmt.Sprintf("%s%s%s[%d];",_names[i], SP+sign+SP, fun, i))
 				return
 			}
 
@@ -461,6 +467,9 @@ func (tr *translation) writeVar(names interface{}, values []ast.Expr, type_ inte
 			str := fmt.Sprintf("_%s", SP+sign+SP+fun)
 
 			for _, i := range idxValidNames {
+				if !Bootstrap {
+					_names[i] = stripField(_names[i])
+				}
 				str += fmt.Sprintf(",%s_[%d]", SP+_names[i]+SP+sign+SP, i)
 			}
 
