@@ -136,6 +136,109 @@ func withNamedType() {
 	}
 }
 
+// * * *
+
+const (
+	WHITE = iota
+	BLACK
+	BLUE
+	RED
+	YELLOW
+)
+
+type Color byte
+
+type Box struct {
+	width, height, depth float64
+	color                Color
+}
+
+type BoxList []Box
+
+func (b Box) Volume() float64 {
+	return b.width * b.height * b.depth
+}
+
+func (b *Box) SetColor(c Color) {
+	b.color = c
+}
+
+func (bl BoxList) BiggestsColor() Color {
+	v := 0.00
+	k := Color(WHITE)
+	for _, b := range bl {
+		if b.Volume() > v {
+			v = b.Volume()
+			k = b.color
+		}
+	}
+	return k
+}
+
+func (bl BoxList) PaintItBlack() {
+	for i, _ := range bl {
+		bl[i].SetColor(BLACK)
+	}
+}
+
+func (c Color) String() string {
+	strings := []string{"WHITE", "BLACK", "BLUE", "RED", "YELLOW"}
+	return strings[c]
+}
+
+func complexNamedType() {
+	pass := true
+
+	boxes := BoxList{
+		Box{4, 4, 4, RED},
+		Box{10, 10, 1, YELLOW},
+		Box{1, 1, 20, BLACK},
+		Box{10, 10, 1, BLUE},
+		Box{20, 20, 20, YELLOW},
+		Box{10, 30, 1, WHITE},
+	}
+
+	if len(boxes) != 6 {
+		fmt.Printf("\tFAIL: len boxes => got %d, want 6\n", len(boxes))
+		pass, PASS = false, false
+	}
+	if boxes[0].Volume() != 64 {
+		fmt.Printf("\tFAIL: the volume of the first one => got %d, want 64\n",
+			boxes[0].Volume())
+		pass, PASS = false, false
+	}
+	if boxes[len(boxes)-1].color.String() != "WHITE" {
+		fmt.Printf("\tFAIL: the color of the last one => got %s, want WHITE\n",
+			boxes[len(boxes)-1].color.String())
+		pass, PASS = false, false
+	}
+	if boxes.BiggestsColor().String() != "YELLOW" {
+		fmt.Printf("\tFAIL: the biggest one => got %s, want YELLOW\n",
+			boxes.BiggestsColor().String())
+		pass, PASS = false, false
+	}
+
+	// Let's paint them all black
+	boxes.PaintItBlack()
+
+	if boxes[1].color.String() != "BLACK" {
+		fmt.Printf("\tFAIL: the color of the second one => got %s, want BLACK\n",
+			boxes[1].color.String())
+		pass, PASS = false, false
+	}
+	if boxes.BiggestsColor().String() != "BLACK" {
+		fmt.Printf("\tFAIL: finally, the biggest one => got %s, want BLACK\n",
+			boxes.BiggestsColor().String())
+		pass, PASS = false, false
+	}
+
+	if pass {
+		fmt.Println("\tpass")
+	}
+}
+
+// * * *
+
 func main() {
 	fmt.Print("\n\n== Methods\n\n")
 
@@ -145,6 +248,8 @@ func main() {
 	method()
 	fmt.Println("=== RUN withNamedType")
 	withNamedType()
+	fmt.Println("=== RUN complexNamedType")
+	complexNamedType()
 
 	if PASS {
 		fmt.Println("PASS")

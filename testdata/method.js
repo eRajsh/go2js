@@ -87,8 +87,8 @@ function method() {
 
 
 
-function sliceOfints(t) { this.t=arguments; }
-function agesByNames(t) { this.t=arguments; }
+function sliceOfints(){} sliceOfints.alias(g.SliceType);
+function agesByNames(){} agesByNames.alias(g.MapType);
 
 sliceOfints.prototype.sum = function() {
 	var sum = 0;
@@ -136,6 +136,109 @@ function withNamedType() {
 	}
 }
 
+
+
+const 
+WHITE = 0,
+BLACK = 1,
+BLUE = 2,
+RED = 3,
+YELLOW = 4;
+
+
+function Color(t) { this.t=t; }
+
+function Box(width, height, depth, color) {
+	this.width=width; this.height=height; this.depth=depth;
+	this.color=color
+}
+
+function BoxList(){} BoxList.alias(g.SliceType);
+
+Box.prototype.Volume = function() {
+	return this.width * this.height * this.depth;
+}
+
+Box.prototype.SetColor = function(c) {
+	this.color = c;
+}
+
+BoxList.prototype.BiggestsColor = function() {
+	var v = 0.00;
+	var k = Color(WHITE);
+	var b; for (var _ in this.t) { b = this.t[_];
+		if (b.Volume() > v) {
+			v = b.Volume();
+			k = b.color;
+		}
+	}
+	return k;
+}
+
+BoxList.prototype.PaintItBlack = function() {
+	var _; for (var i in this.t) { _ = this.t[i];
+		this.t[i].SetColor(BLACK);
+	}
+}
+
+Color.prototype.String = function() {
+	var strings = g.Slice("", ["WHITE", "BLACK", "BLUE", "RED", "YELLOW"]);
+	return strings.get()[this.t];
+}
+
+function complexNamedType() {
+	var pass = true;
+
+	var boxes = new BoxList(
+		new Box(4, 4, 4, RED),
+		new Box(10, 10, 1, YELLOW),
+		new Box(1, 1, 20, BLACK),
+		new Box(10, 10, 1, BLUE),
+		new Box(20, 20, 20, YELLOW),
+		new Box(10, 30, 1, WHITE)
+	);
+
+	if (boxes.length !== 6) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: len boxes => got " + boxes.length + ", want 6<br>");
+		pass = false, PASS = false;
+	}
+	if (boxes[0].Volume() !== 64) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: the volume of the first one => got " + boxes[0].Volume() + ", want 64<br>");
+
+		pass = false, PASS = false;
+	}
+	if (boxes[boxes.length - 1].color.String() !== "WHITE") {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: the color of the last one => got " + boxes[boxes.length - 1].color.String() + ", want WHITE<br>");
+
+		pass = false, PASS = false;
+	}
+	if (boxes.BiggestsColor().String() !== "YELLOW") {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: the biggest one => got " + boxes.BiggestsColor().String() + ", want YELLOW<br>");
+
+		pass = false, PASS = false;
+	}
+
+
+	boxes.PaintItBlack();
+
+	if (boxes[1].color.String() !== "BLACK") {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: the color of the second one => got " + boxes[1].color.String() + ", want BLACK<br>");
+
+		pass = false, PASS = false;
+	}
+	if (boxes.BiggestsColor().String() !== "BLACK") {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: finally, the biggest one => got " + boxes.BiggestsColor().String() + ", want BLACK<br>");
+
+		pass = false, PASS = false;
+	}
+
+	if (pass) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	}
+}
+
+
+
 function main() {
 	document.write("<br><br>== Methods<br><br>");
 
@@ -145,6 +248,8 @@ function main() {
 	method();
 	document.write("=== RUN withNamedType<br>");
 	withNamedType();
+	document.write("=== RUN complexNamedType<br>");
+	complexNamedType();
 
 	if (PASS) {
 		document.write("PASS<br>");

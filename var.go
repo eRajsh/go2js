@@ -170,21 +170,45 @@ func (tr *translation) getType(spec []ast.Spec, isGlobal bool) {
 		if tr.getExpression(tSpec.Type).hasError {
 			continue
 		}
+		name := validIdent(tSpec.Name)
 
 		switch typ := tSpec.Type.(type) {
 		// godoc go/ast Ident
 		//  NamePos token.Pos // identifier position
 		//  Name    string    // identifier name
 		//  Obj     *Object   // denoted object; or nil
-		case *ast.Ident:
-
 		case *ast.StructType:
-			tr.getStruct(typ, tSpec.Name.Name, isGlobal)
+			tr.getStruct(typ, name, isGlobal)
+
+		case *ast.ArrayType:
+			tr.addLine(tSpec.Pos())
+
+			if typ.Len != nil { // array
+				tr.WriteString(fmt.Sprintf("function %s(){}%s.alias(g.ArrayType);",
+					name, SP+name))
+			} else { // slice
+				tr.WriteString(fmt.Sprintf("function %s(){}%s.alias(g.SliceType);",
+					name, SP+name))
+			}
+		case *ast.MapType:
+			tr.addLine(tSpec.Pos())
+			tr.WriteString(fmt.Sprintf("function %s(){}%s.alias(g.MapType);",
+				name, SP+name))
+				//"function %s(v,%szero)%s{%sg.mapType.apply(this,%sarguments)%s}%s",
+				//name, SP, SP, SP, SP, SP, SP))
+
+		case *ast.Ident:
+			tr.addLine(tSpec.Pos())
+			tr.WriteString(fmt.Sprintf("function %s(t)%s{%sthis%s=t;%s}",
+				name, SP, SP, FIELD_TYPE, SP))
+			tr.zeroType[tr.funcId][tr.blockId][name] = "FOO"
+//fmt.Println(tSpec.Name.Name)
 
 		default:
-			tr.addLine(tSpec.Pos())
+			/*tr.addLine(tSpec.Pos())
 			tr.WriteString(fmt.Sprintf("function %s(t)%s{%sthis%s=arguments;%s}",
-				tSpec.Name, SP, SP, FIELD_TYPE, SP)) // TODO: add validIdent()
+				validIdent(tSpec.Name), SP, SP, FIELD_TYPE, SP))*/
+			panic(fmt.Sprintf("unimplemented: %T", typ))
 		}
 
 		if tr.hasError {
@@ -321,7 +345,7 @@ func (tr *translation) getStruct(typ *ast.StructType, name string, isGlobal bool
 
 	if name != "" {
 		tr.WriteString(fmt.Sprintf("function %s(%s)%s{%s}",
-			validIdent(name), fieldNames, SP, fieldLines))
+			name, fieldNames, SP, fieldLines))
 		//tr.WriteString(fmt.Sprintf("function %s(%s)%s{%sthis._z=%q;%s}",
 		//validIdent(name), fieldNames, SP, SP, fieldsInit, fieldLines))
 
@@ -459,7 +483,7 @@ func (tr *translation) writeVar(names interface{}, values []ast.Expr, type_ inte
 				if tr.resultUseFunc[i] {
 					_names[i] = stripField(_names[i])
 				}
-				tr.WriteString(fmt.Sprintf("%s%s%s[%d];",_names[i], SP+sign+SP, fun, i))
+				tr.WriteString(fmt.Sprintf("%s%s%s[%d];", _names[i], SP+sign+SP, fun, i))
 				return
 			}
 
@@ -771,7 +795,7 @@ func (tr *translation) zeroOfMap(m *ast.MapType) string {
 func (tr *translation) zeroOfType(name string) string {
 	// In the actual function
 	if tr.funcId != 0 {
-		for block := tr.blockId; block >= 1; block-- {
+		for block := tr.blockId; block >= 0; block-- {
 			if _, ok := tr.zeroType[tr.funcId][block][name]; ok {
 				return tr.zeroType[tr.funcId][block][name]
 			}

@@ -819,6 +819,8 @@ S:
 		switch t := typ.X.(type) {
 		case *ast.SelectorExpr:
 			e.translate(typ.X)
+		case *ast.CallExpr:
+			e.translate(t)
 		case *ast.Ident:
 			x = t.Name
 		case *ast.IndexExpr:

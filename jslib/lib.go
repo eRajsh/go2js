@@ -16,9 +16,6 @@ const (
 	sliceT
 )
 
-// == Array
-//
-
 func init() {
 	// Use the toString() method when Array.isArray isn't implemented:
 	// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray#Compatibility
@@ -27,20 +24,60 @@ func init() {
 			return Object.prototype.toString.call(arg) == "[object Array]"
 		}
 	}
+
+	// Inheritance
+	// http://phrogz.net/JS/classes/OOPinJS2.html
+	Function.prototype.alias = func(parent interface{}) {
+		if parent.constructor == Function { // Normal Inheritance
+			this.prototype = parent //new(parent)
+			this.prototype.constructor = this
+			this.prototype.parent = parent.prototype
+		} else { // Pure Virtual Inheritance
+			this.prototype = parent
+			this.prototype.constructor = this
+			this.prototype.parent = parent
+		}
+		return this
+	}
 }
+
+// == Numbers
+//
+
+type Int struct{ v int }
+type Int8 struct{ v int8 }
+type Int16 struct{ v int16 }
+type Int32 struct{ v int32 }
+
+type Uint struct{ v uint }
+type Uint8 struct{ v uint8 }
+type Uint16 struct{ v uint16 }
+type Uint32 struct{ v uint32 }
+
+func (i Int) valueOf()    { return i.v }
+func (i Int8) valueOf()   { return i.v }
+func (i Int16) valueOf()  { return i.v }
+func (i Int32) valueOf()  { return i.v }
+func (u Uint) valueOf()   { return i.v }
+func (u Uint8) valueOf()  { return i.v }
+func (u Uint16) valueOf() { return i.v }
+func (u Uint32) valueOf() { return i.v }
+
+// == Array
+//
 
 // The array can not be compared with nil.
 // The capacity is the same than length.
 
-// arrayType represents a fixed array type.
-type arrayType struct {
+// ArrayType represents a fixed array type.
+type ArrayType struct {
 	v []interface{} // array's value
 
 	len_ map[int]int
 }
 
 // len returns the length for the given dimension.
-func (a arrayType) len(index int) int {
+func (a ArrayType) len(index int) int {
 	if index == nil {
 		return a.len_[0]
 	}
@@ -48,7 +85,7 @@ func (a arrayType) len(index int) int {
 }
 
 // cap returns the capacity for the given dimension.
-func (a arrayType) cap(index int) int {
+func (a ArrayType) cap(index int) int {
 	if index == nil {
 		return a.len_[0]
 	}
@@ -56,17 +93,17 @@ func (a arrayType) cap(index int) int {
 }
 
 // str returns the array (of bytes or runes) like a string.
-func (a arrayType) str() string {
+func (a ArrayType) str() string {
 	return a.v.join("")
 }
 
 // typ returns the type.
-func (a arrayType) typ() int { return arrayT }
+func (a ArrayType) typ() int { return arrayT }
 
 // MkArray initializes an array of dimension "index" to value "zero",
 // merging the elements of "data" if any.
-func MkArray(index []int, zero interface{}, data []interface{}) *arrayType {
-	a := new(arrayType)
+func MkArray(index []int, zero interface{}, data []interface{}) *ArrayType {
+	a := new(ArrayType)
 
 	if data != nil {
 		if !equalIndex(index, indexArray(data)) {
@@ -156,8 +193,8 @@ func mergeArray(dst, src []interface{}) {
 // == Slice
 //
 
-// sliceType represents a slice type.
-type sliceType struct {
+// SliceType represents a slice type.
+type SliceType struct {
 	arr interface{}   // the array where data is got or created from scratch using make
 	v   []interface{} // elements appended
 
@@ -169,7 +206,7 @@ type sliceType struct {
 	nil_ bool // for variables declared like slices
 }
 
-func (s sliceType) isNil() bool {
+func (s SliceType) isNil() bool {
 	if s.len != 0 || s.cap != 0 {
 		return false
 	}
@@ -177,18 +214,18 @@ func (s sliceType) isNil() bool {
 }
 
 // typ returns the type.
-func (s sliceType) typ() int { return sliceT }
+func (s SliceType) typ() int { return sliceT }
 
 // MkSlice initializes a slice with the zero value.
-func MkSlice(zero interface{}, len, cap int) *sliceType {
-	s := new(sliceType)
+func MkSlice(zero interface{}, len, cap int) *SliceType {
+	s := new(SliceType)
 
 	if zero == nil {
 		s.nil_ = true
 		return s
 	}
 
-	arr := new(arrayType)
+	arr := new(ArrayType)
 	arr.len_[0] = len
 	// The fastest way of fill in an array is when array length is specified first.
 	arr.v = Array(len)
@@ -210,15 +247,15 @@ func MkSlice(zero interface{}, len, cap int) *sliceType {
 }
 
 // Slice creates a new slice with the elements in "data".
-func Slice(zero interface{}, data []interface{}) *sliceType {
-	s := new(sliceType)
+func Slice(zero interface{}, data []interface{}) *SliceType {
+	s := new(SliceType)
 
 	if zero == nil {
 		s.nil_ = true
 		return s
 	}
 
-	arr := new(arrayType)
+	arr := new(ArrayType)
 	for i, srcVal := range data {
 		isHashMap := false
 
@@ -249,8 +286,8 @@ func Slice(zero interface{}, data []interface{}) *sliceType {
 }
 
 // SliceFrom creates a new slice from an array or slice using the indexes low and high.
-func SliceFrom(src interface{}, low, high int) *sliceType {
-	s := new(sliceType)
+func SliceFrom(src interface{}, low, high int) *SliceType {
+	s := new(SliceType)
 
 	if low != nil {
 		s.low = low | 0 // to integer
@@ -282,7 +319,7 @@ func SliceFrom(src interface{}, low, high int) *sliceType {
 }
 
 // get gets the slice.
-func (s sliceType) get() []interface{} {
+func (s SliceType) get() []interface{} {
 	if s.arr != nil {
 		arr := s.arr.v.slice(s.low, s.high)
 
@@ -296,12 +333,12 @@ func (s sliceType) get() []interface{} {
 }
 
 // set sets a value.
-func (s sliceType) set(index []int, v interface{}) {
+func (s SliceType) set(index []int, v interface{}) {
 	s.arr.v[index[0]+s.low] = v
 }
 
 // str returns the slice (of bytes or runes) like a string.
-func (s sliceType) str() string {
+func (s SliceType) str() string {
 	_s := s.get()
 	return _s.join("")
 }
@@ -309,7 +346,7 @@ func (s sliceType) str() string {
 // * * *
 
 // Append implements the function "append".
-func Append(src []interface{}, elt ...interface{}) (dst sliceType) {
+func Append(src []interface{}, elt ...interface{}) (dst SliceType) {
 	// Copy src to the new slice
 	dst.low = src.low
 	dst.high = src.high
@@ -317,7 +354,7 @@ func Append(src []interface{}, elt ...interface{}) (dst sliceType) {
 	dst.cap = src.cap
 	dst.nil_ = src.nil_
 
-	arr := new(arrayType)
+	arr := new(ArrayType)
 	arr.len_[0] = src.arr.len_[0]
 	for _, v := range src.arr.v {
 		arr.v.push(v)
@@ -392,16 +429,16 @@ func Copy(dst []interface{}, src interface{}) (n int) {
 //
 // A map has not built-in function "cap".
 
-// mapType represents a map type.
+// MapType represents a map type.
 // The compiler adds the appropriate zero value for the map (which it is work out
 // from the map type).
-type mapType struct {
+type MapType struct {
 	v    map[interface{}]interface{} // map's value
 	zero interface{}                 // zero value for the map's value
 }
 
 // len returns the number of elements.
-func (m mapType) len() int {
+func (m MapType) len() int {
 	len := 0
 	for key, _ := range m.v {
 		if m.v.hasOwnProperty(key) {
@@ -412,18 +449,18 @@ func (m mapType) len() int {
 }
 
 // typ returns the type.
-func (m mapType) typ() int { return mapT }
+func (m MapType) typ() int { return mapT }
 
 // Map creates a map storing its zero value.
-func Map(zero interface{}, v map[interface{}]interface{}) *mapType {
-	m := &mapType{v, zero}
+func Map(zero interface{}, v map[interface{}]interface{}) *MapType {
+	m := &MapType{v, zero}
 	return m
 }
 
 // get returns the value for the key "k" if it exists and a boolean indicating it.
 // If looking some key up in M's map gets you "nil" ("undefined" in JS),
 // then return a copy of the zero value.
-func (m mapType) get(k interface{}) (interface{}, bool) {
+func (m MapType) get(k interface{}) (interface{}, bool) {
 	v := m.v
 
 	// Allow multi-dimensional index (separated by commas)

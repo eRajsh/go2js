@@ -22,7 +22,7 @@ var bar = 0;
 var let_ = 0;
 
 
-
+function function_(t) { this.t=t; }
 
 function try_(private_, public_) {
 	this.private_=private_;
