@@ -32,7 +32,6 @@ func TestConst(t *testing.T)    { translate('t', "decl_const.go", t) }
 func TestVar(t *testing.T)      { translate('t', "decl_var.go", t) }
 func TestStruct(t *testing.T)   { translate('t', "decl_struct.go", t) }
 func TestReserved(t *testing.T) { translate('t', "decl_reserved.go", t) }
-func TestOp(t *testing.T)       { translate('t', "operator.go", t) }
 func TestPointer(t *testing.T)  { translate('t', "pointer.go", t) }
 
 func TestFunc(t *testing.T)  { translate('t', "func.go", t) }
@@ -42,7 +41,8 @@ func TestMap(t *testing.T)   { translate('t', "map.go", t) }
 
 func TestMethod(t *testing.T) { translate('t', "method.go", t) }
 
-func TestMisc(t *testing.T) { translate('t', "misc.go", t) }
+func TestNumeric(t *testing.T) { translate('t', "numeric.go", t) }
+func TestMisc(t *testing.T)    { translate('t', "misc.go", t) }
 
 func ExampleControl() {
 	Translate(DIR_TEST+"control.go", true)

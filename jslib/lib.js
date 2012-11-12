@@ -29,17 +29,73 @@ sliceT = 3;
 
 	Function.prototype.alias = function(parent) {
 		if (JSON.stringify(parent.constructor) === JSON.stringify(Function)) {
-			this.prototype = new(parent);
-			this.prototype.constructor = this;
+			this.prototype = parent;
+			this.prototype.constructor = this_;
 			this.prototype.parent = parent.prototype;
 		} else {
 			this.prototype = parent;
-			this.prototype.constructor = this;
+			this.prototype.constructor = this_;
 			this.prototype.parent = parent;
 		}
-		return this;
+		return this_;
 	};
 }());
+
+
+
+
+function UintType(v) { this.v=v }
+function Uint8Type(v) { this.v=v }
+function Uint16Type(v) { this.v=v }
+function Uint32Type(v) { this.v=v }
+
+function IntType(v) { this.v=v }
+function Int8Type(v) { this.v=v }
+function Int16Type(v) { this.v=v }
+function Int32Type(v) { this.v=v }
+
+function Float32Type(v) { this.v=v }
+
+function ByteType(v) { this.v=v }
+function RuneType(v) { this.v=v }
+
+
+
+
+UintType.prototype.valueOf = function() { return this.v; }
+Uint8Type.prototype.valueOf = function() { return this.v; }
+Uint16Type.prototype.valueOf = function() { return this.v; }
+Uint32Type.prototype.valueOf = function() { return this.v; }
+
+IntType.prototype.valueOf = function() { return this.v; }
+Int8Type.prototype.valueOf = function() { return this.v; }
+Int16Type.prototype.valueOf = function() { return this.v; }
+Int32Type.prototype.valueOf = function() { return this.v; }
+
+Float32Type.prototype.valueOf = function() { return this.v; }
+
+ByteType.prototype.valueOf = function() { return this.v; }
+RuneType.prototype.valueOf = function() { return this.v; }
+
+
+
+function Uint(n) { return new UintType(n); }
+function Uint8(n) { return new Uint8Type(n); }
+function Uint16(n) { return new Uint16Type(n); }
+function Uint32(n) { return new Uint32Type(n); }
+
+function Int(n) { return new IntType(n); }
+function Int8(n) { return new Int8Type(n); }
+function Int16(n) { return new Int16Type(n); }
+function Int32(n) { return new Int32Type(n); }
+
+function Float32(n) { return new Float32Type(n); }
+
+function Byte(n) { return new ByteType(n); }
+function Rune(n) { return new RuneType(n); }
+
+
+
 
 
 
@@ -459,6 +515,28 @@ function Export(pkg, exported) {
 	}
 }
 
+g.UintType = UintType;
+g.Uint8Type = Uint8Type;
+g.Uint16Type = Uint16Type;
+g.Uint32Type = Uint32Type;
+g.IntType = IntType;
+g.Int8Type = Int8Type;
+g.Int16Type = Int16Type;
+g.Int32Type = Int32Type;
+g.Float32Type = Float32Type;
+g.ByteType = ByteType;
+g.RuneType = RuneType;
+g.Uint = Uint;
+g.Uint8 = Uint8;
+g.Uint16 = Uint16;
+g.Uint32 = Uint32;
+g.Int = Int;
+g.Int8 = Int8;
+g.Int16 = Int16;
+g.Int32 = Int32;
+g.Float32 = Float32;
+g.Byte = Byte;
+g.Rune = Rune;
 g.ArrayType = ArrayType;
 g.MkArray = MkArray;
 g.SliceType = SliceType;

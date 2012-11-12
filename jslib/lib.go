@@ -41,27 +41,58 @@ func init() {
 	}
 }
 
-// == Numbers
+// == Numeric types
 //
 
-type Int struct{ v int }
-type Int8 struct{ v int8 }
-type Int16 struct{ v int16 }
-type Int32 struct{ v int32 }
+type UintType struct{ v uint }
+type Uint8Type struct{ v uint8 }
+type Uint16Type struct{ v uint16 }
+type Uint32Type struct{ v uint32 }
 
-type Uint struct{ v uint }
-type Uint8 struct{ v uint8 }
-type Uint16 struct{ v uint16 }
-type Uint32 struct{ v uint32 }
+type IntType struct{ v int }
+type Int8Type struct{ v int8 }
+type Int16Type struct{ v int16 }
+type Int32Type struct{ v int32 }
 
-func (i Int) valueOf()    { return i.v }
-func (i Int8) valueOf()   { return i.v }
-func (i Int16) valueOf()  { return i.v }
-func (i Int32) valueOf()  { return i.v }
-func (u Uint) valueOf()   { return i.v }
-func (u Uint8) valueOf()  { return i.v }
-func (u Uint16) valueOf() { return i.v }
-func (u Uint32) valueOf() { return i.v }
+type Float32Type struct{ v float32 }
+
+type ByteType struct{ v byte }
+type RuneType struct{ v rune }
+
+// Override the "valueOf" method to convert the object to the primitive value.
+// https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/valueOf
+
+func (n UintType) valueOf()   { return n.v }
+func (n Uint8Type) valueOf()  { return n.v }
+func (n Uint16Type) valueOf() { return n.v }
+func (n Uint32Type) valueOf() { return n.v }
+
+func (n IntType) valueOf()   { return n.v }
+func (n Int8Type) valueOf()  { return n.v }
+func (n Int16Type) valueOf() { return n.v }
+func (n Int32Type) valueOf() { return n.v }
+
+func (n Float32Type) valueOf() { return n.v }
+
+func (n ByteType) valueOf() { return n.v }
+func (n RuneType) valueOf() { return n.v }
+
+// * * *
+
+func Uint(n uint) UintType { return UintType{n} }
+func Uint8(n uint8) Uint8Type { return Uint8Type{n} }
+func Uint16(n uint16) Uint16Type { return Uint16Type{n} }
+func Uint32(n uint32) Uint32Type { return Uint32Type{n} }
+
+func Int(n int) IntType { return IntType{n} }
+func Int8(n int8) Int8Type { return Int8Type{n} }
+func Int16(n int16) Int16Type { return Int16Type{n} }
+func Int32(n int32) Int32Type { return Int32Type{n} }
+
+func Float32(n float32) Float32Type { return Float32Type{n} }
+
+func Byte(n byte) ByteType { return ByteType{n} }
+func Rune(n byte) RuneType { return RuneType{n} }
 
 // == Array
 //
