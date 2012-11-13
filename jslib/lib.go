@@ -52,7 +52,7 @@ type NumType struct {
 // Override the "valueOf" method to convert the object to the primitive value.
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/valueOf
 func (n NumType) valueOf() { return n.v }
-func (n NumType) toString() { return n.v }
+//func (n NumType) toString() { return n.v }
 
 // * * *
 

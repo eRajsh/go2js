@@ -30,14 +30,14 @@ sliceT = 3;
 	Function.prototype.alias = function(parent) {
 		if (JSON.stringify(parent.constructor) == JSON.stringify(Function)) {
 			this.prototype = parent;
-			this.prototype.constructor = this_;
+			this.prototype.constructor = this;
 			this.prototype.parent = parent.prototype;
 		} else {
 			this.prototype = parent;
-			this.prototype.constructor = this_;
+			this.prototype.constructor = this;
 			this.prototype.parent = parent;
 		}
-		return this_;
+		return this;
 	};
 }());
 
@@ -52,7 +52,7 @@ function NumType(v, t) {
 
 
 NumType.prototype.valueOf = function() { return this.v; }
-NumType.prototype.toString = function() { return this.v; }
+
 
 
 

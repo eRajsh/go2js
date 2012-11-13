@@ -190,10 +190,13 @@ func (tr *translation) GetArgs(funcName string, args []ast.Expr) string {
 func validIdent(name interface{}) string {
 	name_ := fmt.Sprintf("%s", name)
 
+	if Bootstrap {
+		return name_
+	}
 	if _, ok := reserved[name_]; ok {
 		return name_ + "_"
 	}
-	if !Bootstrap && name_ == LIB_RESERVED_NAME {
+	if name_ == LIB_RESERVED_NAME {
 		return name_ + "_"
 	}
 	return name_
