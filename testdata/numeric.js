@@ -27,6 +27,8 @@ var i32 = g.Int32(32);
 
 var f32 = g.Float32(3.2);
 var f32_ = g.Float32(3.2);
+var f64 = g.Float64(6.4);
+var f64_ = g.Float64(6.4);
 
 var b = g.Byte(8);
 var b_ = g.Byte(8);
@@ -51,7 +53,7 @@ function value() {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
 		pass = false, PASS = false;
 	}
-	if (f32 != 3.2 || f32_ != 3.2) {
+	if (f32 != 3.2 || f32_ != 3.2 || f64 != 6.4 || f64_ != 6.4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: float<br>");
 		pass = false, PASS = false;
 	}
@@ -80,7 +82,7 @@ function add() {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
 		pass = false, PASS = false;
 	}
-	if (f32 + 1 != 4.2 || f32_ + 1 != 4.2) {
+	if (f32 + 1 != 4.2 || f32_ + 1 != 4.2 || f64 + 1 != 7.4 || f64_ + 1 != 7.4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: float<br>");
 		pass = false, PASS = false;
 	}
@@ -109,7 +111,7 @@ function subtract() {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
 		pass = false, PASS = false;
 	}
-	if (f32 - 1 != 2.2 || f32_ - 1 != 2.2) {
+	if (f32 - 1 != 2.2 || f32_ - 1 != 2.2 || f64 - 1 != 5.4 || f64_ - 1 != 5.4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: float<br>");
 		pass = false, PASS = false;
 	}
@@ -138,7 +140,7 @@ function multiplication() {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
 		pass = false, PASS = false;
 	}
-	if (f32 * 2 != 6.4 || f32_ * 2 != 6.4) {
+	if (f32 * 2 != 6.4 || f32_ * 2 != 6.4 || f64 * 2 != 12.8 || f64_ * 2 != 12.8) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: float<br>");
 		pass = false, PASS = false;
 	}
@@ -167,7 +169,7 @@ function division() {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
 		pass = false, PASS = false;
 	}
-	if (f32 / 2 != 1.6 || f32_ / 2 != 1.6) {
+	if (f32 / 2 != 1.6 || f32_ / 2 != 1.6 || f64 / 2 != 3.2 || f64_ / 2 != 3.2) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: float<br>");
 		pass = false, PASS = false;
 	}

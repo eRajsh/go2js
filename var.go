@@ -509,13 +509,14 @@ _noFunc:
 	isZeroValue := false
 	isFirst := true
 	value := ""
+	numericFunc := ""
 
 	if values == nil { // initialization explicit
 		value, typeIs = tr.zeroValue(true, type_)
 		isZeroValue = true
 	}
 
-	for _, idxName := range idxValidNames {
+	for iValidNames, idxName := range idxValidNames {
 		name := _names[idxName]
 		nameExpr := ""
 
@@ -667,17 +668,23 @@ _noFunc:
 			} else {
 				if value != "" {
 					// Get the numeric function
-					if ident, ok := type_.(*ast.Ident); ok {
-						switch ident.Name {
-						case "uint", "uint8", "uint16", "uint32",
-							"int", "int8", "int16", "int32",
-							"float32",
-							"byte", "rune":
-							value = fmt.Sprintf("g.%s(%s)",
-								strings.Title(ident.Name), value)
+					if iValidNames == 0 {
+						if ident, ok := type_.(*ast.Ident); ok {
+							switch ident.Name {
+							case "uint", "uint8", "uint16", "uint32",
+								"int", "int8", "int16", "int32",
+								"float32", "float64",
+								"byte", "rune":
+								numericFunc = "g." + strings.Title(ident.Name)
+							}
 						}
 					}
-					tr.WriteString(SP + sign + SP + value)
+					if numericFunc != "" {
+						tr.WriteString(fmt.Sprintf("%s%s(%s)",
+							SP+sign+SP, numericFunc, value))
+					} else {
+						tr.WriteString(SP + sign + SP + value)
+					}
 				}
 
 				if tr.isArray {

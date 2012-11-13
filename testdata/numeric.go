@@ -27,6 +27,8 @@ var (
 
 	f32  float32 = 3.2
 	f32_         = float32(3.2)
+	f64  float64 = 6.4
+	f64_         = float64(6.4)
 
 	b  byte = 8
 	b_      = byte(8)
@@ -51,7 +53,7 @@ func value() {
 		fmt.Print("\tFAIL: int\n")
 		pass, PASS = false, false
 	}
-	if f32 != 3.2 || f32_ != 3.2 {
+	if f32 != 3.2 || f32_ != 3.2 || f64 != 6.4 || f64_ != 6.4 {
 		fmt.Print("\tFAIL: float\n")
 		pass, PASS = false, false
 	}
@@ -80,7 +82,7 @@ func add() {
 		fmt.Print("\tFAIL: int\n")
 		pass, PASS = false, false
 	}
-	if f32+1 != 4.2 || f32_+1 != 4.2 {
+	if f32+1 != 4.2 || f32_+1 != 4.2 || f64+1 != 7.4 || f64_+1 != 7.4 {
 		fmt.Print("\tFAIL: float\n")
 		pass, PASS = false, false
 	}
@@ -109,7 +111,7 @@ func subtract() {
 		fmt.Print("\tFAIL: int\n")
 		pass, PASS = false, false
 	}
-	if f32-1 != 2.2 || f32_-1 != 2.2 {
+	if f32-1 != 2.2 || f32_-1 != 2.2 || f64-1 != 5.4 || f64_-1 != 5.4 {
 		fmt.Print("\tFAIL: float\n")
 		pass, PASS = false, false
 	}
@@ -138,7 +140,7 @@ func multiplication() {
 		fmt.Print("\tFAIL: int\n")
 		pass, PASS = false, false
 	}
-	if f32*2 != 6.4 || f32_*2 != 6.4 {
+	if f32*2 != 6.4 || f32_*2 != 6.4 || f64*2 != 12.8 || f64_*2 != 12.8 {
 		fmt.Print("\tFAIL: float\n")
 		pass, PASS = false, false
 	}
@@ -167,7 +169,7 @@ func division() {
 		fmt.Print("\tFAIL: int\n")
 		pass, PASS = false, false
 	}
-	if f32/2 != 1.6 || f32_/2 != 1.6 {
+	if f32/2 != 1.6 || f32_/2 != 1.6 || f64/2 != 3.2 || f64_/2 != 3.2 {
 		fmt.Print("\tFAIL: float\n")
 		pass, PASS = false, false
 	}

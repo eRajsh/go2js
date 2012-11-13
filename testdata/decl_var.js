@@ -8,7 +8,7 @@ var test = {}; (function() {
 
 var A = "";
 var a = g.Int(0);
-var b = 0, c = 0, d = 0;
+var b = g.Float64(0), c = g.Float64(0), d = g.Float64(0);
 var e = 0;
 var f = g.Float32(-1), g_ = g.Float32(-2);
 

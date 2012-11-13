@@ -67,6 +67,7 @@ func Int16(n int16) NumType { return NumType{n, "int16"} }
 func Int32(n int32) NumType { return NumType{n, "int32"} }
 
 func Float32(n float32) NumType { return NumType{n, "float32"} }
+func Float64(n float64) NumType { return NumType{n, "float64"} }
 
 func Byte(n byte) NumType { return NumType{n, "byte"} }
 func Rune(n rune) NumType { return NumType{n, "rune"} }

@@ -67,6 +67,7 @@ function Int16(n) { return new NumType(n, "int16"); }
 function Int32(n) { return new NumType(n, "int32"); }
 
 function Float32(n) { return new NumType(n, "float32"); }
+function Float64(n) { return new NumType(n, "float64"); }
 
 function Byte(n) { return new NumType(n, "byte"); }
 function Rune(n) { return new NumType(n, "rune"); }
@@ -502,6 +503,7 @@ g.Int8 = Int8;
 g.Int16 = Int16;
 g.Int32 = Int32;
 g.Float32 = Float32;
+g.Float64 = Float64;
 g.Byte = Byte;
 g.Rune = Rune;
 g.ArrayType = ArrayType;
