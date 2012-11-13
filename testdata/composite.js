@@ -61,36 +61,36 @@ function builtInArray() {
 	};}; var tests = [
 
 
-		_("len a1", a1.len() === 5, true),
-		_("len a2", a2.len() === 5, true),
-		_("len a3", a3.len() === 5, true),
-		_("len a4", a4.len() === 5, true),
-		_("len a4", a4.len() !== 5, false),
+		_("len a1", a1.len() == 5, true),
+		_("len a2", a2.len() == 5, true),
+		_("len a3", a3.len() == 5, true),
+		_("len a4", a4.len() == 5, true),
+		_("len a4", a4.len() != 5, false),
 
-		_("cap a1", a1.cap() === 5, true),
-		_("cap a2", a2.cap() === 5, true),
-		_("cap a3", a3.cap() === 5, true),
-		_("cap a4", a4.cap() === 5, true),
+		_("cap a1", a1.cap() == 5, true),
+		_("cap a2", a2.cap() == 5, true),
+		_("cap a3", a3.cap() == 5, true),
+		_("cap a4", a4.cap() == 5, true),
 
-		_("len a5", a5.len() === 3, true),
-		_("cap a5", a5.cap() === 3, true),
-		_("len a5[0]", a5.len(0) === 4, true),
-		_("cap a5[0]", a5.cap(0) === 4, true),
-		_("len a5[1000]", a5.len(1000) === 4, true),
-		_("cap a5[1000]", a5.cap(1000) === 4, true),
+		_("len a5", a5.len() == 3, true),
+		_("cap a5", a5.cap() == 3, true),
+		_("len a5[0]", a5.len(0) == 4, true),
+		_("cap a5[0]", a5.cap(0) == 4, true),
+		_("len a5[1000]", a5.len(1000) == 4, true),
+		_("cap a5[1000]", a5.cap(1000) == 4, true),
 
-		_("len a6", a6.len() === 3, true),
-		_("cap a6", a6.cap() === 3, true),
-		_("len a6[0]", a6.len(0) === 4, true),
-		_("cap a6[0]", a6.cap(0) === 4, true),
-		_("len a6[0][0]", a6.len(0,0) === 2, true),
-		_("cap a6[0][0]", a6.cap(0,0) === 2, true),
-		_("len a6[0][1000]", a6.len(0,1000) === 2, true),
-		_("cap a6[0][1000]", a6.cap(0,1000) === 2, true)
+		_("len a6", a6.len() == 3, true),
+		_("cap a6", a6.cap() == 3, true),
+		_("len a6[0]", a6.len(0) == 4, true),
+		_("cap a6[0]", a6.cap(0) == 4, true),
+		_("len a6[0][0]", a6.len(0,0) == 2, true),
+		_("cap a6[0][0]", a6.cap(0,0) == 2, true),
+		_("len a6[0][1000]", a6.len(0,1000) == 2, true),
+		_("cap a6[0][1000]", a6.cap(0,1000) == 2, true)
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
-		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+		if (JSON.stringify(t.in_) != JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
 		}
@@ -135,13 +135,13 @@ function initArray() {
 		in_: in_,
 		out: out
 	};}; var tests = [
-		_("len", array1.len() === array2.len(), true),
-		_("cap", array1.cap() === array2.cap(), true),
-		_("equality", JSON.stringify(array1.v) === JSON.stringify(array2.v), true)
+		_("len", array1.len() == array2.len(), true),
+		_("cap", array1.cap() == array2.cap(), true),
+		_("equality", JSON.stringify(array1.v) == JSON.stringify(array2.v), true)
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
-		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+		if (JSON.stringify(t.in_) != JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
 		}
@@ -165,7 +165,7 @@ function _array() {
 
 	var older = older10(array);
 
-	if (older.name === "Sam") {
+	if (older.name == "Sam") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: got " + older.name + ", want Sam<br>");
@@ -187,7 +187,7 @@ function multiArray() {
 		[5, 6, 7, 8]
 	]);
 
-	if (JSON.stringify(doubleArray_1.v) === JSON.stringify(doubleArray_2.v) && JSON.stringify(doubleArray_2.v) === JSON.stringify(doubleArray_3.v)) {
+	if (JSON.stringify(doubleArray_1.v) == JSON.stringify(doubleArray_2.v) && JSON.stringify(doubleArray_2.v) == JSON.stringify(doubleArray_3.v)) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: got different arraies<br>");
@@ -224,12 +224,12 @@ function _struct() {
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
-		if (JSON.stringify(t.inPerson) !== JSON.stringify(t.outPerson)) {
+		if (JSON.stringify(t.inPerson) != JSON.stringify(t.outPerson)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => person got " + t.inPerson + ", want " + t.outPerson + "<br>");
 
 			pass = false, PASS = false;
 		}
-		if (JSON.stringify(t.inDiff) !== JSON.stringify(t.outDiff)) {
+		if (JSON.stringify(t.inDiff) != JSON.stringify(t.outDiff)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => difference got " + t.inDiff + ", want " + t.outDiff + "<br>");
 
 			pass = false, PASS = false;

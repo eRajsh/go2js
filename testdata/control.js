@@ -32,7 +32,7 @@ function _if() {
 
 	var i = 7;
 
-	if (i === 3) {
+	if (i == 3) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: multiple (i == 3)<br>");
 		pass = false, PASS = false;
 	} else if (i < 3) {
@@ -75,7 +75,7 @@ function _switch() {
 	case i > 10: case i < 0:
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: without expression (i>10, i<0)<br>");
 		pass = false, PASS = false; break;
-	case i === 10:
+	case i == 10:
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: without expression (i==10)<br>");
 		pass = false, PASS = false; break;
 	default:
@@ -85,7 +85,7 @@ function _switch() {
 
 
 	switch (true) {
-	case i === 5: break;
+	case i == 5: break;
 
 	default:
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: without expression 2 (default)<br>");
@@ -113,7 +113,7 @@ function _switch() {
 		pass = false, PASS = false;
 	}
 
-	if (JSON.stringify(pass) === JSON.stringify(false) && JSON.stringify(PASS) === JSON.stringify(true)) {
+	if (JSON.stringify(pass) == JSON.stringify(false) && JSON.stringify(PASS) == JSON.stringify(true)) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: with fallthrough (4,5,6)<br>");
 		PASS = false;
 	}
@@ -134,7 +134,7 @@ function _for() {
 		sum += i;
 	}
 
-	if (sum === 45) {
+	if (sum == 45) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: simple<br>");
@@ -147,7 +147,7 @@ function _for() {
 		sum += sum;
 	}
 
-	if (sum === 1024) {
+	if (sum == 1024) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2 expressions omitted<br>");
@@ -160,7 +160,7 @@ function _for() {
 		sum += sum;
 	}
 
-	if (sum === 1024) {
+	if (sum == 1024) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2 expressions omitted, no semicolons<br>");
@@ -173,13 +173,13 @@ function _for() {
 
 	for (;;) {
 		i++;
-		if (i === 3) {
+		if (i == 3) {
 			s = "" + i + "";
 			break;
 		}
 	}
 
-	if (s === "3") {
+	if (s == "3") {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: infinite loop<br>");
@@ -195,7 +195,7 @@ function _for() {
 		s += "" + i + " ";
 	}
 
-	if (s === "10 9 8 7 6 5 ") {
+	if (s == "10 9 8 7 6 5 ") {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: break<br>");
@@ -205,13 +205,13 @@ function _for() {
 
 	s = "";
 	for (var i = 10; i > 0; i--) {
-		if (i === 5) {
+		if (i == 5) {
 			continue;
 		}
 		s += "" + i + " ";
 	}
 
-	if (s === "10 9 8 7 6 4 3 2 1 ") {
+	if (s == "10 9 8 7 6 4 3 2 1 ") {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: continue<br>");
@@ -236,7 +236,7 @@ function _range() {
 	});
 
 	var v; for (var i in s.get()) { v = s.get()[i];
-		if (JSON.stringify(tests.get(i)[0]) !== JSON.stringify(v)) {
+		if (JSON.stringify(tests.get(i)[0]) != JSON.stringify(v)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + i + ". got " + v + ", want " + tests.get(i)[0] + "<br>");
 			pass = false, PASS = false;
 		}

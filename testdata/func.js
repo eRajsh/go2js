@@ -20,7 +20,7 @@ var x = 10;
 }());
 
 function _init() {
-	if (x === 13) {
+	if (x == 13) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: got " + x + ", want 13<br>");
@@ -46,18 +46,18 @@ function simpleFunc() {
 	var z = 5;
 
 	var max_xy = max(x, y);
-	if (max_xy !== 4) {
+	if (max_xy != 4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: max(x,y) => got " + max_xy + ", want 4)<br>");
 		pass = false, PASS = false;
 	}
 
 	var max_xz = max(x, z);
-	if (max_xz !== 5) {
+	if (max_xz != 5) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: max(x,z) => got " + max_xz + ", want 5)<br>");
 		pass = false, PASS = false;
 	}
 
-	if (max(y, z) !== 5) {
+	if (max(y, z) != 5) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: max(y,z) => got " + max(y, z) + ", want 5)<br>");
 		pass = false, PASS = false;
 	}
@@ -79,11 +79,11 @@ function twoOuputValues() {
 	var y = 4;
 	var _ = SumAndProduct(x, y), xPLUSy = _[0], xTIMESy = _[1];
 
-	if (xPLUSy !== 7) {
+	if (xPLUSy != 7) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: sum => got " + xPLUSy + ", want 7)<br>");
 		pass = false, PASS = false;
 	}
-	if (xTIMESy !== 12) {
+	if (xTIMESy != 12) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: product => got " + xTIMESy + ", want 12)<br>");
 		pass = false, PASS = false;
 	}
@@ -121,13 +121,13 @@ function resultVariable() {
 	for (var i = -2.0; i <= 10; i++) {
 		var _ = MySqrt(i), sqroot = _[0], ok = _[1];
 		if (ok) {
-			if (JSON.stringify(sqroot) !== JSON.stringify(tests.get(i)[0])) {
+			if (JSON.stringify(sqroot) != JSON.stringify(tests.get(i)[0])) {
 				document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: square(" + i + ") => got " + sqroot + ", want " + tests.get(i)[0] + "<br>");
 
 				pass = false, PASS = false;
 			}
 		} else {
-			if (i !== -2.0 && i !== -1.0 && i !== 0) {
+			if (i != -2.0 && i != -1.0 && i != 0) {
 				document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: square(" + i + ") => should no be run<br>");
 				pass = false, PASS = false;
 			}
@@ -176,7 +176,7 @@ function variadic() {
 
 
 	var getOlder = function() { var people = arguments;
-		if (people.length === 0) {
+		if (people.length == 0) {
 			return [new person(), false];
 		}
 
@@ -213,28 +213,28 @@ function variadic() {
 	];
 
 	older = getOlder(paul, jim)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests[0].out)) {
+	if (JSON.stringify(older.name) != JSON.stringify(tests[0].out)) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder " + tests[0].msg + ") => got " + older.name + ", want " + tests[0].out + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	older = getOlder(paul, jim, sam)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests[1].out)) {
+	if (JSON.stringify(older.name) != JSON.stringify(tests[1].out)) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder " + tests[1].msg + ") => got " + older.name + ", want " + tests[1].out + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	older = getOlder(paul, jim, sam, rob)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests[2].out)) {
+	if (JSON.stringify(older.name) != JSON.stringify(tests[2].out)) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder " + tests[2].msg + ") => got " + older.name + ", want " + tests[2].out + "<br>");
 
 		pass = false, PASS = false;
 	}
 
 	older = getOlder(karl)[0];
-	if (JSON.stringify(older.name) !== JSON.stringify(tests[3].out)) {
+	if (JSON.stringify(older.name) != JSON.stringify(tests[3].out)) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: (getOlder " + tests[3].msg + ") => got " + older.name + ", want " + tests[3].out + "<br>");
 
 		pass = false, PASS = false;
@@ -264,7 +264,7 @@ function variadic() {
 	var email2 = "bar@mail.se";
 
 	var dataUser = getUser(name, surname, age, email1, email2);
-	if (JSON.stringify(dataUser) !== JSON.stringify("" + name + " " + surname + ", age " + age + ", emails: " + email1 + " " + email2 + "")) {
+	if (JSON.stringify(dataUser) != JSON.stringify("" + name + " " + surname + ", age " + age + ", emails: " + email1 + " " + email2 + "")) {
 
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: multiple parameters => got " + dataUser + "<br>");
 		pass = false, PASS = false;
@@ -276,7 +276,7 @@ function variadic() {
 }
 
 function Max(slice) {
-	if (slice.len === 1) {
+	if (slice.len == 1) {
 		return slice.get()[0];
 	}
 
@@ -303,7 +303,7 @@ function recursive() {
 
 	var s = g.Slice(0, [1, 2, 3, 4, 6, 8]);
 
-	if (Max(s) !== 8) {
+	if (Max(s) != 8) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: Max => got " + Max(s) + ", want 8<br>");
 		pass = false, PASS = false;
 	}

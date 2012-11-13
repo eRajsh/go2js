@@ -15,7 +15,7 @@ var PASS = true;
 function argArray(arr) {
 	var pass = true;
 
-	if (arr.len() === 3 && arr.cap() === 3 && arr.v[0] === 1 && arr.v[1] === 2 && arr.v[2] === 3) {
+	if (arr.len() == 3 && arr.cap() == 3 && arr.v[0] == 1 && arr.v[1] == 2 && arr.v[2] == 3) {
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: argArray<br>");
 		pass = false, PASS = false;
@@ -30,7 +30,7 @@ function argArray(arr) {
 function argEllipsis(arr) {
 	var pass = true;
 
-	if (arr.len() === 2 && arr.cap() === 2 && arr.v[0] === 5 && arr.v[1] === 6) {
+	if (arr.len() == 2 && arr.cap() == 2 && arr.v[0] == 5 && arr.v[1] == 6) {
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: argEllipsis<br>");
 		pass = false, PASS = false;
@@ -45,7 +45,7 @@ function argEllipsis(arr) {
 function argSlice(s) {
 	var pass = true;
 
-	if (s.len === 2 && s.cap === 2 && s.str() === "89" && s.get()[0] === '8' && s.get()[1] === '9') {
+	if (s.len == 2 && s.cap == 2 && s.str() == "89" && s.get()[0] == '8' && s.get()[1] == '9') {
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: argSlice<br>");
 		pass = false, PASS = false;
@@ -60,7 +60,7 @@ function argSlice(s) {
 function argMap(m) {
 	var pass = true;
 
-	if (m.len() === 2 && m.get(1)[0] === "foo" && m.get(2)[0] === "bar") {
+	if (m.len() == 2 && m.get(1)[0] == "foo" && m.get(2)[0] == "bar") {
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: argSlice<br>");
 		pass = false, PASS = false;

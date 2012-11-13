@@ -53,18 +53,18 @@ function nilValue() {
 	var num = {p:10};
 	var p = {p:undefined};
 
-	if (p.p === undefined) {
+	if (p.p == undefined) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: declaration => got " + p === undefined + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: declaration => got " + p == undefined + "<br>");
 		pass = false, PASS = false;
 	}
 
 	p = num;
-	if (p.p !== undefined) {
+	if (p.p != undefined) {
 
 	} else {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: assignment => got " + p === undefined + "<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: assignment => got " + p == undefined + "<br>");
 		pass = false, PASS = false;
 	}
 
@@ -83,11 +83,11 @@ function access() {
 	var i = {p:6};
 	var iPtr = i;
 
-	if (helloPtr.p !== "Hello, mina-san!") {
+	if (helloPtr.p != "Hello, mina-san!") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: *helloPtr => got " + helloPtr.p + ", want " + hello + "<br>");
 		pass = false, PASS = false;
 	}
-	if (iPtr.p !== 6) {
+	if (iPtr.p != 6) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: *iPtr => got " + iPtr.p + ", want " + i + "<br>");
 		pass = false, PASS = false;
 	}
@@ -98,13 +98,13 @@ function access() {
 	var y = x;
 
 	y.p++;
-	if (x.p !== 4) {
+	if (x.p != 4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x => got " + x + ", want 4<br>");
 		pass = false, PASS = false;
 	}
 
 	y.p++;
-	if (x.p !== 5) {
+	if (x.p != 5) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x => got " + x + ", want 5<br>");
 		pass = false, PASS = false;
 	}
@@ -124,7 +124,7 @@ function allocation() {
 	doubleSum.p = 0;
 	doubleSum.p = sum * 2;
 
-	if (sum === 45 && doubleSum.p === 90) {
+	if (sum == 45 && doubleSum.p == 90) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: sum=" + sum + ", *doubleSum=" + doubleSum.p + "<br>");
@@ -142,7 +142,7 @@ function parameterByValue() {
 	var x = 3;
 	var x1 = add(x);
 
-	if (x === 3 && x1 === 4) {
+	if (x == 3 && x1 == 4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: x=" + x + ", x1=" + x1 + "<br>");
@@ -161,7 +161,7 @@ function byReference_1() {
 	var x = {p:3};
 	var x1 = add(x);
 
-	if (x1 === 4 && x.p === 4) {
+	if (x1 == 4 && x.p == 4) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. x=" + x + ", x1=" + x1 + "<br>");
@@ -169,7 +169,7 @@ function byReference_1() {
 	}
 
 	x1 = add(x);
-	if (x.p === 5 && x1 === 5) {
+	if (x.p == 5 && x1 == 5) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. x=" + x + ", x1=" + x1 + "<br>");
@@ -189,7 +189,7 @@ function byReference_2() {
 	var incr = 1;
 
 	add(value, incr);
-	if (value.p === 7) {
+	if (value.p == 7) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 1. value=" + value + "<br>");
@@ -197,7 +197,7 @@ function byReference_2() {
 	}
 
 	add(value, incr);
-	if (value.p === 8) {
+	if (value.p == 8) {
 
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: 2. value=" + value + "<br>");
@@ -217,7 +217,7 @@ function byReference_3() {
 	var y = x;
 
 	f();
-	if (y.p === 4) {
+	if (y.p == 4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: *y=" + y.p + "<br>");

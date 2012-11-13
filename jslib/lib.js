@@ -21,14 +21,14 @@ sliceT = 3;
 
 	if (!Array.isArray) {
 		Array.isArray = function(arg) {
-			return Object.prototype.toString.call(arg) === "[object Array]";
+			return Object.prototype.toString.call(arg) == "[object Array]";
 		};
 	}
 
 
 
 	Function.prototype.alias = function(parent) {
-		if (JSON.stringify(parent.constructor) === JSON.stringify(Function)) {
+		if (JSON.stringify(parent.constructor) == JSON.stringify(Function)) {
 			this.prototype = parent;
 			this.prototype.constructor = this_;
 			this.prototype.parent = parent.prototype;
@@ -86,7 +86,7 @@ function ArrayType(v, len_) {
 
 
 ArrayType.prototype.len = function(index) {
-	if (index === undefined) {
+	if (index == undefined) {
 		return this.len_[0];
 	}
 	return this.len_[arguments.length];
@@ -94,7 +94,7 @@ ArrayType.prototype.len = function(index) {
 
 
 ArrayType.prototype.cap = function(index) {
-	if (index === undefined) {
+	if (index == undefined) {
 		return this.len_[0];
 	}
 	return this.len_[arguments.length];
@@ -113,7 +113,7 @@ ArrayType.prototype.typ = function() { return arrayT; }
 function MkArray(index, zero, data) {
 	var a = new ArrayType([], g.Map(0));
 
-	if (data !== undefined) {
+	if (data != undefined) {
 		if (!equalIndex(index, indexArray(data))) {
 			a.v = initArray(index, zero);
 			mergeArray(a.v, data);
@@ -135,11 +135,11 @@ function MkArray(index, zero, data) {
 
 
 function equalIndex(index1, index2) {
-	if (index1.length !== index2.length) {
+	if (index1.length != index2.length) {
 		return false;
 	}
 	var v; for (var i in index1) { v = index1[i];
-		if (JSON.stringify(v) !== JSON.stringify(index2[i])) {
+		if (JSON.stringify(v) != JSON.stringify(index2[i])) {
 			return false;
 		}
 	}
@@ -162,7 +162,7 @@ function indexArray(a) { var index = [];
 
 
 function initArray(index, zero) { var a = [];
-	if (index.length === 0) {
+	if (index.length == 0) {
 		return zero;
 	}
 	var nextArray = initArray(index.slice(1), zero);
@@ -182,7 +182,7 @@ function mergeArray(dst, src) {
 			var isHashMap = false;
 
 
-			if (typeof(srcVal) === "object") {
+			if (typeof(srcVal) == "object") {
 				var v; for (var k in srcVal) { v = srcVal[k];
 					if (srcVal.hasOwnProperty(k)) {
 						isHashMap = true;
@@ -215,7 +215,7 @@ function SliceType(arr, v, low, high, len, cap, nil_) {
 }
 
 SliceType.prototype.isNil = function() {
-	if (this.len !== 0 || this.cap !== 0) {
+	if (this.len != 0 || this.cap != 0) {
 		return false;
 	}
 	return this.nil_;
@@ -228,7 +228,7 @@ SliceType.prototype.typ = function() { return sliceT; }
 function MkSlice(zero, len, cap) {
 	var s = new SliceType(undefined, [], 0, 0, 0, 0, false);
 
-	if (zero === undefined) {
+	if (zero == undefined) {
 		s.nil_ = true;
 		return s;
 	}
@@ -241,7 +241,7 @@ function MkSlice(zero, len, cap) {
 		arr.v[i] = zero;
 	}
 
-	if (cap !== undefined) {
+	if (cap != undefined) {
 		s.cap = cap;
 	} else {
 		s.cap = len;
@@ -258,7 +258,7 @@ function MkSlice(zero, len, cap) {
 function Slice(zero, data) {
 	var s = new SliceType(undefined, [], 0, 0, 0, 0, false);
 
-	if (zero === undefined) {
+	if (zero == undefined) {
 		s.nil_ = true;
 		return s;
 	}
@@ -268,7 +268,7 @@ function Slice(zero, data) {
 		var isHashMap = false;
 
 
-		if (typeof(srcVal) === "object") {
+		if (typeof(srcVal) == "object") {
 			var v; for (var k in srcVal) { v = srcVal[k];
 				if (srcVal.hasOwnProperty(k)) {
 					isHashMap = true;
@@ -297,15 +297,15 @@ function Slice(zero, data) {
 function SliceFrom(src, low, high) {
 	var s = new SliceType(undefined, [], 0, 0, 0, 0, false);
 
-	if (low !== undefined) {
+	if (low != undefined) {
 		s.low = low | 0;
 	} else {
 		s.low = 0;
 	}
-	if (high !== undefined) {
+	if (high != undefined) {
 		s.high = high | 0;
 	} else {
-		if (src.arr !== undefined) {
+		if (src.arr != undefined) {
 			s.high = src.len;
 		} else {
 			s.high = src.v.length;
@@ -314,7 +314,7 @@ function SliceFrom(src, low, high) {
 
 	s.len = s.high - s.low;
 
-	if (src.arr !== undefined) {
+	if (src.arr != undefined) {
 		s.arr = src.arr;
 		s.cap = src.cap - s.low;
 		s.low += src.low;
@@ -328,10 +328,10 @@ function SliceFrom(src, low, high) {
 
 
 SliceType.prototype.get = function() {
-	if (this.arr !== undefined) {
+	if (this.arr != undefined) {
 		var arr = this.arr.v.slice(this.low, this.high);
 
-		if (this.v.length !== 0) {
+		if (this.v.length != 0) {
 			return arr.concat(this.v);
 		} else {
 			return arr;
@@ -381,7 +381,7 @@ function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = ne
 		if (Array.isArray(v)) {
 			var vArr; for (var _ in v) { vArr = v[_];
 				dst.v.push(vArr);
-				if (JSON.stringify(dst.len) === JSON.stringify(dst.cap)) {
+				if (JSON.stringify(dst.len) == JSON.stringify(dst.cap)) {
 					dst.cap = dst.len * 2;
 				}
 				dst.len++;
@@ -390,7 +390,7 @@ function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = ne
 		}
 
 		dst.v.push(v);
-		if (JSON.stringify(dst.len) === JSON.stringify(dst.cap)) {
+		if (JSON.stringify(dst.len) == JSON.stringify(dst.cap)) {
 			dst.cap = dst.len * 2;
 		}
 		dst.len++;
@@ -401,16 +401,16 @@ function Append(src) { var elt = [].slice.call(arguments).slice(1); var dst = ne
 
 function Copy(dst, src) { var n = 0;
 
-	if (src.arr !== undefined) {
+	if (src.arr != undefined) {
 		for (var i = src.low; i < src.high; i++) {
-			if (JSON.stringify(n) === JSON.stringify(dst.len)) {
+			if (JSON.stringify(n) == JSON.stringify(dst.len)) {
 				return n;
 			}
 			dst.arr.v[n] = src.arr.v[i];
 			n++;
 		}
 		var v; for (var _ in src.v) { v = src.v[_];
-			if (JSON.stringify(n) === JSON.stringify(dst.len)) {
+			if (JSON.stringify(n) == JSON.stringify(dst.len)) {
 				return n;
 			}
 			dst.v.push(v);
@@ -421,7 +421,7 @@ function Copy(dst, src) { var n = 0;
 
 
 	for (; n < src.length; n++) {
-		if (JSON.stringify(n) === JSON.stringify(dst.len)) {
+		if (JSON.stringify(n) == JSON.stringify(dst.len)) {
 			break;
 		}
 		dst.arr.v[n] = src[n];
@@ -476,7 +476,7 @@ MapType.prototype.get = function(k) {
 		v = v[arguments[i]];
 	}
 
-	if (v === undefined) {
+	if (v == undefined) {
 		return [this.zero, false];
 	}
 	return [v, true];

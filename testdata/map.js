@@ -24,23 +24,23 @@ function builtIn() {
 		in_: in_,
 		out: out
 	};}; var tests = [
-		_("nil m1", m1.v === undefined, true),
-		_("nil m2", m2.v === undefined, false),
-		_("nil m3", m3.v === undefined, false),
-		_("nil m4", m4.v === undefined, false),
-		_("nil m4", m4.v !== undefined, true),
+		_("nil m1", m1.v == undefined, true),
+		_("nil m2", m2.v == undefined, false),
+		_("nil m3", m3.v == undefined, false),
+		_("nil m4", m4.v == undefined, false),
+		_("nil m4", m4.v != undefined, true),
 
-		_("len m1", m1.len() === 0, true),
-		_("len m2", m2.len() === 0, true),
-		_("len m3", m3.len() === 0, true),
-		_("len m4", m4.len() === 0, true),
+		_("len m1", m1.len() == 0, true),
+		_("len m2", m2.len() == 0, true),
+		_("len m3", m3.len() == 0, true),
+		_("len m4", m4.len() == 0, true),
 
-		_("nil rating", rating.v !== undefined, true),
-		_("len rating", rating.len() === 4, true)
+		_("nil rating", rating.v != undefined, true),
+		_("len rating", rating.len() == 4, true)
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
-		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+		if (JSON.stringify(t.in_) != JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
 		}
@@ -85,7 +85,7 @@ function declaration() {
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
-		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+		if (JSON.stringify(t.in_) != JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
 		}
@@ -102,7 +102,7 @@ function reference() {
 	var m1 = m;
 	m1.v["Hello"] = "Salut";
 
-	if (JSON.stringify(m.get("Hello")[0]) === JSON.stringify(m1.get("Hello")[0])) {
+	if (JSON.stringify(m.get("Hello")[0]) == JSON.stringify(m1.get("Hello")[0])) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	} else {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: m[\"Hello\"] => got " + m.get("Hello")[0] + ", want " + m1.get("Hello")[0] + "<br>");
@@ -130,7 +130,7 @@ function keyNoExistent() {
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
-		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+		if (JSON.stringify(t.in_) != JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
 		}
@@ -165,17 +165,17 @@ function _range() {
 	var value; for (var key in rating.v) { value = rating.get(key)[0];
 		switch (key) {
 		case "C":
-			if (value !== 5) {
+			if (value != 5) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + key + " => got " + value + ", want 5<br>");
 			pass = false, PASS = false;
 		} break;
 		case "Go":
-			if (value !== 4.5) {
+			if (value != 4.5) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + key + " => got " + value + ", want 4.5<br>");
 			pass = false, PASS = false;
 		} break;
 		case "Python":
-			if (value !== 4.5) {
+			if (value != 4.5) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + key + " => got " + value + ", want 4.5<br>");
 			pass = false, PASS = false;
 		} break;
@@ -187,7 +187,7 @@ function _range() {
 
 
 	for (var key in rating.v) {
-		if (key !== "C" && key !== "Go" && key !== "Python") {
+		if (key != "C" && key != "Go" && key != "Python") {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: key " + key + " no expected<br>");
 			pass = false, PASS = false;
 		}
@@ -219,17 +219,17 @@ function blankIdInRange() {
 	var A3 = g.MkArray([1], 0, [1]);
 
 	slice = g.SliceFrom(A1, 0);
-	if (Max(slice) !== 9) {
+	if (Max(slice) != 9) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A1 => got " + Max(slice) + ", want 9<br>");
 		pass = false, PASS = false;
 	}
 	slice = g.SliceFrom(A2, 0);
-	if (Max(slice) !== 4) {
+	if (Max(slice) != 4) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A2 => got " + Max(slice) + ", want 4<br>");
 		pass = false, PASS = false;
 	}
 	slice = g.SliceFrom(A3, 0);
-	if (Max(slice) !== 1) {
+	if (Max(slice) != 1) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: A3 => got " + Max(slice) + ", want 1<br>");
 		pass = false, PASS = false;
 	}

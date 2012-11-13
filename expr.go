@@ -196,7 +196,6 @@ func (e *expression) translate(expr ast.Expr) {
 			isOpNot = true
 			fallthrough
 		case token.EQL:
-			op += "="
 			isComparing = true
 		}
 

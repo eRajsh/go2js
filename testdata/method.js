@@ -26,11 +26,11 @@ function noMethod() {
 
 	var r1 = new Rectangle(12, 2);
 
-	if (area(r1) !== 24) {
+	if (area(r1) != 24) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: area r1 => got " + area(r1) + ", want 24)<br>");
 		pass = false, PASS = false;
 	}
-	if (area(new Rectangle(9, 4)) !== 36) {
+	if (area(new Rectangle(9, 4)) != 36) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: area Rectangle{9,4} => got " + area(new Rectangle(9, 4)) + ", want 36)<br>");
 
 		pass = false, PASS = false;
@@ -75,7 +75,7 @@ function method() {
 	];
 
 	var t; for (var _ in tests) { t = tests[_];
-		if (JSON.stringify(t.in_) !== JSON.stringify(t.out)) {
+		if (JSON.stringify(t.in_) != JSON.stringify(t.out)) {
 			document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: " + t.msg + " => got " + t.in_ + ", want " + t.out + "<br>");
 			pass = false, PASS = false;
 		}
@@ -121,11 +121,11 @@ function withNamedType() {
 	folks["Popey"] = 100;
 
 
-	if (s.sum() !== 15) {
+	if (s.sum() != 15) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: s.sum => got " + s.sum() + ", want 15)<br>");
 		pass = false, PASS = false;
 	}
-	if (folks.older() !== "Popey") {
+	if (folks.older() != "Popey") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: folks.older => got " + folks.older() + ", want Popey)<br>");
 
 		pass = false, PASS = false;
@@ -198,21 +198,21 @@ function complexNamedType() {
 		new Box(10, 30, 1, WHITE)
 	);
 
-	if (boxes.length !== 6) {
+	if (boxes.length != 6) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: len boxes => got " + boxes.length + ", want 6<br>");
 		pass = false, PASS = false;
 	}
-	if (boxes[0].Volume() !== 64) {
+	if (boxes[0].Volume() != 64) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: the volume of the first one => got " + boxes[0].Volume() + ", want 64<br>");
 
 		pass = false, PASS = false;
 	}
-	if (boxes[boxes.length - 1].color.String() !== "WHITE") {
+	if (boxes[boxes.length - 1].color.String() != "WHITE") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: the color of the last one => got " + boxes[boxes.length - 1].color.String() + ", want WHITE<br>");
 
 		pass = false, PASS = false;
 	}
-	if (boxes.BiggestsColor().String() !== "YELLOW") {
+	if (boxes.BiggestsColor().String() != "YELLOW") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: the biggest one => got " + boxes.BiggestsColor().String() + ", want YELLOW<br>");
 
 		pass = false, PASS = false;
@@ -221,12 +221,12 @@ function complexNamedType() {
 
 	boxes.PaintItBlack();
 
-	if (boxes[1].color.String() !== "BLACK") {
+	if (boxes[1].color.String() != "BLACK") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: the color of the second one => got " + boxes[1].color.String() + ", want BLACK<br>");
 
 		pass = false, PASS = false;
 	}
-	if (boxes.BiggestsColor().String() !== "BLACK") {
+	if (boxes.BiggestsColor().String() != "BLACK") {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: finally, the biggest one => got " + boxes.BiggestsColor().String() + ", want BLACK<br>");
 
 		pass = false, PASS = false;
