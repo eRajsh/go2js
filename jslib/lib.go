@@ -44,55 +44,32 @@ func init() {
 // == Numeric types
 //
 
-type UintType struct{ v uint }
-type Uint8Type struct{ v uint8 }
-type Uint16Type struct{ v uint16 }
-type Uint32Type struct{ v uint32 }
-
-type IntType struct{ v int }
-type Int8Type struct{ v int8 }
-type Int16Type struct{ v int16 }
-type Int32Type struct{ v int32 }
-
-type Float32Type struct{ v float32 }
-
-type ByteType struct{ v byte }
-type RuneType struct{ v rune }
+type NumType struct {
+	v interface{} // value
+	t string      // type
+}
 
 // Override the "valueOf" method to convert the object to the primitive value.
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/valueOf
-
-func (n UintType) valueOf()   { return n.v }
-func (n Uint8Type) valueOf()  { return n.v }
-func (n Uint16Type) valueOf() { return n.v }
-func (n Uint32Type) valueOf() { return n.v }
-
-func (n IntType) valueOf()   { return n.v }
-func (n Int8Type) valueOf()  { return n.v }
-func (n Int16Type) valueOf() { return n.v }
-func (n Int32Type) valueOf() { return n.v }
-
-func (n Float32Type) valueOf() { return n.v }
-
-func (n ByteType) valueOf() { return n.v }
-func (n RuneType) valueOf() { return n.v }
+func (n NumType) valueOf() { return n.v }
+func (n NumType) toString() { return n.v }
 
 // * * *
 
-func Uint(n uint) UintType { return UintType{n} }
-func Uint8(n uint8) Uint8Type { return Uint8Type{n} }
-func Uint16(n uint16) Uint16Type { return Uint16Type{n} }
-func Uint32(n uint32) Uint32Type { return Uint32Type{n} }
+func Uint(n uint) NumType     { return NumType{n, "uint"} }
+func Uint8(n uint8) NumType   { return NumType{n, "uint8"} }
+func Uint16(n uint16) NumType { return NumType{n, "uint16"} }
+func Uint32(n uint32) NumType { return NumType{n, "uint32"} }
 
-func Int(n int) IntType { return IntType{n} }
-func Int8(n int8) Int8Type { return Int8Type{n} }
-func Int16(n int16) Int16Type { return Int16Type{n} }
-func Int32(n int32) Int32Type { return Int32Type{n} }
+func Int(n int) NumType     { return NumType{n, "int"} }
+func Int8(n int8) NumType   { return NumType{n, "int8"} }
+func Int16(n int16) NumType { return NumType{n, "int16"} }
+func Int32(n int32) NumType { return NumType{n, "int32"} }
 
-func Float32(n float32) Float32Type { return Float32Type{n} }
+func Float32(n float32) NumType { return NumType{n, "float32"} }
 
-func Byte(n byte) ByteType { return ByteType{n} }
-func Rune(n byte) RuneType { return RuneType{n} }
+func Byte(n byte) NumType { return NumType{n, "byte"} }
+func Rune(n rune) NumType { return NumType{n, "rune"} }
 
 // == Array
 //

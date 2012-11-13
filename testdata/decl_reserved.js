@@ -17,9 +17,9 @@ private_ = 2;
 var class_ = false;
 
 
-var enum_ = 0;
-var bar = 0;
-var let_ = 0;
+var enum_ = g.Int(0);
+var bar = g.Int(0);
+var let_ = g.Int(0);
 
 
 function function_(t) { this.t=t; }

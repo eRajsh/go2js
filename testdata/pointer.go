@@ -228,10 +228,10 @@ func byReference_3() {
 func main() {
 	fmt.Print("\n\n== Pointers\n\n")
 
-	fmt.Println("=== RUN declaration")
+	/*fmt.Println("=== RUN declaration")
 	declaration()
 	fmt.Println("=== RUN showAddress")
-	showAddress()
+	showAddress()*/
 
 	fmt.Println("=== RUN nilValue")
 	nilValue()

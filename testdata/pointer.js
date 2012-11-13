@@ -11,7 +11,7 @@
 var PASS = true;
 
 
-var i = {p:undefined};
+var i = g.Int({p:undefined});
 var hello = {p:undefined};
 var p = {p:undefined};
 
@@ -24,7 +24,7 @@ var p = {p:undefined};
 }());
 
 function declaration() {
-	var i = {p:undefined};
+	var i = g.Int({p:undefined});
 	var hello = {p:undefined};
 	var p = {p:undefined};
 
@@ -35,9 +35,9 @@ function declaration() {
 
 function showAddress() {
 	
-	var i = {p:9};
+	var i = g.Int({p:9});
 	var hello = {p:"Hello world"};
-	var pi = {p:3.14};
+	var pi = g.Float32({p:3.14});
 	var b = {p:true};
 
 
@@ -228,10 +228,10 @@ function byReference_3() {
 function main() {
 	document.write("<br><br>== Pointers<br><br>");
 
-	document.write("=== RUN declaration<br>");
-	declaration();
-	document.write("=== RUN showAddress<br>");
-	showAddress();
+
+
+
+
 
 	document.write("=== RUN nilValue<br>");
 	nilValue();

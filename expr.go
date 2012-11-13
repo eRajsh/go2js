@@ -386,8 +386,11 @@ S:
 
 		case "uint", "uint8", "uint16", "uint32",
 			"int", "int8", "int16", "int32",
-			"float32", "float64", "byte", "rune":
+			"float32",
+			"byte", "rune":
+			e.WriteString("g." + strings.Title(callName) + "(")
 			e.translate(typ.Args[0])
+			e.WriteString(")")
 			e.returnBasicLit = true
 		// ==
 

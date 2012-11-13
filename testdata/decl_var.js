@@ -7,12 +7,12 @@
 var test = {}; (function() {
 
 var A = "";
-var a = 0;
+var a = g.Int(0);
 var b = 0, c = 0, d = 0;
 var e = 0;
-var f = -1, g_ = -2;
+var f = g.Float32(-1), g_ = g.Float32(-2);
 
-var h = 0;
+var h = g.Int(0);
 var i = 2.0, j = 3.0, k = "bar";
 
 
@@ -76,8 +76,8 @@ function main() {
 	var Fa = 0, Fb = 10;
 	var Fc = "c";
 	
-	var Fd = 20;
-	var Fe = 0;
+	var Fd = g.Uint(20);
+	var Fe = g.Float32(0);
 
 } main();
 

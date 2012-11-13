@@ -11,26 +11,28 @@
 var PASS = true;
 
 
-var u = 1;
-var u_ = 1;
-var u8 = 8;
-var u16 = 16;
-var u32 = 32;
+var u1 = g.Uint(1), u2 = g.Uint(2);
 
-var i = 1;
-var i_ = 1;
-var i8 = 8;
-var i16 = 16;
-var i32 = 32;
+var u = g.Uint(1);
+var u_ = g.Uint(1);
+var u8 = g.Uint8(8);
+var u16 = g.Uint16(16);
+var u32 = g.Uint32(32);
 
-var f32 = 3.2;
-var f32_ = 3.2;
+var i = g.Int(1);
+var i_ = g.Int(1);
+var i8 = g.Int8(8);
+var i16 = g.Int16(16);
+var i32 = g.Int32(32);
 
-var b = 8;
-var b_ = 8;
+var f32 = g.Float32(3.2);
+var f32_ = g.Float32(3.2);
 
-var r = 32;
-var r_ = 32;
+var b = g.Byte(8);
+var b_ = g.Byte(8);
+
+var r = g.Rune(32);
+var r_ = g.Rune(32);
 
 
 

@@ -11,6 +11,8 @@ import "fmt"
 var PASS = true
 
 var (
+	u1, u2 uint = 1, 2
+
 	u   uint   = 1
 	u_         = uint(1)
 	u8  uint8  = 8

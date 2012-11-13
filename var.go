@@ -666,8 +666,20 @@ _noFunc:
 
 			} else {
 				if value != "" {
+					// Get the numeric function
+					if ident, ok := type_.(*ast.Ident); ok {
+						switch ident.Name {
+						case "uint", "uint8", "uint16", "uint32",
+							"int", "int8", "int16", "int32",
+							"float32",
+							"byte", "rune":
+							value = fmt.Sprintf("g.%s(%s)",
+								strings.Title(ident.Name), value)
+						}
+					}
 					tr.WriteString(SP + sign + SP + value)
 				}
+
 				if tr.isArray {
 					tr.WriteString(")")
 					tr.isArray = false
