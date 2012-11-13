@@ -19,11 +19,11 @@ var u8 = g.Uint8(8);
 var u16 = g.Uint16(16);
 var u32 = g.Uint32(32);
 
-var i = g.Int(1);
-var i_ = g.Int(1);
-var i8 = g.Int8(8);
-var i16 = g.Int16(16);
-var i32 = g.Int32(32);
+var i = g.Int(-1);
+var i_ = g.Int(-1);
+var i8 = g.Int8(-8);
+var i16 = g.Int16(-16);
+var i32 = g.Int32(-32);
 
 var f32 = g.Float32(3.2);
 var f32_ = g.Float32(3.2);
@@ -49,7 +49,7 @@ function value() {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: uint<br>");
 		pass = false, PASS = false;
 	}
-	if (i != 1 || i_ != 1 || i8 != 8 || i16 != 16 || i32 != 32) {
+	if (i != -1 || i_ != -1 || i8 != -8 || i16 != -16 || i32 != -32) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
 		pass = false, PASS = false;
 	}
@@ -71,27 +71,46 @@ function value() {
 	}
 }
 
-function add() {
+function calculation() {
 	var pass = true;
 
 	if (u + 1 != 2 || u_ + 1 != 2 || u8 + 1 != 9 || u16 + 1 != 17 || u32 + 1 != 33) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: uint<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: add uint<br>");
 		pass = false, PASS = false;
 	}
-	if (i + 1 != 2 || i_ + 1 != 2 || i8 + 1 != 9 || i16 + 1 != 17 || i32 + 1 != 33) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
+	if (i + 1 != 0 || i_ + 1 != 0 || i8 + 1 != -7 || i16 + 1 != -15 || i32 + 1 != -31) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: add int<br>");
 		pass = false, PASS = false;
 	}
 	if (f32 + 1 != 4.2 || f32_ + 1 != 4.2 || f64 + 1 != 7.4 || f64_ + 1 != 7.4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: float<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: add float<br>");
 		pass = false, PASS = false;
 	}
 	if (b + 1 != 9 || b_ + 1 != 9) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: byte<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: add byte<br>");
 		pass = false, PASS = false;
 	}
 	if (r + 1 != 33 || r_ + 1 != 33) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: rune<br>");
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: add rune<br>");
+		pass = false, PASS = false;
+	}
+
+	if (u8 - 1 != 7 || i8 - 1 != -9 || f32 - 1 != 2.2 || b - 1 != 7 || r - 1 != 31) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: subtract<br>");
+		pass = false, PASS = false;
+	}
+
+	if (u16 * 2 != 32 || i16 * 2 != -32 || f64 * 2 != 12.8 || b * 2 != 16 || r * 2 != 64) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: multiplication<br>");
+		pass = false, PASS = false;
+	}
+
+	if (u / 1 != 1 || i / 1 != -1 || f32 / 2 != 1.6 || b / 2 != 4 || r / 2 != 16) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: division (quotient)<br>");
+		pass = false, PASS = false;
+	}
+	if (u8 % 3 != 2 || u16 % 3 != 1 || i8 % 3 != -2 || i16 % 3 != -1) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: division (remainder)<br>");
 		pass = false, PASS = false;
 	}
 
@@ -100,87 +119,33 @@ function add() {
 	}
 }
 
-function subtract() {
+function bitwise() {
 	var pass = true;
 
-	if (u - 1 != 0 || u_ - 1 != 0 || u8 - 1 != 7 || u16 - 1 != 15 || u32 - 1 != 31) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: uint<br>");
-		pass = false, PASS = false;
-	}
-	if (i - 1 != 0 || i_ - 1 != 0 || i8 - 1 != 7 || i16 - 1 != 15 || i32 - 1 != 31) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
-		pass = false, PASS = false;
-	}
-	if (f32 - 1 != 2.2 || f32_ - 1 != 2.2 || f64 - 1 != 5.4 || f64_ - 1 != 5.4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: float<br>");
-		pass = false, PASS = false;
-	}
-	if (b - 1 != 7 || b_ - 1 != 7) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: byte<br>");
-		pass = false, PASS = false;
-	}
-	if (r - 1 != 31 || r_ - 1 != 31) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: rune<br>");
+	if (u16>>1 != 8 || u16<<1 != 32 || i16>>1 != -8 || i16<<1 != -32) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: Shift<br>");
 		pass = false, PASS = false;
 	}
 
-	if (pass) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
-	}
-}
-
-function multiplication() {
-	var pass = true;
-
-	if (u * 2 != 2 || u_ * 2 != 2 || u8 * 2 != 16 || u16 * 2 != 32 || u32 * 2 != 64) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: uint<br>");
-		pass = false, PASS = false;
-	}
-	if (i * 2 != 2 || i_ * 2 != 2 || i8 * 2 != 16 || i16 * 2 != 32 || i32 * 2 != 64) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
-		pass = false, PASS = false;
-	}
-	if (f32 * 2 != 6.4 || f32_ * 2 != 6.4 || f64 * 2 != 12.8 || f64_ * 2 != 12.8) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: float<br>");
-		pass = false, PASS = false;
-	}
-	if (b * 2 != 16 || b_ * 2 != 16) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: byte<br>");
-		pass = false, PASS = false;
-	}
-	if (r * 2 != 64 || r_ * 2 != 64) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: rune<br>");
+	if ((7&9) != 1 || (-7&9) != 9) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: AND<br>");
 		pass = false, PASS = false;
 	}
 
-	if (pass) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
+	if ((7|9) != 15 || (-7|9) != -7) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: OR<br>");
+		pass = false, PASS = false;
 	}
-}
 
-function division() {
-	var pass = true;
+	if ((7^9) != 14 || (-7^9) != -16) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: XOR<br>");
+		pass = false, PASS = false;
+	}
 
-	if (u / 1 != 1 || u_ / 1 != 1 || u8 / 2 != 4 || u16 / 2 != 8 || u32 / 2 != 16) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: uint<br>");
-		pass = false, PASS = false;
-	}
-	if (i / 1 != 1 || i_ / 1 != 1 || i8 / 2 != 4 || i16 / 2 != 8 || i32 / 2 != 16) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: int<br>");
-		pass = false, PASS = false;
-	}
-	if (f32 / 2 != 1.6 || f32_ / 2 != 1.6 || f64 / 2 != 3.2 || f64_ / 2 != 3.2) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: float<br>");
-		pass = false, PASS = false;
-	}
-	if (b / 2 != 4 || b_ / 2 != 4) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: byte<br>");
-		pass = false, PASS = false;
-	}
-	if (r / 2 != 16 || r_ / 2 != 16) {
-		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: rune<br>");
-		pass = false, PASS = false;
-	}
+
+
+
+
 
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
@@ -192,14 +157,10 @@ function main() {
 
 	document.write("=== RUN value<br>");
 	value();
-	document.write("=== RUN add<br>");
-	add();
-	document.write("=== RUN subtract<br>");
-	subtract();
-	document.write("=== RUN multiplication<br>");
-	multiplication();
-	document.write("=== RUN division<br>");
-	division();
+	document.write("=== RUN calculation<br>");
+	calculation();
+	document.write("=== RUN bitwise<br>");
+	bitwise();
 
 	if (PASS) {
 		document.write("PASS<br>");
@@ -208,17 +169,4 @@ function main() {
 		alert("Fail: Numeric");
 	}
 } main();
-
-
-var x = 14, y = 9;
-
-var and = x & y;
-var or = x | y;
-var xor = x ^ y;
-var not = !true;
-
-var lShift = 9 << 2;
-var rShift = 9 >> 2;
-var lShiftNeg = -9 << 2;
-var rShiftNeg = -9 >> 2;
 /* Generated by GoScript (github.com/kless/goscript) */

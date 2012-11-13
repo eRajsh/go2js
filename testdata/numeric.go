@@ -19,11 +19,11 @@ var (
 	u16 uint16 = 16
 	u32 uint32 = 32
 
-	i   int   = 1
-	i_        = int(1)
-	i8  int8  = 8
-	i16 int16 = 16
-	i32 int32 = 32
+	i   int   = -1
+	i_        = int(-1)
+	i8  int8  = -8
+	i16 int16 = -16
+	i32 int32 = -32
 
 	f32  float32 = 3.2
 	f32_         = float32(3.2)
@@ -49,7 +49,7 @@ func value() {
 		fmt.Print("\tFAIL: uint\n")
 		pass, PASS = false, false
 	}
-	if i != 1 || i_ != 1 || i8 != 8 || i16 != 16 || i32 != 32 {
+	if i != -1 || i_ != -1 || i8 != -8 || i16 != -16 || i32 != -32 {
 		fmt.Print("\tFAIL: int\n")
 		pass, PASS = false, false
 	}
@@ -71,27 +71,46 @@ func value() {
 	}
 }
 
-func add() {
+func calculation() {
 	pass := true
 
 	if u+1 != 2 || u_+1 != 2 || u8+1 != 9 || u16+1 != 17 || u32+1 != 33 {
-		fmt.Print("\tFAIL: uint\n")
+		fmt.Print("\tFAIL: add uint\n")
 		pass, PASS = false, false
 	}
-	if i+1 != 2 || i_+1 != 2 || i8+1 != 9 || i16+1 != 17 || i32+1 != 33 {
-		fmt.Print("\tFAIL: int\n")
+	if i+1 != 0 || i_+1 != 0 || i8+1 != -7 || i16+1 != -15 || i32+1 != -31 {
+		fmt.Print("\tFAIL: add int\n")
 		pass, PASS = false, false
 	}
 	if f32+1 != 4.2 || f32_+1 != 4.2 || f64+1 != 7.4 || f64_+1 != 7.4 {
-		fmt.Print("\tFAIL: float\n")
+		fmt.Print("\tFAIL: add float\n")
 		pass, PASS = false, false
 	}
 	if b+1 != 9 || b_+1 != 9 {
-		fmt.Print("\tFAIL: byte\n")
+		fmt.Print("\tFAIL: add byte\n")
 		pass, PASS = false, false
 	}
 	if r+1 != 33 || r_+1 != 33 {
-		fmt.Print("\tFAIL: rune\n")
+		fmt.Print("\tFAIL: add rune\n")
+		pass, PASS = false, false
+	}
+
+	if u8-1 != 7 || i8-1 != -9 || f32-1 != 2.2 || b-1 != 7 || r-1 != 31 {
+		fmt.Print("\tFAIL: subtract\n")
+		pass, PASS = false, false
+	}
+
+	if u16*2 != 32 || i16*2 != -32 || f64*2 != 12.8 || b*2 != 16 || r*2 != 64 {
+		fmt.Print("\tFAIL: multiplication\n")
+		pass, PASS = false, false
+	}
+
+	if u/1 != 1 || i/1 != -1 || f32/2 != 1.6 || b/2 != 4 || r/2 != 16 {
+		fmt.Print("\tFAIL: division (quotient)\n")
+		pass, PASS = false, false
+	}
+	if u8%3 != 2 || u16%3 != 1 || i8%3 != -2 || i16%3 != -1 {
+		fmt.Print("\tFAIL: division (remainder)\n")
 		pass, PASS = false, false
 	}
 
@@ -100,87 +119,33 @@ func add() {
 	}
 }
 
-func subtract() {
+func bitwise() {
 	pass := true
 
-	if u-1 != 0 || u_-1 != 0 || u8-1 != 7 || u16-1 != 15 || u32-1 != 31 {
-		fmt.Print("\tFAIL: uint\n")
-		pass, PASS = false, false
-	}
-	if i-1 != 0 || i_-1 != 0 || i8-1 != 7 || i16-1 != 15 || i32-1 != 31 {
-		fmt.Print("\tFAIL: int\n")
-		pass, PASS = false, false
-	}
-	if f32-1 != 2.2 || f32_-1 != 2.2 || f64-1 != 5.4 || f64_-1 != 5.4 {
-		fmt.Print("\tFAIL: float\n")
-		pass, PASS = false, false
-	}
-	if b-1 != 7 || b_-1 != 7 {
-		fmt.Print("\tFAIL: byte\n")
-		pass, PASS = false, false
-	}
-	if r-1 != 31 || r_-1 != 31 {
-		fmt.Print("\tFAIL: rune\n")
+	if u16>>1 != 8 || u16<<1 != 32 || i16>>1 != -8 || i16<<1 != -32 {
+		fmt.Print("\tFAIL: Shift\n")
 		pass, PASS = false, false
 	}
 
-	if pass {
-		fmt.Println("\tpass")
-	}
-}
-
-func multiplication() {
-	pass := true
-
-	if u*2 != 2 || u_*2 != 2 || u8*2 != 16 || u16*2 != 32 || u32*2 != 64 {
-		fmt.Print("\tFAIL: uint\n")
-		pass, PASS = false, false
-	}
-	if i*2 != 2 || i_*2 != 2 || i8*2 != 16 || i16*2 != 32 || i32*2 != 64 {
-		fmt.Print("\tFAIL: int\n")
-		pass, PASS = false, false
-	}
-	if f32*2 != 6.4 || f32_*2 != 6.4 || f64*2 != 12.8 || f64_*2 != 12.8 {
-		fmt.Print("\tFAIL: float\n")
-		pass, PASS = false, false
-	}
-	if b*2 != 16 || b_*2 != 16 {
-		fmt.Print("\tFAIL: byte\n")
-		pass, PASS = false, false
-	}
-	if r*2 != 64 || r_*2 != 64 {
-		fmt.Print("\tFAIL: rune\n")
+	if 7&9 != 1 || -7&9 != 9 {
+		fmt.Print("\tFAIL: AND\n")
 		pass, PASS = false, false
 	}
 
-	if pass {
-		fmt.Println("\tpass")
+	if 7|9 != 15 || -7|9 != -7 {
+		fmt.Print("\tFAIL: OR\n")
+		pass, PASS = false, false
 	}
-}
 
-func division() {
-	pass := true
+	if 7^9 != 14 || -7^9 != -16 {
+		fmt.Print("\tFAIL: XOR\n")
+		pass, PASS = false, false
+	}
 
-	if u/1 != 1 || u_/1 != 1 || u8/2 != 4 || u16/2 != 8 || u32/2 != 16 {
-		fmt.Print("\tFAIL: uint\n")
+	/*if 7&^9 != 6 || -7&^9 != -16 {
+		fmt.Print("\tFAIL: AND NOT\n")
 		pass, PASS = false, false
-	}
-	if i/1 != 1 || i_/1 != 1 || i8/2 != 4 || i16/2 != 8 || i32/2 != 16 {
-		fmt.Print("\tFAIL: int\n")
-		pass, PASS = false, false
-	}
-	if f32/2 != 1.6 || f32_/2 != 1.6 || f64/2 != 3.2 || f64_/2 != 3.2 {
-		fmt.Print("\tFAIL: float\n")
-		pass, PASS = false, false
-	}
-	if b/2 != 4 || b_/2 != 4 {
-		fmt.Print("\tFAIL: byte\n")
-		pass, PASS = false, false
-	}
-	if r/2 != 16 || r_/2 != 16 {
-		fmt.Print("\tFAIL: rune\n")
-		pass, PASS = false, false
-	}
+	}*/
 
 	if pass {
 		fmt.Println("\tpass")
@@ -192,14 +157,10 @@ func main() {
 
 	fmt.Println("=== RUN value")
 	value()
-	fmt.Println("=== RUN add")
-	add()
-	fmt.Println("=== RUN subtract")
-	subtract()
-	fmt.Println("=== RUN multiplication")
-	multiplication()
-	fmt.Println("=== RUN division")
-	division()
+	fmt.Println("=== RUN calculation")
+	calculation()
+	fmt.Println("=== RUN bitwise")
+	bitwise()
 
 	if PASS {
 		fmt.Println("PASS")
@@ -208,17 +169,3 @@ func main() {
 		print("Fail: Numeric")
 	}
 }
-
-// TODO: remove
-var x, y = 14, 9
-var (
-	and = x & y
-	or  = x | y
-	xor = x ^ y
-	not = !true
-
-	lShift    = 9 << 2
-	rShift    = 9 >> 2
-	lShiftNeg = -9 << 2
-	rShiftNeg = -9 >> 2
-)

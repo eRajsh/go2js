@@ -299,12 +299,12 @@ function SliceFrom(src, low, high) {
 	var s = new SliceType(undefined, [], 0, 0, 0, 0, false);
 
 	if (low != undefined) {
-		s.low = low | 0;
+		s.low = (low|0);
 	} else {
 		s.low = 0;
 	}
 	if (high != undefined) {
-		s.high = high | 0;
+		s.high = (high|0);
 	} else {
 		if (src.arr != undefined) {
 			s.high = src.len;

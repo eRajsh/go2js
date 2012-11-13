@@ -34,9 +34,9 @@ a1 = 1,
 a2 = 2;
 
 const 
-b0 = 1 << 0,
-b1 = 1 << 1,
-b2 = 1 << 2;
+b0 = 1<<0,
+b1 = 1<<1,
+b2 = 1<<2;
 
 const 
 c0 = 0 * 42,
@@ -48,10 +48,10 @@ const x = 0;
 const y = 0;
 
 const 
-bit0 = 1 << 0, mask0 = 1 << 0 - 1,
-bit1 = 1 << 1, mask1 = 1 << 1 - 1,
+bit0 = 1<<0, mask0 = 1<<0 - 1,
+bit1 = 1<<1, mask1 = 1<<1 - 1,
 
-bit3 = 1 << 3, mask3 = 1 << 3 - 1;
+bit3 = 1<<3, mask3 = 1<<3 - 1;
 
 
 function main() {

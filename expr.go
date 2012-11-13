@@ -187,8 +187,8 @@ func (e *expression) translate(expr ast.Expr) {
 	//  Op    token.Token // operator
 	//  Y     Expr        // right operand
 	case *ast.BinaryExpr:
-		isComparing := false
-		isOpNot := false
+		var isBitwise, isComparing, isOpNot bool
+		addSpaces := true
 		op := typ.Op.String()
 
 		switch typ.Op {
@@ -197,12 +197,28 @@ func (e *expression) translate(expr ast.Expr) {
 			fallthrough
 		case token.EQL:
 			isComparing = true
+
+		// Bitwise operators
+		case token.AND, token.OR, token.XOR, token.AND_NOT:
+			isBitwise = true
+			fallthrough
+		case token.SHL, token.SHR:
+			addSpaces = false
 		}
 
+		if addSpaces {
+			op = SP + op + SP
+		}
 		if e.tr.isConst {
+			if isBitwise {
+				e.WriteString("(")
+			}
 			e.translate(typ.X)
-			e.WriteString(SP + op + SP)
+			e.WriteString(op)
 			e.translate(typ.Y)
+			if isBitwise {
+				e.WriteString(")")
+			}
 			break
 		}
 
@@ -232,11 +248,11 @@ func (e *expression) translate(expr ast.Expr) {
 
 			// Map
 			if y.isNil && e.tr.isType(mapType, xStr) {
-				e.WriteString(fmt.Sprintf("%s.v%s%s%sundefined", xStr, SP, op, SP))
+				e.WriteString(fmt.Sprintf("%s.v%sundefined", xStr, op))
 				break
 			}
 			if x.isNil && e.tr.isType(mapType, yStr) {
-				e.WriteString(fmt.Sprintf("%s.v%s%s%sundefined", yStr, SP, op, SP))
+				e.WriteString(fmt.Sprintf("%s.v%sundefined", yStr, op))
 				break
 			}
 		}
@@ -252,6 +268,9 @@ func (e *expression) translate(expr ast.Expr) {
 		if stringify {
 			e.WriteString("JSON.stringify(" + x.String() + ")")
 		} else {
+			if isBitwise {
+				e.WriteString("(")
+			}
 			e.WriteString(x.String())
 		}
 		// To know when a pointer is compared with the value nil.
@@ -259,12 +278,15 @@ func (e *expression) translate(expr ast.Expr) {
 			e.WriteString(NIL)
 		}
 
-		e.WriteString(SP + op + SP)
+		e.WriteString(op)
 
 		if stringify {
 			e.WriteString("JSON.stringify(" + y.String() + ")")
 		} else {
 			e.WriteString(y.String())
+			if isBitwise {
+				e.WriteString(")")
+			}
 		}
 		if x.isNil && !y.isPointer && !y.isVarAddress {
 			e.WriteString(NIL)
