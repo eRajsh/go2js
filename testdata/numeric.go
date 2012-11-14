@@ -152,6 +152,11 @@ func bitwise() {
 		pass, PASS = false, false
 	}
 
+	if ^-7 != 6 || ^7 != -8 {
+		fmt.Print("\tFAIL: NOT\n")
+		pass, PASS = false, false
+	}
+
 	if pass {
 		fmt.Println("\tpass")
 	}

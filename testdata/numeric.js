@@ -152,6 +152,11 @@ function bitwise() {
 		pass = false, PASS = false;
 	}
 
+	if (~-7 != 6 || ~7 != -8) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: NOT<br>");
+		pass = false, PASS = false;
+	}
+
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");
 	}
