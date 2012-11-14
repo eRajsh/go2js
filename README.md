@@ -1,12 +1,12 @@
-GoScript
-========
+Go2js
+=====
 Translation compiler from Go to JavaScript.
 
-[Documentation online](http://go.pkgdoc.org/github.com/kless/goscript)
+[Documentation online](http://go.pkgdoc.org/github.com/kless/go2js)
 
 ## Installation
 
-	go get github.com/kless/goscript
+	go get github.com/kless/go2js
 
 ## Status
 
@@ -18,7 +18,7 @@ There are two ways to get an slice in JS:
 
 1. To use a function to calculate the slice value. I'm using this way now:
 
-	https://github.com/kless/goscript/blob/054e62f70d94e926812976147cc66a9bccbc370e/jslib/lib.go#L284
+	https://github.com/kless/go2js/blob/054e62f70d94e926812976147cc66a9bccbc370e/jslib/lib.go#L284
 
 	The issue is that it's performance is not good. The solution would be cache
 	its value after of to use slice.get(). But then, I would have to add a function
@@ -28,8 +28,8 @@ There are two ways to get an slice in JS:
 
 2. Every time that it is set an array/slice then it is calcualted the slice value.
 
-	https://github.com/kless/goscript/blob/6e2abd6e6f4cd1f2facc3f63c877811c2186da4b/jslib/lib.go#L180
-	https://github.com/kless/goscript/blob/6e2abd6e6f4cd1f2facc3f63c877811c2186da4b/jslib/lib.go#L304
+	https://github.com/kless/go2js/blob/6e2abd6e6f4cd1f2facc3f63c877811c2186da4b/jslib/lib.go#L180
+	https://github.com/kless/go2js/blob/6e2abd6e6f4cd1f2facc3f63c877811c2186da4b/jslib/lib.go#L304
 
 	The issue is that there is to hold the references from where the slice is
 	got and to the slices which is referencing. But that references to slices
@@ -52,11 +52,8 @@ Ideas? Thoughts?
 
 + The multiple assignment has different order of preference than in JS
  (functionInverse in "testdata/func.go" fails due this issue).
-+ Check arithmetic, since that in JS all numbers are handled like floats.
-+ More tests where functions have parameters with custom types (jslib), and return
- those custom types.
 + Evaluation of constants.
-+ Shadow variables in Js.
++ Shadow variables in JS.
 + Goroutines.
 + Types int64 and complex.
 
