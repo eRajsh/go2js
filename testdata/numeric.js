@@ -11,8 +11,6 @@
 var PASS = true;
 
 
-var u1 = g.Uint(1), u2 = g.Uint(2);
-
 var u = g.Uint(1);
 var u_ = g.Uint(1);
 var u8 = g.Uint8(8);
@@ -142,10 +140,17 @@ function bitwise() {
 		pass = false, PASS = false;
 	}
 
+	if ((7&~9) != 6 || (-7&~9) != -16) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: AND NOT<br>");
+		pass = false, PASS = false;
+	}
 
-
-
-
+	var n = 7;
+	n &= ~(9);
+	if (n != 6) {
+		document.write("&nbsp;&nbsp;&nbsp;&nbsp;FAIL: AND NOT (assignment)<br>");
+		pass = false, PASS = false;
+	}
 
 	if (pass) {
 		document.write("&nbsp;&nbsp;&nbsp;&nbsp;pass<br>");

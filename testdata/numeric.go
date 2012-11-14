@@ -11,8 +11,6 @@ import "fmt"
 var PASS = true
 
 var (
-	u1, u2 uint = 1, 2
-
 	u   uint   = 1
 	u_         = uint(1)
 	u8  uint8  = 8
@@ -142,10 +140,17 @@ func bitwise() {
 		pass, PASS = false, false
 	}
 
-	/*if 7&^9 != 6 || -7&^9 != -16 {
+	if 7&^9 != 6 || -7&^9 != -16 {
 		fmt.Print("\tFAIL: AND NOT\n")
 		pass, PASS = false, false
-	}*/
+	}
+
+	n := 7
+	n &^= 9
+	if n != 6 {
+		fmt.Print("\tFAIL: AND NOT (assignment)\n")
+		pass, PASS = false, false
+	}
 
 	if pass {
 		fmt.Println("\tpass")

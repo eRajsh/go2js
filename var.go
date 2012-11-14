@@ -776,6 +776,7 @@ func (tr *translation) zeroValue(init bool, typ interface{}) (value string, dt d
 		return
 	}
 
+	isType := true
 	switch ident.Name {
 	case "bool":
 		value = "false"
@@ -791,8 +792,12 @@ func (tr *translation) zeroValue(init bool, typ interface{}) (value string, dt d
 	default:
 		value = ident.Name
 		value = fmt.Sprintf("new %s(%s)", value, tr.zeroOfType(value))
+		isType = false
 	}
 
+	if !Bootstrap && isType {
+		//value = fmt.Sprintf("g.%s(%s)", strings.Title(ident.Name), value)
+	}
 	if tr.initIsPointer {
 		value = "{p:undefined}"
 		dt = pointerType

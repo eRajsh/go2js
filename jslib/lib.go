@@ -41,17 +41,42 @@ func init() {
 	}
 }
 
-// == Numeric types
+// == Boolean
 //
 
-type NumType struct {
+type BoolType struct {
 	v interface{} // value
 	t string      // type
 }
 
 // Override the "valueOf" method to convert the object to the primitive value.
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/valueOf
+func (b BoolType) valueOf() { return b.v }
+
+func Bool(b bool) BoolType { return BoolType{b, "bool"} }
+
+// == String
+//
+
+type StringType struct {
+	v interface{}
+	t string
+}
+
+func (s StringType) valueOf() { return s.v }
+
+func String(s string) StringType { return StringType{s, "string"} }
+
+// == Numeric types
+//
+
+type NumType struct {
+	v interface{}
+	t string
+}
+
 func (n NumType) valueOf() { return n.v }
+
 //func (n NumType) toString() { return n.v }
 
 // * * *

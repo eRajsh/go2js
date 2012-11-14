@@ -7,6 +7,7 @@
 package test
 
 var A string
+var B bool
 var a int
 var b, c, d float64
 var e = 0

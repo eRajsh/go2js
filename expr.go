@@ -199,9 +199,12 @@ func (e *expression) translate(expr ast.Expr) {
 			isComparing = true
 
 		// Bitwise operators
-		case token.AND, token.OR, token.XOR, token.AND_NOT:
-			isBitwise = true
+		case token.AND_NOT:
+			op = "&~"
 			fallthrough
+		case token.AND, token.OR, token.XOR:
+			isBitwise = true
+			addSpaces = false
 		case token.SHL, token.SHR:
 			addSpaces = false
 		}

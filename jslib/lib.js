@@ -44,14 +44,39 @@ sliceT = 3;
 
 
 
-function NumType(v, t) {
+function BoolType(v, t) {
 	this.v=v;
 	this.t=t
 }
 
 
 
+BoolType.prototype.valueOf = function() { return this.v; }
+
+function Bool(b) { return new BoolType(b, "bool"); }
+
+
+
+
+function StringType(v, t) {
+	this.v=v;
+	this.t=t
+}
+
+StringType.prototype.valueOf = function() { return this.v; }
+
+function String(s) { return new StringType(s, "string"); }
+
+
+
+
+function NumType(v, t) {
+	this.v=v;
+	this.t=t
+}
+
 NumType.prototype.valueOf = function() { return this.v; }
+
 
 
 
@@ -493,6 +518,10 @@ function Export(pkg, exported) {
 	}
 }
 
+g.BoolType = BoolType;
+g.Bool = Bool;
+g.StringType = StringType;
+g.String = String;
 g.NumType = NumType;
 g.Uint = Uint;
 g.Uint8 = Uint8;
