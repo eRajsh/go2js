@@ -174,7 +174,7 @@ function _for() {
 	for (;;) {
 		i++;
 		if (i == 3) {
-			s = "" + i + "";
+			s = i;
 			break;
 		}
 	}
@@ -192,7 +192,7 @@ function _for() {
 		if (i < 5) {
 			break;
 		}
-		s += "" + i + " ";
+		s += i + " ";
 	}
 
 	if (s == "10 9 8 7 6 5 ") {
@@ -208,7 +208,7 @@ function _for() {
 		if (i == 5) {
 			continue;
 		}
-		s += "" + i + " ";
+		s += i + " ";
 	}
 
 	if (s == "10 9 8 7 6 4 3 2 1 ") {

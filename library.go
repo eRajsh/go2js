@@ -264,11 +264,18 @@ func (tr *translation) joinArgsPrintf(args []ast.Expr) string {
 
 	for i, v := range args[1:] {
 		if i != 0 {
-			result += fmt.Sprintf("%s+%s", SP, SP+`"`)
+			result += fmt.Sprintf("%s+%s\"", SP, SP)
 		}
-		result += fmt.Sprintf("%s+%s", values[i]+`"`+SP, SP+tr.getExpression(v).String())
+		if values[i] != `"` {
+			result += fmt.Sprintf("%s+%s", values[i]+`"`+SP, SP)
+		}
+		result += tr.getExpression(v).String()
 	}
-	result += fmt.Sprintf("%s+%s", SP, SP+`"`+values[len(values)-1])
+	// Last value
+	last := values[len(values)-1]
+	if last != `"` {
+		result += fmt.Sprintf("%s+%s", SP, SP+`"`+last)
+	}
 
 	return result
 }
