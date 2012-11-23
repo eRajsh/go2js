@@ -834,7 +834,9 @@ S:
 	//  X      Expr      // parenthesized expression
 	//  Rparen token.Pos // position of ")"
 	case *ast.ParenExpr:
+		e.WriteString("(")
 		e.translate(typ.X)
+		e.WriteString(")")
 
 	// godoc go/ast SelectorExpr
 	//   X   Expr   // expression
