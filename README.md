@@ -2,7 +2,7 @@ Go2js
 =====
 Translation compiler from Go to JavaScript.
 
-[Documentation online](http://go.pkgdoc.org/github.com/kless/go2js)
+[Documentation online](http://godoc.org/github.com/kless/go2js)
 
 ## Installation
 
