@@ -16,7 +16,7 @@ Sorry to not be able to continue with this project for some time, but I have to
 work very hard into a startup to become profitable, to then be able to finance
 a third project related to low level libraries:
 
-https://gist.github.com/kless/4419687
+https://gist.github.com/kless/4419687  
 http://www.reddit.com/r/programming/comments/15q9ph/planning_rust_lowlevel_library_for_multimedia/
 
 I follow being interested into a full translator from Go to JS because my
