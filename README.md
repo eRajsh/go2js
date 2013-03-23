@@ -13,15 +13,9 @@ Translation compiler from Go to JavaScript.
 Inactive | Incomplete
 
 Sorry to not be able to continue with this project for some time, but I have to
-work very hard into a startup to become profitable, to then be able to finance
-a third project related to low level libraries:
+work very hard in third projects.
 
-https://gist.github.com/kless/4419687  
-http://www.reddit.com/r/programming/comments/15q9ph/planning_rust_lowlevel_library_for_multimedia/
-
-I follow being interested into a full translator from Go to JS because my
-vision is to be able to use Go in the browser, using it indirectly through this
-translator or directly through Servo, a browser engine being built in Rust.
+Although I follow being interested in be able to use Go in the browser.
 
 ## DOUBT
 
